@@ -254,6 +254,8 @@
     );
     color: var(--nc-neon-purple);
     border: 2px solid var(--nc-neon-purple);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     box-shadow:
       0 4px 0 0 var(--nc-neon-purple-dark),
       0 6px 12px rgba(0, 0, 0, 0.3),
@@ -301,7 +303,9 @@
 
   /* Cabinet card frame */
   .cabinet-card {
-    background: var(--nc-bg-secondary);
+    background: rgba(26, 15, 46, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 2px solid var(--nc-border-soft);
     border-radius: 0.875rem;
     box-shadow:

@@ -152,7 +152,7 @@ export default function Home() {
               >
                 <div className="hero-glow relative aspect-[3/4] w-64 sm:w-80 lg:w-96">
                   <Image
-                    src="/assets/neon-cabinet-hero.png"
+                    src="/assets/neon-cabinet-logo-big.png"
                     alt="Neon Cabinet Arcade Machine"
                     fill
                     className="object-contain"
@@ -167,9 +167,6 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-
-        {/* Bottom fade gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-nc-bg-primary to-transparent" />
       </section>
 
       {/* Games Section */}
@@ -201,26 +198,9 @@ export default function Home() {
           </motion.div>
 
           {/* Games grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-5 md:grid-cols-2">
             {games.map((game, index) => (
               <GameCard key={game.id} game={game} index={index} />
-            ))}
-
-            {/* Coming Soon placeholder cards */}
-            {[1, 2, 3].map((i) => (
-              <motion.div
-                key={`coming-${i}`}
-                className="cabinet-card flex aspect-[3/4] flex-col items-center justify-center opacity-50"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 0.5, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: (games.length + i) * 0.1 }}
-              >
-                <div className="mb-4 h-16 w-16 rounded-full border-2 border-dashed border-nc-border-soft" />
-                <p className="font-pixel text-xs text-nc-text-muted">
-                  Coming Soon
-                </p>
-              </motion.div>
             ))}
           </div>
         </div>

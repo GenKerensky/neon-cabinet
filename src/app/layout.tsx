@@ -23,10 +23,10 @@ const sansFont = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Neon Cabinet",
+  title: "Neon Cabinet - Retro Arcade",
   description:
     "A virtual web arcade for retro-style games. Play classics like Space Defender and more.",
-  icons: { icon: "/assets/favicon.svg" },
+  icons: { icon: "/assets/neon-cabinet-favicon.png" },
 };
 
 export default function RootLayout({
