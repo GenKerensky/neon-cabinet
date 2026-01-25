@@ -7,3 +7,6 @@ coverage
 *.lock
 *.lockb
 bun.lockb
+*.frag
+*.vert
+*.glsl

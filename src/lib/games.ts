@@ -11,8 +11,8 @@ export const games: Game[] = [
     id: "space-defender",
     name: "Space Defender",
     description:
-      "Defend the galaxy from endless waves of asteroids. Blaster, laser, and missile weapons.",
+      "Defend the galaxy from endless waves of asteroids using an arsenal of upgradeable weapons.",
     href: "/games/space-defender",
-    thumbnail: "/assets/space-defender-thumb.svg",
+    thumbnail: "/assets/space-defender-thumb.png",
   },
 ];

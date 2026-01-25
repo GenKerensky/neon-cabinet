@@ -62,14 +62,16 @@ neon-cabinet/
 │   ├── lib/
 │   │   ├── utils.ts
 │   │   └── games.ts            # Game list for arcade
-│   ├── game/                   # Phaser game code
-│   │   ├── PhaserGame.tsx      # React–Phaser bridge
-│   │   ├── EventBus.ts
-│   │   ├── main.ts
-│   │   ├── objects/
-│   │   ├── scenes/
-│   │   ├── shaders/
-│   │   └── utils/
+│   ├── games/                  # One folder per game
+│   │   ├── _shared/
+│   │   │   └── shaders/        # Shared (e.g. CRT), reused across games
+│   │   └── space-defender/
+│   │       ├── PhaserGame.tsx  # React–Phaser bridge
+│   │       ├── EventBus.ts
+│   │       ├── main.ts
+│   │       ├── objects/
+│   │       ├── scenes/
+│   │       └── utils/
 │   └── types/
 ├── public/
 │   └── assets/                 # Placeholder SVGs (thumbnails, logo, favicon)

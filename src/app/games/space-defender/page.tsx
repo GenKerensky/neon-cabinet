@@ -2,11 +2,13 @@
 
 import dynamic from "next/dynamic";
 import { useRef } from "react";
-import type { IRefPhaserGame } from "@/game/PhaserGame";
+import type { IRefPhaserGame } from "@/games/space-defender/PhaserGame";
 
 const PhaserGame = dynamic(
   () =>
-    import("@/game/PhaserGame").then((mod) => ({ default: mod.PhaserGame })),
+    import("@/games/space-defender/PhaserGame").then((mod) => ({
+      default: mod.PhaserGame,
+    })),
   { ssr: false },
 );
 
@@ -21,7 +23,7 @@ export default function SpaceDefenderPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-3.5rem)] w-full [&_#phaser-game]:h-full">
+    <div className="flex h-[calc(100vh-3.5rem)] w-full items-center justify-center [&_#phaser-game]:h-full [&_#phaser-game]:max-h-[768px]">
       <PhaserGame ref={phaserRef} currentActiveScene={onCurrentActiveScene} />
     </div>
   );

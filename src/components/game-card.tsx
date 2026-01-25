@@ -16,7 +16,7 @@ export function GameCard({ game }: GameCardProps) {
   return (
     <Link href={game.href} className="block group">
       <Card className="overflow-hidden border-border/60 bg-card/80 transition-all duration-200 hover:scale-[1.02] hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10">
-        <div className="relative aspect-video w-full overflow-hidden bg-muted">
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
           <Image
             src={game.thumbnail}
             alt={game.name}
