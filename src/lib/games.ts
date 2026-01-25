@@ -21,9 +21,8 @@ export const games: Game[] = [
     name: "Battle Tanks",
     description:
       "Command your tank through a wireframe battlefield. The pioneering 1980 arcade hit brought 3D combat to life—now rebuilt with modern firepower.",
-    href: "#",
+    href: "/games/battle-tanks",
     thumbnail: "/assets/battle-tanks-cabinet.png",
-    comingSoon: true,
   },
   {
     id: "mars-lander",
