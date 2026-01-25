@@ -59,6 +59,7 @@
   },
   "trustedDependencies": [
     "glslang-validator-prebuilt",
+    "napi-postinstall",
     "unrs-resolver"
   ],
   "lint-staged": {
