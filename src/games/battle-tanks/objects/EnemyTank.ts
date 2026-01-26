@@ -1,6 +1,6 @@
 import { Vector3D } from "../engine/Vector3D";
 import { WireframeRenderer } from "../engine/WireframeRenderer";
-import { ENEMY_TANK } from "../models/models";
+import { ENEMY_TANK } from "../models";
 import { Obstacle } from "./Obstacle";
 
 export type TankMode = "patrol" | "hunt";

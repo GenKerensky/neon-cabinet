@@ -1,6 +1,6 @@
 import { Vector3D } from "../engine/Vector3D";
 import { WireframeRenderer } from "../engine/WireframeRenderer";
-import { ENEMY_PROJECTILE } from "../models/models";
+import { ENEMY_PROJECTILE } from "../models";
 
 /**
  * Enemy projectile - red, slower than player shots

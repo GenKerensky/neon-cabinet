@@ -1,7 +1,7 @@
 import { Vector3D } from "../engine/Vector3D";
 import { WireframeModel, createEdges } from "../engine/WireframeModel";
 import { WireframeRenderer } from "../engine/WireframeRenderer";
-import { COLORS } from "../models/models";
+import { COLORS } from "../models";
 
 /**
  * Turret wireframe model - detailed stationary gun emplacement

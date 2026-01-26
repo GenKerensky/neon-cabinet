@@ -1,0 +1,21 @@
+# Wavefront OBJ file
+# Exported from Battle Tanks game
+# Model: terrain/pyramid
+# color: 0x00ff00
+
+# Vertices
+v -30.0000 0.0000 -30.0000
+v 30.0000 0.0000 -30.0000
+v 30.0000 0.0000 30.0000
+v -30.0000 0.0000 30.0000
+v 0.0000 60.0000 0.0000
+
+# Edges
+l 1 2
+l 2 3
+l 3 4
+l 4 1
+l 1 5
+l 2 5
+l 3 5
+l 4 5

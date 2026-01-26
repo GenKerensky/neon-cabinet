@@ -1,7 +1,7 @@
 import { Vector3D } from "../engine/Vector3D";
 import { Camera3D } from "../engine/Camera3D";
 import { WireframeRenderer } from "../engine/WireframeRenderer";
-import { PROJECTILE } from "../models/models";
+import { PROJECTILE } from "../models";
 
 /**
  * Cannon projectile that travels in 3D space

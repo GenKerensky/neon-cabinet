@@ -1,7 +1,7 @@
 import { Vector3D } from "../engine/Vector3D";
 import { WireframeModel } from "../engine/WireframeModel";
 import { WireframeRenderer } from "../engine/WireframeRenderer";
-import { COLORS, SHIELD_PICKUP, LASER_PICKUP } from "../models/models";
+import { COLORS, SHIELD_PICKUP, LASER_PICKUP } from "../models";
 import { WeaponType } from "./weapons/Weapon";
 
 export type PickupType = "armor" | "weapon";

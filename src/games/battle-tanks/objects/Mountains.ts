@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { Vector3D } from "../engine/Vector3D";
 import { Camera3D, ScreenPoint } from "../engine/Camera3D";
-import { COLORS } from "../models/models";
+import { COLORS } from "../models";
 
 interface MountainPeak {
   angle: number;

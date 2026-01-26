@@ -7,7 +7,7 @@ import { GroundGrid } from "../objects/GroundGrid";
 import { Mountains } from "../objects/Mountains";
 import { Starfield } from "../effects/Starfield";
 import { Atmosphere } from "../effects/Atmosphere";
-import { ENEMY_TANK } from "../models/models";
+import { ENEMY_TANK } from "../models";
 import { TURRET_MODEL } from "../objects/Turret";
 import { Vector3D } from "../engine/Vector3D";
 import { WireframeModel } from "../engine/WireframeModel";

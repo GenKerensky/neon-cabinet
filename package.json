@@ -13,6 +13,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate:shaders": "node scripts/validate-shaders.mjs",
+    "export-model": "bun run scripts/model-convert.ts",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "prepare": "husky"

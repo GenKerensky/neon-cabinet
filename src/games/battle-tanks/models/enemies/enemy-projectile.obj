@@ -1,0 +1,26 @@
+# Wavefront OBJ file
+# Exported from Battle Tanks game
+# Model: enemies/enemy-projectile
+# color: 0xff0000
+
+# Vertices
+v 0.0000 0.0000 -8.0000
+v -2.0000 0.0000 0.0000
+v 2.0000 0.0000 0.0000
+v 0.0000 2.0000 0.0000
+v 0.0000 -2.0000 0.0000
+v 0.0000 0.0000 12.0000
+
+# Edges
+l 1 2
+l 1 3
+l 1 4
+l 1 5
+l 2 4
+l 4 3
+l 3 5
+l 5 2
+l 2 6
+l 3 6
+l 4 6
+l 5 6
