@@ -31,3 +31,7 @@ coverage
 
 # Bun
 bun.lockb
+
+# Nx
+.nx/cache
+.nx/workspace-data
