@@ -3,37 +3,50 @@ import { WireframeModel, createEdges } from "../../engine/WireframeModel";
 import { COLORS } from "../colors";
 
 /**
- * Shield pickup - hexagonal shield shape with plus sign (cyan)
- * Matches the design: wider at top, tapers to point at bottom
+ * shield-pickup - imported from OBJ
  */
 export const SHIELD_PICKUP: WireframeModel = {
   vertices: [
-    // Shield outline - six-sided polygon
-    new Vector3D(-20, 40, 0), // 0: top left
-    new Vector3D(20, 40, 0), // 1: top right (horizontal top edge)
-    new Vector3D(25, 25, 0), // 2: upper right (angles down and out)
-    new Vector3D(22, 10, 0), // 3: mid right (angles down and in)
-    new Vector3D(0, 0, 0), // 4: bottom point (converges to center)
-    new Vector3D(-22, 10, 0), // 5: mid left (angles down and in)
-    new Vector3D(-25, 25, 0), // 6: upper left (angles down and out)
-    // Inner plus sign - centered
-    new Vector3D(0, 30, 0), // 7: plus top
-    new Vector3D(0, 10, 0), // 8: plus bottom
-    new Vector3D(-10, 20, 0), // 9: plus left
-    new Vector3D(10, 20, 0), // 10: plus right
+    new Vector3D(17.502232, 37.41943, 0),
+    new Vector3D(19.680687, 30.166288, -0.000001),
+    new Vector3D(12.397648, 10.734774, -0.000002),
+    new Vector3D(0, 0, -0.000003),
+    new Vector3D(0, 33.160339, -0.000001),
+    new Vector3D(0, 13.160341, -0.000002),
+    new Vector3D(-10, 23.160341, -0.000002),
+    new Vector3D(10, 23.160341, -0.000002),
+    new Vector3D(0, 39.328648, 0),
+    new Vector3D(18.827763, 23.444191, -0.000002),
+    new Vector3D(16.65493, 16.722095, -0.000002),
+    new Vector3D(-17.502232, 37.41943, 0),
+    new Vector3D(-19.680687, 30.166288, -0.000001),
+    new Vector3D(-12.397648, 10.734774, -0.000002),
+    new Vector3D(0, 0, -0.000003),
+    new Vector3D(0, 33.160339, -0.000001),
+    new Vector3D(0, 13.160341, -0.000002),
+    new Vector3D(10, 23.160341, -0.000002),
+    new Vector3D(-10, 23.160341, -0.000002),
+    new Vector3D(0, 39.328648, 0),
+    new Vector3D(-18.827763, 23.444191, -0.000002),
+    new Vector3D(-16.65493, 16.722095, -0.000002),
   ],
   edges: createEdges([
-    // Outer shield outline
-    [0, 1], // Top horizontal edge
-    [1, 2], // Top-right angles down and out
-    [2, 3], // Right side angles down and in
-    [3, 4], // Right side to bottom point
-    [4, 5], // Left side from bottom point
-    [5, 6], // Left side angles down and in
-    [6, 0], // Upper left angles down and out, back to top
-    // Inner plus sign (centered)
-    [7, 8], // Vertical bar
-    [9, 10], // Horizontal bar
+    [8, 0],
+    [0, 1],
+    [10, 2],
+    [2, 3],
+    [4, 5],
+    [6, 7],
+    [1, 9],
+    [9, 10],
+    [19, 11],
+    [11, 12],
+    [21, 13],
+    [13, 14],
+    [15, 16],
+    [17, 18],
+    [12, 20],
+    [20, 21],
   ]),
   color: COLORS.pickup_armor,
 };

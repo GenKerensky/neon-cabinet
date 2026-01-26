@@ -56,6 +56,7 @@ export class Game extends Scene {
   // Game state
   private gameState: GameState = "playing";
   private readonly deathDelay = 2000; // ms before game over screen
+  private cheatMode = false;
 
   constructor() {
     super("Game");
@@ -151,6 +152,13 @@ export class Game extends Scene {
         if (this.gameState === "playing") {
           this.tank.cycleWeaponNext();
         }
+      });
+
+    // Cheat mode on C key
+    this.input.keyboard
+      ?.addKey(Phaser.Input.Keyboard.KeyCodes.C)
+      .on("down", () => {
+        this.toggleCheatMode();
       });
 
     EventBus.emit("current-scene-ready", this);
@@ -438,6 +446,12 @@ export class Game extends Scene {
   }
 
   private handlePlayerDeath(): void {
+    // In cheat mode, reset armor instead of game over
+    if (this.cheatMode) {
+      this.tank.resetArmor();
+      return;
+    }
+
     // Game over - show cracked windshield
     this.gameState = "game_over";
     const { width, height } = this.cameras.main;
@@ -451,6 +465,22 @@ export class Game extends Scene {
         wave: this.waveSystem.getWaveNumber(),
       });
     });
+  }
+
+  /**
+   * Toggle cheat mode - enables armor reset on death and equips all weapons
+   */
+  private toggleCheatMode(): void {
+    this.cheatMode = !this.cheatMode;
+
+    if (this.cheatMode) {
+      // Equip all weapons
+      if (!this.tank.hasWeapon("laser")) {
+        this.tank.addWeapon(new LaserWeapon());
+      }
+      // Reset armor to full
+      this.tank.resetArmor();
+    }
   }
 
   update(_time: number, delta: number): void {

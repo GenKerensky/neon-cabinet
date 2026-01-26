@@ -32,6 +32,8 @@ export class LaserWeapon implements Weapon {
 
     this.charge -= this.chargePerShot;
 
+    // Raycast fires straight from crosshair center
+    // Visual beam is rendered separately from upper right screen position
     return {
       type: "laser",
       position: position.clone(),
