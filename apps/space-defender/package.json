@@ -1,15 +1,18 @@
 {
-  "name": "@neon-cabinet/space-defender",
+  "name": "space-defender",
   "version": "0.0.1",
   "type": "module",
-  "main": "./src/PhaserGame.tsx",
-  "types": "./src/PhaserGame.tsx",
+  "main": "./dist/space-defender.es.js",
+  "types": "./dist/PhaserGame.d.ts",
   "exports": {
-    ".": "./src/PhaserGame.tsx"
+    ".": {
+      "types": "./dist/PhaserGame.d.ts",
+      "development": "./src/PhaserGame.tsx",
+      "default": "./dist/space-defender.es.js"
+    }
   },
-  "scripts": {},
   "dependencies": {
-    "@neon-cabinet/games-shared": "workspace:*",
+    "@neon-cabinet/shaders": "workspace:*",
     "phaser": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"

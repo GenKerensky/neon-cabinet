@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import type { Scene } from "phaser";
 import { PhaserGame, type IRefPhaserGame } from "./PhaserGame";
 
 function App() {
@@ -7,7 +8,7 @@ function App() {
     scene: undefined,
   });
 
-  const onCurrentActiveScene = (_scene: Phaser.Scene) => {
+  const onCurrentActiveScene = (_scene: Scene) => {
     // Scene ready
   };
 

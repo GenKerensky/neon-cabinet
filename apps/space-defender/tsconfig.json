@@ -1,16 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "composite": true,
-    "jsx": "react-jsx",
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "noEmit": false,
-    "paths": {
-      "@/*": ["./src/*"]
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
     }
-  },
-  "references": [{ "path": "../../packages/games-shared" }],
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  ]
 }

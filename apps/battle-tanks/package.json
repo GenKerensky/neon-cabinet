@@ -1,15 +1,23 @@
 {
-  "name": "@neon-cabinet/battle-tanks",
+  "name": "battle-tanks",
   "version": "0.0.1",
   "type": "module",
-  "main": "./src/PhaserGame.tsx",
-  "types": "./src/PhaserGame.tsx",
+  "main": "./dist/battle-tanks.es.js",
+  "types": "./dist/PhaserGame.d.ts",
   "exports": {
-    ".": "./src/PhaserGame.tsx"
+    ".": {
+      "types": "./dist/PhaserGame.d.ts",
+      "development": "./src/PhaserGame.tsx",
+      "default": "./dist/battle-tanks.es.js"
+    }
   },
-  "scripts": {},
+  "scripts": {
+    "export-model": "bun run @neon-cabinet/model-tools/src/bin/model-convert.ts",
+    "model-convert": "bun run @neon-cabinet/model-tools/src/bin/model-convert.ts"
+  },
   "dependencies": {
-    "@neon-cabinet/games-shared": "workspace:*",
+    "@neon-cabinet/model-tools": "workspace:*",
+    "@neon-cabinet/shaders": "workspace:*",
     "phaser": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"

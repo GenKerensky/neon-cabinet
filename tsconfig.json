@@ -1,15 +1,24 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "composite": true,
-    "noEmit": true
-  },
   "files": [],
   "references": [
-    { "path": "./apps/frontend" },
-    { "path": "./apps/space-defender" },
-    { "path": "./apps/battle-tanks" },
-    { "path": "./apps/mars-lander" },
-    { "path": "./packages/games-shared" }
+    {
+      "path": "./apps/space-defender"
+    },
+    {
+      "path": "./apps/battle-tanks"
+    },
+    {
+      "path": "./packages/shaders"
+    },
+    {
+      "path": "./apps/mars-lander"
+    },
+    {
+      "path": "./apps/frontend"
+    },
+    {
+      "path": "./packages/model-tools"
+    }
   ]
 }

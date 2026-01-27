@@ -3,7 +3,8 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "cache": true
+      "cache": true,
+      "outputs": ["{projectRoot}/dist"]
     },
     "format": {
       "cache": true
@@ -16,6 +17,9 @@
     },
     "export-model": {
       "cache": true
+    },
+    "test": {
+      "dependsOn": ["^build"]
     }
   },
   "namedInputs": {
@@ -31,13 +35,30 @@
   },
   "plugins": [
     {
+      "plugin": "@nx/js/typescript",
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        },
+        "build": {
+          "targetName": "build",
+          "configName": "tsconfig.lib.json",
+          "buildDepsName": "build-deps",
+          "watchDepsName": "watch-deps"
+        }
+      }
+    },
+    {
       "plugin": "@nx/next/plugin"
     },
     {
       "plugin": "@nx/vite/plugin"
     },
     {
-      "plugin": "@nx/vitest"
+      "plugin": "@nx/vitest",
+      "options": {
+        "testMode": "run"
+      }
     },
     {
       "plugin": "@nx/eslint/plugin"

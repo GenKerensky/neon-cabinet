@@ -2,12 +2,13 @@
 
 import dynamic from "next/dynamic";
 import { useRef } from "react";
-import type { IRefPhaserGame } from "@neon-cabinet/battle-tanks";
+import type { Scene } from "phaser";
 import { GameView } from "../../../components/game-view";
+import type { IRefPhaserGame } from "battle-tanks";
 
 const PhaserGame = dynamic(
   () =>
-    import("@neon-cabinet/battle-tanks").then((mod) => ({
+    import("battle-tanks").then((mod) => ({
       default: mod.PhaserGame,
     })),
   { ssr: false },
@@ -19,7 +20,7 @@ export default function BattleTanksPage() {
     scene: undefined,
   });
 
-  const onCurrentActiveScene = (_scene: Phaser.Scene) => {
+  const onCurrentActiveScene = (_scene: Scene) => {
     // Scene ready
   };
 

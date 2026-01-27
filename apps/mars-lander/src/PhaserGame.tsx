@@ -1,41 +1,42 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
-import Phaser from "phaser";
-import { EventBus } from "./EventBus";
-import { Boot } from "./scenes/Boot";
-import { Title } from "./scenes/Title";
-import { GameOver } from "./scenes/GameOver";
-import { Game as MainGame } from "./scenes/Game";
-import { Pause } from "./scenes/Pause";
-import { VectorShader } from "@neon-cabinet/games-shared";
+import { AUTO, Game, Scale } from "phaser";
+import type { Renderer, Scene, Types } from "phaser";
+import { EventBus } from "./game/EventBus";
+import { Boot } from "./game/scenes/Boot";
+import { Title } from "./game/scenes/Title";
+import { GameOver } from "./game/scenes/GameOver";
+import { Game as MainGame } from "./game/scenes/Game";
+import { Pause } from "./game/scenes/Pause";
+import { VectorShader } from "../../../packages/shaders/src";
 
 const FONT_FAMILY = "Orbitron, sans-serif";
 
 export interface IRefPhaserGame {
-  game: Phaser.Game | undefined;
-  scene: Phaser.Scene | undefined;
+  game: Game | undefined;
+  scene: Scene | undefined;
 }
 
 interface IProps {
-  currentActiveScene?: (scene: Phaser.Scene) => void;
+  currentActiveScene?: (scene: Scene) => void;
 }
 
 export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
   function PhaserGame({ currentActiveScene }, ref) {
-    const game = useRef<Phaser.Game | undefined>(undefined);
+    const game = useRef<Game | undefined>(undefined);
 
     useLayoutEffect(() => {
       if (game.current === undefined) {
-        const config: Phaser.Types.Core.GameConfig & {
+        const config: Types.Core.GameConfig & {
           customFontFamily?: string;
         } = {
-          type: Phaser.AUTO,
+          type: AUTO,
           width: 1600,
           height: 1200,
           parent: "phaser-game",
           backgroundColor: "#000000",
           customFontFamily: FONT_FAMILY,
           scale: {
-            mode: Phaser.Scale.FIT,
+            mode: Scale.FIT,
             zoom: 1,
             autoRound: false,
             max: {
@@ -58,7 +59,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           callbacks: {
             postBoot: (gameInstance) => {
               const renderer =
-                gameInstance.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
+                gameInstance.renderer as Renderer.WebGL.WebGLRenderer;
               if (renderer.pipelines) {
                 renderer.pipelines.addPostPipeline(
                   "VectorShader",
@@ -82,7 +83,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           },
         };
 
-        game.current = new Phaser.Game(config);
+        game.current = new Game(config);
 
         if (typeof ref === "function") {
           ref({ game: game.current, scene: undefined });
@@ -100,7 +101,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
     }, [ref]);
 
     useEffect(() => {
-      const handleSceneReady = (scene_instance: Phaser.Scene) => {
+      const handleSceneReady = (scene_instance: Scene) => {
         if (currentActiveScene && typeof currentActiveScene === "function") {
           currentActiveScene(scene_instance);
         }

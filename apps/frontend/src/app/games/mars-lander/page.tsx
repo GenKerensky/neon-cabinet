@@ -2,12 +2,13 @@
 
 import dynamic from "next/dynamic";
 import { useRef } from "react";
-import type { IRefPhaserGame } from "@neon-cabinet/mars-lander";
+import type { Scene } from "phaser";
+import type { IRefPhaserGame } from "mars-lander";
 import { GameView } from "../../../components/game-view";
 
 const PhaserGame = dynamic(
   () =>
-    import("@neon-cabinet/mars-lander").then((mod) => ({
+    import("mars-lander").then((mod) => ({
       default: mod.PhaserGame,
     })),
   { ssr: false },
@@ -19,7 +20,7 @@ export default function MarsLanderPage() {
     scene: undefined,
   });
 
-  const onCurrentActiveScene = (_scene: Phaser.Scene) => {
+  const onCurrentActiveScene = (_scene: Scene) => {
     // Scene ready; can use for React bridge if needed.
   };
 

@@ -1,12 +1,14 @@
 {
-  "name": "neon-cabinet",
+  "name": "@neon-cabinet",
   "version": "0.0.1",
   "description": "A virtual web arcade for retro-style games. Play classics like Space Defender and more.",
   "scripts": {
     "prepare": "husky",
     "lint-staged": "lint-staged"
   },
-  "dependencies": {},
+  "dependencies": {
+    "glslang-validator-prebuilt": "^0.0.7"
+  },
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.52.0",
     "@eslint/js": "^9.39.2",
@@ -15,6 +17,9 @@
     "@nx/next": "^22.4.1",
     "@nx/vite": "^22.4.1",
     "@nx/vitest": "^22.4.1",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^22.10.2",
@@ -26,7 +31,6 @@
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.4",
     "eslint-config-prettier": "^10.1.8",
-    "glslang-validator-prebuilt": "^0.0.7",
     "husky": "^9.1.7",
     "jsdom": "^25.0.1",
     "lint-staged": "^15.2.11",
@@ -37,13 +41,16 @@
     "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.16",
     "tailwindcss-animate": "^1.0.7",
+    "terser": "^5.46.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.52.0",
     "vite": "^5.4.11",
+    "vite-plugin-dts": "^4.5.4",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8"
   },
   "trustedDependencies": [
+    "glslang-validator-prebuilt",
     "napi-postinstall",
     "unrs-resolver"
   ],
