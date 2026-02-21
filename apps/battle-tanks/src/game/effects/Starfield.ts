@@ -17,8 +17,8 @@ interface Star {
 export class Starfield {
   private graphics!: GameObjects.Graphics;
   private stars: Star[] = [];
-  private screenWidth: number = 0;
-  private panoramaWidth: number = 0;
+  private screenWidth = 0;
+  private panoramaWidth = 0;
 
   create(scene: Scene): void {
     const { width, height } = scene.cameras.main;

@@ -21,9 +21,9 @@ const ASTEROID_CONFIG: Record<
 export class Asteroid extends Physics.Arcade.Sprite {
   public asteroidSize: AsteroidSize;
   public points: number;
-  private storedVelocityX: number = 0;
-  private storedVelocityY: number = 0;
-  private storedAngularVelocity: number = 0;
+  private storedVelocityX = 0;
+  private storedVelocityY = 0;
+  private storedAngularVelocity = 0;
 
   constructor(
     scene: Scene,

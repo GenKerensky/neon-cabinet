@@ -12,10 +12,13 @@
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "references": [
     {
-      "path": "../../packages/shaders/tsconfig.lib.json"
+      "path": "../../libs/typed-event-emitter/tsconfig.lib.json"
     },
     {
-      "path": "../../packages/model-tools"
+      "path": "../../libs/shaders/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/model-tools"
     }
   ]
 }

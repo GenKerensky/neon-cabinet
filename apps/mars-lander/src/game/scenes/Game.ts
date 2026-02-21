@@ -10,9 +10,9 @@ export class Game extends Scene {
   private terrain!: Terrain;
   private particles!: GameObjects.Particles.ParticleEmitter;
 
-  private score: number = 0;
-  private level: number = 1;
-  private gravity: number = 80; // Mars gravity (about 38% of Earth)
+  private score = 0;
+  private level = 1;
+  private gravity = 80; // Mars gravity (about 38% of Earth)
 
   // HUD elements
   private altitudeText!: GameObjects.Text;

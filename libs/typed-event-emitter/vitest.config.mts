@@ -1,15 +1,13 @@
 import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react";
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir: "../../node_modules/.vite/apps/space-defender",
-  plugins: [react()],
+  cacheDir: "../../node_modules/.vite/libs/typed-event-emitter",
   test: {
-    name: "space-defender",
+    name: "typed-event-emitter",
     watch: false,
     globals: true,
-    environment: "jsdom",
+    environment: "node",
     include: ["{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     reporters: ["default"],
     coverage: {

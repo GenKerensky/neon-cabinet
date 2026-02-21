@@ -2,14 +2,14 @@ import { Math as PhaserMath, Physics } from "phaser";
 import type { GameObjects, Scene } from "phaser";
 
 export class Missile extends Physics.Arcade.Sprite {
-  private lifespan: number = 3000;
-  private spawnTime: number = 0;
-  private speed: number = 250;
-  private turnRate: number = 0.03;
+  private lifespan = 3000;
+  private spawnTime = 0;
+  private speed = 250;
+  private turnRate = 0.03;
   private trailEmitter: GameObjects.Particles.ParticleEmitter;
-  private hasExploded: boolean = false;
+  private hasExploded = false;
   private onAutoDetonate?: (missile: Missile) => void;
-  private exhaustAngleDeg: number = 0;
+  private exhaustAngleDeg = 0;
 
   constructor(scene: Scene, x: number, y: number, aimAngle: number) {
     super(scene, x, y, "missile");

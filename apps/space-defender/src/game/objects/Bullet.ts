@@ -2,10 +2,10 @@ import { Physics } from "phaser";
 import type { GameObjects, Scene } from "phaser";
 
 export class Bullet extends Physics.Arcade.Sprite {
-  private lifespan: number = 2000;
-  private spawnTime: number = 0;
-  private aimAngle: number = 0;
-  private speed: number = 500;
+  private lifespan = 2000;
+  private spawnTime = 0;
+  private aimAngle = 0;
+  private speed = 500;
   private trailEmitter: GameObjects.Particles.ParticleEmitter;
   private bloomGlow: GameObjects.Graphics;
 

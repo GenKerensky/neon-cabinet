@@ -4,7 +4,7 @@ export function wrapObject(
   obj: Physics.Arcade.Sprite,
   width: number,
   height: number,
-  padding: number = 20,
+  padding = 20,
 ): void {
   if (obj.x < -padding) {
     obj.x = width + padding;

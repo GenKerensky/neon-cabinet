@@ -1,5 +1,5 @@
 import type { Scene } from "phaser";
-import { VectorMode } from "../../../../../packages/shaders/src";
+import { VectorMode } from "@neon-cabinet/shaders";
 
 const VECTOR_MODE_KEY = "vectorMode";
 

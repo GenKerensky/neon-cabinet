@@ -1,6 +1,6 @@
 import { Math as PhaserMath, Scene } from "phaser";
 import { EventBus } from "../EventBus";
-import { VectorMode } from "../../../../../packages/shaders/src";
+import { VectorMode } from "@neon-cabinet/shaders";
 
 export class Boot extends Scene {
   constructor() {

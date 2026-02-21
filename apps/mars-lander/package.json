@@ -2,19 +2,16 @@
   "name": "mars-lander",
   "version": "0.0.1",
   "type": "module",
-  "main": "./dist/mars-lander.es.js",
-  "types": "./dist/PhaserGame.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/PhaserGame.d.ts",
-      "development": "./src/PhaserGame.tsx",
-      "default": "./dist/mars-lander.es.js"
-    }
+    ".": "./dist/index.js"
   },
   "dependencies": {
     "@neon-cabinet/shaders": "workspace:*",
     "phaser": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "@neon-cabinet/typed-event-emitter": "workspace:*"
   }
 }

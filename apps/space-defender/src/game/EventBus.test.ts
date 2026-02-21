@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { EventBus } from "./EventBus";
 
 describe("EventBus", () => {
@@ -9,15 +9,15 @@ describe("EventBus", () => {
 
   describe("on", () => {
     it("should register an event listener", () => {
-      const listener = () => {};
+      const listener = vi.fn();
       EventBus.on("test-event", listener);
       // If no error is thrown, listener was registered
       expect(true).toBe(true);
     });
 
     it("should allow multiple listeners for the same event", () => {
-      const listener1 = () => {};
-      const listener2 = () => {};
+      const listener1 = vi.fn();
+      const listener2 = vi.fn();
       EventBus.on("test-event", listener1);
       EventBus.on("test-event", listener2);
       expect(true).toBe(true);
@@ -36,8 +36,8 @@ describe("EventBus", () => {
     });
 
     it("should pass arguments to listeners", () => {
-      let receivedArgs: any[] = [];
-      const listener = (...args: any[]) => {
+      let receivedArgs: unknown[] = [];
+      const listener = (...args: unknown[]) => {
         receivedArgs = args;
       };
       EventBus.on("test-event", listener);

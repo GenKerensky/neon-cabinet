@@ -3,12 +3,12 @@ import type { GameObjects, Scene } from "phaser";
 import { Asteroid } from "./Asteroid";
 
 export class RayBeam extends Physics.Arcade.Sprite {
-  private lifespan: number = 1000;
-  private spawnTime: number = 0;
-  private aimAngle: number = 0;
-  private speed: number = 500;
-  private startX: number = 0;
-  private startY: number = 0;
+  private lifespan = 1000;
+  private spawnTime = 0;
+  private aimAngle = 0;
+  private speed = 500;
+  private startX = 0;
+  private startY = 0;
   private beamGraphics: GameObjects.Graphics;
   private asteroidGroup: Physics.Arcade.Group | null = null;
   private onHitAsteroid?: (asteroid: Asteroid) => void;

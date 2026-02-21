@@ -37,3 +37,4 @@ bun.lockb
 .nx/cache
 .nx/workspace-data
 vitest.config.*.timestamp*
+vite.config.*.timestamp*

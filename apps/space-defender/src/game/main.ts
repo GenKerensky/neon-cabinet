@@ -5,7 +5,7 @@ import { Game as MainGame } from "./scenes/Game";
 import { Pause } from "./scenes/Pause";
 import { AUTO } from "phaser";
 import type { Renderer, Types } from "phaser";
-import { VectorShader } from "../../../../packages/shaders/src";
+import { VectorShader } from "@neon-cabinet/shaders";
 
 export const config: Types.Core.GameConfig = {
   type: AUTO,

@@ -3,7 +3,7 @@ import type { GameObjects } from "phaser";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
 import { getVectorMode, setVectorMode, VectorMode } from "../utils/settings";
-import { VectorShader } from "../../../../../packages/shaders/src";
+import { VectorShader } from "@neon-cabinet/shaders";
 
 export class Pause extends Scene {
   private modeLetterTexts: GameObjects.Text[] = [];

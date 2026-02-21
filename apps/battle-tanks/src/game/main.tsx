@@ -1,6 +1,6 @@
 import { AUTO, Game, Scale } from "phaser";
 import type { Renderer, Types } from "phaser";
-import { VectorShader } from "../../../../packages/shaders/src";
+import { VectorShader } from "@neon-cabinet/shaders";
 import { Boot } from "./scenes/Boot";
 import { Title } from "./scenes/Title";
 import { Game as MainGame } from "./scenes/Game";

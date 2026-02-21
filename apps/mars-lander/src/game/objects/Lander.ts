@@ -2,11 +2,11 @@ import { Input, Math as PhaserMath, Physics } from "phaser";
 import type { GameObjects, Scene, Types } from "phaser";
 
 export class Lander extends Physics.Arcade.Sprite {
-  private fuel: number = 100;
-  private maxFuel: number = 100;
-  private fuelConsumption: number = 15; // per second when thrusting
-  private thrustPower: number = 250;
-  private rotationSpeed: number = 150; // degrees per second
+  private fuel = 100;
+  private maxFuel = 100;
+  private fuelConsumption = 15; // per second when thrusting
+  private thrustPower = 250;
+  private rotationSpeed = 150; // degrees per second
   private thrustEmitter: GameObjects.Particles.ParticleEmitter;
 
   // Input keys

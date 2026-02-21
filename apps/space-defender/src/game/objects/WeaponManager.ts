@@ -11,7 +11,7 @@ import { Asteroid } from "./Asteroid";
 
 export class WeaponManager {
   private weapons: Weapon[] = [];
-  private currentWeaponIndex: number = 0;
+  private currentWeaponIndex = 0;
   private unlockedWeapons: Set<number> = new Set([0]);
   private scene: Scene;
   private onWeaponUnlock?: (weapon: Weapon) => void;

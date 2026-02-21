@@ -9,17 +9,17 @@ export class Ship extends Physics.Arcade.Sprite {
     S: Input.Keyboard.Key;
     D: Input.Keyboard.Key;
   };
-  private thrustSpeed: number = 300;
-  private drag: number = 0.99;
-  private isInvulnerable: boolean = false;
+  private thrustSpeed = 300;
+  private drag = 0.99;
+  private isInvulnerable = false;
   private invulnerabilityTimer?: Time.TimerEvent;
-  private aimAngle: number = 0;
-  private targetAimAngle: number = 0;
-  private rotationVelocity: number = 0;
-  private rotationAccel: number = 15; // Angular acceleration (radians/sec²)
-  private maxRotationSpeed: number = 8; // Max rotation speed (radians/sec)
-  private rotationDamping: number = 0.92; // Friction on rotation
-  private exhaustAngleDeg: number = 0;
+  private aimAngle = 0;
+  private targetAimAngle = 0;
+  private rotationVelocity = 0;
+  private rotationAccel = 15; // Angular acceleration (radians/sec²)
+  private maxRotationSpeed = 8; // Max rotation speed (radians/sec)
+  private rotationDamping = 0.92; // Friction on rotation
+  private exhaustAngleDeg = 0;
   private thrustEmitter: GameObjects.Particles.ParticleEmitter;
 
   constructor(scene: Scene, x: number, y: number) {
@@ -166,7 +166,7 @@ export class Ship extends Physics.Arcade.Sprite {
     }
   }
 
-  makeInvulnerable(duration: number = 2000): void {
+  makeInvulnerable(duration = 2000): void {
     this.isInvulnerable = true;
 
     if (this.invulnerabilityTimer) {

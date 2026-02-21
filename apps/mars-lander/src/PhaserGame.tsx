@@ -7,7 +7,7 @@ import { Title } from "./game/scenes/Title";
 import { GameOver } from "./game/scenes/GameOver";
 import { Game as MainGame } from "./game/scenes/Game";
 import { Pause } from "./game/scenes/Pause";
-import { VectorShader } from "../../../packages/shaders/src";
+import { VectorShader } from "@neon-cabinet/shaders";
 
 const FONT_FAMILY = "Orbitron, sans-serif";
 

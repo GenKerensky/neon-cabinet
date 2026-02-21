@@ -40,7 +40,7 @@ export class Terrain {
     this.maxTerrainHeight = this.height * 0.3; // Terrain cannot go above 30% from top
   }
 
-  generate(difficulty: number = 1, avoidCenter: boolean = false): void {
+  generate(difficulty = 1, avoidCenter = false): void {
     this.points = [];
     this.landingZones = [];
 

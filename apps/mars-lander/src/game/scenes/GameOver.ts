@@ -4,9 +4,9 @@ import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
 
 export class GameOver extends Scene {
-  private score: number = 0;
-  private level: number = 1;
-  private crashReason: string = "";
+  private score = 0;
+  private level = 1;
+  private crashReason = "";
 
   constructor() {
     super("GameOver");

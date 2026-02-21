@@ -427,7 +427,7 @@ export class PlayerTank {
   /**
    * Restore armor by amount (for pickups)
    */
-  restoreArmor(amount: number = 1): boolean {
+  restoreArmor(amount = 1): boolean {
     let restored = false;
     for (const section of ["front", "rear", "left", "right"] as TankSection[]) {
       if (this.damageState[section] > 0) {

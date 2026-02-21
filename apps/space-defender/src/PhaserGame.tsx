@@ -7,7 +7,7 @@ import { Title } from "./game/scenes/Title";
 import { GameOver } from "./game/scenes/GameOver";
 import { Game as MainGame } from "./game/scenes/Game";
 import { Pause } from "./game/scenes/Pause";
-import { VectorShader } from "../../../packages/shaders/src";
+import { VectorShader } from "@neon-cabinet/shaders";
 
 const FONT_FAMILY = "Orbitron, sans-serif";
 
@@ -98,7 +98,6 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           game.current = undefined;
         }
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -118,7 +117,6 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
       return () => {
         EventBus.off("current-scene-ready", handleSceneReady);
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentActiveScene]);
 
     return (

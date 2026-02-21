@@ -9,16 +9,19 @@
       "path": "./apps/battle-tanks"
     },
     {
-      "path": "./packages/shaders"
-    },
-    {
       "path": "./apps/mars-lander"
     },
     {
       "path": "./apps/frontend"
     },
     {
-      "path": "./packages/model-tools"
+      "path": "./libs/model-tools"
+    },
+    {
+      "path": "./libs/shaders"
+    },
+    {
+      "path": "./libs/typed-event-emitter"
     }
   ]
 }

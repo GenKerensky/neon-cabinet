@@ -57,13 +57,11 @@ try {
   console.log(`Validating ${shaderEntries.length} shader file(s)...\n`);
 
   if (!existsSync(glslangValidatorPath)) {
-    console.error(
-      `Error: glslangValidator binary not found at ${glslangValidatorPath}`,
+    console.warn(
+      `Warning: glslangValidator binary not found at ${glslangValidatorPath}`,
     );
-    console.error(
-      "Try running: bun install to ensure the package is properly installed.",
-    );
-    process.exit(1);
+    console.warn("Skipping shader validation. Run: bun install");
+    process.exit(0);
   }
 
   let hasErrors = false;

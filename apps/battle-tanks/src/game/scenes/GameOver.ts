@@ -3,8 +3,8 @@ import { EventBus } from "../EventBus";
 import { getFontFamily } from "../../utils/font";
 
 export class GameOver extends Scene {
-  private score: number = 0;
-  private wave: number = 1;
+  private score = 0;
+  private wave = 1;
 
   constructor() {
     super("GameOver");

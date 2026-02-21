@@ -19,7 +19,9 @@
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/.eslintrc.json",
-      "!{projectRoot}/eslint.config.js"
+      "!{projectRoot}/eslint.config.js",
+      "!{projectRoot}/eslint.config.mjs",
+      "!{projectRoot}/src/test-setup.[jt]s"
     ],
     "sharedGlobals": []
   },
@@ -41,5 +43,18 @@
     { "plugin": "@nx/vitest", "options": { "testMode": "run" } },
     { "plugin": "@nx/eslint/plugin" }
   ],
+  "generators": {
+    "@nx/react": {
+      "library": {
+        "unitTestRunner": "vitest"
+      }
+    },
+    "@nx/next": {
+      "application": {
+        "style": "tailwind",
+        "linter": "eslint"
+      }
+    }
+  },
   "nxCloudId": "699910c8c8e0b1409daaed08"
 }

@@ -16,9 +16,9 @@ export class Game extends Scene {
   private missileExplosionParticles!: GameObjects.Particles.ParticleEmitter;
   private weaponManager!: WeaponManager;
 
-  private score: number = 0;
-  private lives: number = 3;
-  private wave: number = 1;
+  private score = 0;
+  private lives = 3;
+  private wave = 1;
 
   private scoreText!: GameObjects.Text;
   private livesContainer!: GameObjects.Container;
@@ -30,10 +30,10 @@ export class Game extends Scene {
   private cooldownCircle!: GameObjects.Graphics;
   private reloadText!: GameObjects.Text;
 
-  private canShoot: boolean = true;
-  private cooldownStartTime: number = 0;
-  private cooldownDuration: number = 0;
-  private cheatMode: boolean = false;
+  private canShoot = true;
+  private cooldownStartTime = 0;
+  private cooldownDuration = 0;
+  private cheatMode = false;
 
   constructor() {
     super("Game");
