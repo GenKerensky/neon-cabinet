@@ -6,21 +6,11 @@
       "cache": true,
       "outputs": ["{projectRoot}/dist"]
     },
-    "format": {
-      "cache": true
-    },
-    "format:check": {
-      "cache": true
-    },
-    "validate:shaders": {
-      "cache": true
-    },
-    "export-model": {
-      "cache": true
-    },
-    "test": {
-      "dependsOn": ["^build"]
-    }
+    "format": { "cache": true },
+    "format:check": { "cache": true },
+    "validate:shaders": { "cache": true },
+    "export-model": { "cache": true },
+    "test": { "dependsOn": ["^build"] }
   },
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
@@ -37,9 +27,7 @@
     {
       "plugin": "@nx/js/typescript",
       "options": {
-        "typecheck": {
-          "targetName": "typecheck"
-        },
+        "typecheck": { "targetName": "typecheck" },
         "build": {
           "targetName": "build",
           "configName": "tsconfig.lib.json",
@@ -48,20 +36,10 @@
         }
       }
     },
-    {
-      "plugin": "@nx/next/plugin"
-    },
-    {
-      "plugin": "@nx/vite/plugin"
-    },
-    {
-      "plugin": "@nx/vitest",
-      "options": {
-        "testMode": "run"
-      }
-    },
-    {
-      "plugin": "@nx/eslint/plugin"
-    }
-  ]
+    { "plugin": "@nx/next/plugin" },
+    { "plugin": "@nx/vite/plugin" },
+    { "plugin": "@nx/vitest", "options": { "testMode": "run" } },
+    { "plugin": "@nx/eslint/plugin" }
+  ],
+  "nxCloudId": "699910c8c8e0b1409daaed08"
 }
