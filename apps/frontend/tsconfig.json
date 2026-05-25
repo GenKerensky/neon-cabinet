@@ -60,6 +60,9 @@
       "path": "../mars-lander"
     },
     {
+      "path": "../maze-runner"
+    },
+    {
       "path": "../battle-tanks"
     }
   ]

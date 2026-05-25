@@ -37,9 +37,8 @@ export const games: Game[] = [
     name: "Maze Runner",
     description:
       "Navigate neon corridors, devour dots, and outwit relentless pursuers. A fresh take on the 1980 maze chase that conquered arcades worldwide.",
-    href: "#",
+    href: "/games/maze-runner",
     thumbnail: "/assets/maze-runner-cabinet.png",
-    comingSoon: true,
   },
   {
     id: "starfighter-assault",

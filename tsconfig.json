@@ -22,6 +22,9 @@
     },
     {
       "path": "./libs/typed-event-emitter"
+    },
+    {
+      "path": "./apps/maze-runner"
     }
   ]
 }

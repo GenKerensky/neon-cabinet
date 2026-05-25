@@ -89,6 +89,7 @@
         "framer-motion": "^12.29.0",
         "lucide-react": "^0.468.0",
         "mars-lander": "workspace:*",
+        "maze-runner": "workspace:*",
         "next": "^16.1.4",
         "phaser": "catalog:",
         "react": "catalog:",
@@ -99,6 +100,17 @@
     },
     "apps/mars-lander": {
       "name": "mars-lander",
+      "version": "0.0.1",
+      "dependencies": {
+        "@neon-cabinet/shaders": "workspace:*",
+        "@neon-cabinet/typed-event-emitter": "workspace:*",
+        "phaser": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+      },
+    },
+    "apps/maze-runner": {
+      "name": "maze-runner",
       "version": "0.0.1",
       "dependencies": {
         "@neon-cabinet/shaders": "workspace:*",
@@ -2282,6 +2294,8 @@
     "mars-lander": ["mars-lander@workspace:apps/mars-lander"],
 
     "math-intrinsics": ["math-intrinsics@1.1.0", "", {}, "sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g=="],
+
+    "maze-runner": ["maze-runner@workspace:apps/maze-runner"],
 
     "mdn-data": ["mdn-data@2.0.30", "", {}, "sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA=="],
 
