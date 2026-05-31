@@ -4,6 +4,19 @@
       "type": "stdio",
       "command": "npx",
       "args": ["nx-mcp@latest"]
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "/usr/lib/opt/codex-desktop/resources/node-runtime/bin/node",
+      "args": [
+        "/usr/lib/opt/codex-desktop/resources/node-runtime/lib/node_modules/npm/bin/npx-cli.js",
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--no-usage-statistics"
+      ],
+      "env": {
+        "CHROME_DEVTOOLS_MCP_NO_UPDATE_CHECKS": "1"
+      }
     }
   }
 }
