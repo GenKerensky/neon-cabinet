@@ -4,6 +4,7 @@ import { MazeGenerator, CellType, MazeCell } from "../utils/MazeGenerator";
 import { Player } from "../objects/Player";
 import { Direction } from "../utils/DirectionUtils";
 import { Enemy, EnemyState } from "../objects/Enemy";
+import type { EnemyCrowdBehavior } from "../objects/Enemy";
 import { Chaser } from "../ai/Chaser";
 import { Ambusher } from "../ai/Ambusher";
 import { Wanderer } from "../ai/Wanderer";
@@ -394,6 +395,12 @@ export class Game extends Scene {
     this.player.update(time, delta);
 
     for (const enemy of this.enemies) {
+      const enemyIndex = this.enemies.indexOf(enemy);
+      const definition = this.activeGhostDefinitions[enemyIndex];
+      enemy.setCrowdContext?.(
+        this.getBlockedGhostCells(enemy),
+        this.getGhostCrowdBehavior(definition),
+      );
       enemy.update(
         time,
         delta,
@@ -827,6 +834,44 @@ export class Game extends Scene {
       undefined,
       this,
     );
+  }
+
+  private getBlockedGhostCells(currentEnemy: Enemy): Set<string> {
+    const blocked = new Set<string>();
+    for (const enemy of this.enemies) {
+      if (enemy === currentEnemy || enemy.getState() === EnemyState.DEAD) {
+        continue;
+      }
+      if (!enemy.getGridX || !enemy.getGridY || !enemy.getCurrentDirection) {
+        continue;
+      }
+      blocked.add(`${enemy.getGridX()},${enemy.getGridY()}`);
+
+      const dir = enemy.getCurrentDirection();
+      const nextX =
+        enemy.getGridX() +
+        (dir === Direction.RIGHT ? 1 : dir === Direction.LEFT ? -1 : 0);
+      const nextY =
+        enemy.getGridY() +
+        (dir === Direction.DOWN ? 1 : dir === Direction.UP ? -1 : 0);
+      blocked.add(`${nextX},${nextY}`);
+    }
+    return blocked;
+  }
+
+  private getGhostCrowdBehavior(
+    definition?: GhostDefinition,
+  ): EnemyCrowdBehavior {
+    switch (definition?.archetype) {
+      case "chaser":
+      case "sentinel":
+        return "trail";
+      case "timid":
+      case "wanderer":
+        return "yield";
+      default:
+        return "reroute";
+    }
   }
 
   private rebuildActiveGhosts(): void {

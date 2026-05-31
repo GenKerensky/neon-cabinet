@@ -16,6 +16,8 @@ import {
   isEnteringPenFromOutside,
   isAtCellCenter,
   getCenterTolerance,
+  getCellCenter,
+  hasCrossedCellCenter,
 } from "../utils/gridGeometry";
 
 const DIR_TO_VDIR: Record<number, VectorDirection> = {
@@ -31,6 +33,14 @@ const VDIR_TO_DIR: Record<VectorDirection, Direction> = {
   DOWN: Direction.DOWN,
   LEFT: Direction.LEFT,
   RIGHT: Direction.RIGHT,
+};
+
+type BodyLayerMetadata = {
+  animations?: Array<Record<string, unknown>>;
+};
+
+type HasLayersMetadata = {
+  layersMetadata?: Map<string, BodyLayerMetadata>;
 };
 
 function toVDir(d: Direction | VectorDirection): VectorDirection {
@@ -66,9 +76,13 @@ export class Player extends VectorPuppet {
   private animationState: PlayerAnimationState = PlayerAnimationState.IDLE;
   private isDying = false;
   private deathTimer = 0;
+  private deathDuration = 900;
   private onDeathComplete?: () => void;
-  private invulnerabilityTimer?: Phaser.Time.TimerEvent;
-  private invulnerabilityTween?: Phaser.Tweens.Tween;
+  private invulnerabilityElapsed = 0;
+  private invulnerabilityDuration = 0;
+  private invulnerabilityFlashPhase = 0;
+  private onInvulnerabilityComplete?: () => void;
+  private baseBodyAnimations: Array<Record<string, unknown>> = [];
 
   set movementDirection(dir: Direction) {
     (this as any).currentDirection = DIR_TO_VDIR[dir];
@@ -145,6 +159,11 @@ export class Player extends VectorPuppet {
     this.gridX = Math.floor((x - ox) / ts);
     this.gridY = Math.floor((y - oy) / ts);
     this.scale = ts / 30;
+    (this as any).currentDirection = "NONE";
+    const bodyMetadata = (
+      this as unknown as HasLayersMetadata
+    ).layersMetadata?.get("body");
+    this.baseBodyAnimations = [...(bodyMetadata?.animations ?? [])];
     scene.physics.add.existing(this);
   }
 
@@ -166,21 +185,29 @@ export class Player extends VectorPuppet {
     const mazeDir = toDir(dir);
     const vDir = toVDir(dir);
     if (this.isDying) return;
+    if (mazeDir === Direction.NONE) return;
 
     const currentDir =
       VDIR_TO_DIR[(this as any).currentDirection as VectorDirection] ??
       Direction.NONE;
     if (currentDir === Direction.NONE) {
-      (this as any).currentDirection = vDir;
-      super.setDirection(vDir);
+      if (this.canMove(mazeDir)) {
+        this.commitDirection(mazeDir);
+      } else {
+        this.nextDirection = mazeDir;
+        super.setDirection(vDir);
+      }
+      return;
+    }
+
+    if (mazeDir === this.getOppositeDirection(currentDir)) {
+      this.commitDirection(mazeDir);
       return;
     }
 
     if (this.isAtIntersection() && this.isCentered()) {
       if (this.canMove(mazeDir)) {
-        (this as any).currentDirection = vDir;
-        this.nextDirection = Direction.NONE;
-        super.setDirection(vDir);
+        this.commitDirection(mazeDir);
       } else {
         this.nextDirection = mazeDir;
       }
@@ -195,46 +222,27 @@ export class Player extends VectorPuppet {
     this.nextDirection = Direction.NONE;
     (this as any).currentDirection = "NONE";
     this.animationState = PlayerAnimationState.DEATH;
-    this.deathTimer = 900;
+    this.deathDuration = 1100;
+    this.deathTimer = this.deathDuration;
     this.onDeathComplete = onComplete;
+    this.setAlpha(1);
+    this.setDeathAnimation(0);
   }
 
   startInvulnerability(durationMs: number, onComplete?: () => void): void {
-    this.invulnerabilityTimer?.remove?.();
-    this.invulnerabilityTween?.stop?.();
-
+    this.invulnerabilityDuration = Math.max(0, durationMs);
+    this.invulnerabilityElapsed = 0;
+    this.invulnerabilityFlashPhase = 0;
+    this.onInvulnerabilityComplete = onComplete;
     this.setAlpha(0.45);
-    this.invulnerabilityTween = this.scene.tweens.add({
-      targets: this,
-      alpha: 1,
-      duration: 120,
-      yoyo: true,
-      repeat: -1,
-      ease: "Sine.easeInOut",
-    });
-
-    const finish = () => {
-      this.invulnerabilityTween?.stop?.();
-      this.invulnerabilityTween = undefined;
-      this.invulnerabilityTimer = undefined;
-      this.setAlpha(1);
-      onComplete?.();
-    };
-
-    if (this.scene.time?.delayedCall) {
-      this.invulnerabilityTimer = this.scene.time.delayedCall(
-        durationMs,
-        finish,
-      );
-    } else {
-      finish();
-    }
   }
 
   override update(time: number, delta: number): void {
     super.update(time, delta);
     if (this.isDying) {
       this.deathTimer -= delta;
+      const progress = 1 - Math.max(0, this.deathTimer) / this.deathDuration;
+      this.setDeathAnimation(progress);
       if (this.deathTimer <= 0) {
         const complete = this.onDeathComplete;
         this.onDeathComplete = undefined;
@@ -243,6 +251,8 @@ export class Player extends VectorPuppet {
       }
       return;
     }
+
+    this.updateInvulnerability(delta);
 
     const dt = delta / 1000;
     const moveAmount = this.speed * dt;
@@ -254,35 +264,58 @@ export class Player extends VectorPuppet {
       return;
     }
 
+    this.applyQueuedDirectionAtCenter();
+    this.moveAlongCurrentDirection(moveAmount);
+    this.updateAnimationState();
+  }
+
+  private moveAlongCurrentDirection(moveAmount: number): void {
+    const currentVDir = (this as any).currentDirection as VectorDirection;
+    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
     const dx = directionToDx(currentDir);
     const dy = directionToDy(currentDir);
 
-    const newX = this.x + dx * moveAmount;
-    const newY = this.y + dy * moveAmount;
-
-    if (this.canMove(currentDir)) {
-      this.gridX = Math.floor((newX - this.offsetX) / this.tileSize);
-      this.gridY = Math.floor((newY - this.offsetY) / this.tileSize);
-      this.x = newX;
-      this.y = newY;
-      this.enforceCenterline();
-    } else {
-      this.snapToGrid();
+    if (dx === 0 && dy === 0) {
+      return;
     }
+
+    this.easeOntoCenterline(moveAmount);
+
+    if (!this.canMove(currentDir)) {
+      this.snapToGrid();
+      return;
+    }
+
+    const nextGridX = this.gridX + dx;
+    const nextGridY = this.gridY + dy;
+    const nextCenter = getCellCenter(
+      nextGridX,
+      nextGridY,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+    );
+    const previousPosition = { x: this.x, y: this.y };
+    const nextPosition = {
+      x: this.x + dx * moveAmount,
+      y: this.y + dy * moveAmount,
+    };
+    const axis = dx !== 0 ? "x" : "y";
 
     if (
-      this.nextDirection !== Direction.NONE &&
-      (this.isAtIntersection() || !this.canMove(currentDir))
+      hasCrossedCellCenter(previousPosition, nextPosition, nextCenter, axis)
     ) {
-      if (this.canMove(this.nextDirection)) {
-        const committedDirection = this.nextDirection;
-        (this as any).currentDirection = DIR_TO_VDIR[committedDirection];
-        this.nextDirection = Direction.NONE;
-        super.setDirection(DIR_TO_VDIR[committedDirection]);
-      }
+      this.x = nextCenter.x;
+      this.y = nextCenter.y;
+      this.gridX = nextGridX;
+      this.gridY = nextGridY;
+      this.applyQueuedDirectionAtCenter();
+      return;
     }
 
-    this.updateAnimationState();
+    this.x = nextPosition.x;
+    this.y = nextPosition.y;
+    this.easeOntoCenterline(moveAmount);
   }
 
   private updateAnimationState(): void {
@@ -338,6 +371,103 @@ export class Player extends VectorPuppet {
       case PlayerAnimationState.DEATH:
         break;
     }
+  }
+
+  private commitDirection(dir: Direction): void {
+    (this as any).currentDirection = DIR_TO_VDIR[dir];
+    this.nextDirection = Direction.NONE;
+    super.setDirection(DIR_TO_VDIR[dir]);
+  }
+
+  private applyQueuedDirectionAtCenter(): void {
+    if (this.nextDirection === Direction.NONE) return;
+    if (!this.isCentered()) {
+      if (!this.isWithinTurnAssistWindow()) return;
+      this.snapToGrid();
+    }
+    if (this.canMove(this.nextDirection)) {
+      this.commitDirection(this.nextDirection);
+    }
+  }
+
+  private isWithinTurnAssistWindow(): boolean {
+    const center = getCellCenter(
+      this.gridX,
+      this.gridY,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+    );
+    const currentVDir = (this as any).currentDirection as VectorDirection;
+    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
+    const currentDx = directionToDx(currentDir);
+    const currentDy = directionToDy(currentDir);
+    const nextDx = directionToDx(this.nextDirection);
+    const nextDy = directionToDy(this.nextDirection);
+
+    if (currentDx === nextDx || currentDy === nextDy) return false;
+
+    const turnAxisDelta =
+      nextDy !== 0 ? Math.abs(this.x - center.x) : Math.abs(this.y - center.y);
+    const travelAxisDelta =
+      currentDx !== 0
+        ? Math.abs(this.x - center.x)
+        : Math.abs(this.y - center.y);
+    const tolerance = Math.max(1.25, this.tileSize * 0.08);
+    return turnAxisDelta <= tolerance && travelAxisDelta <= this.tileSize * 0.5;
+  }
+
+  private updateInvulnerability(delta: number): void {
+    if (this.invulnerabilityDuration <= 0) return;
+
+    this.invulnerabilityElapsed += delta;
+    const progress = Math.min(
+      1,
+      this.invulnerabilityElapsed / this.invulnerabilityDuration,
+    );
+    const flashesPerSecond = 6 + progress * 20;
+    this.invulnerabilityFlashPhase += (delta / 1000) * flashesPerSecond;
+    const visiblePulse =
+      Math.sin(this.invulnerabilityFlashPhase * Math.PI * 2) >= 0;
+    this.setAlpha(visiblePulse ? 1 : 0.28);
+
+    if (this.invulnerabilityElapsed >= this.invulnerabilityDuration) {
+      const complete = this.onInvulnerabilityComplete;
+      this.invulnerabilityDuration = 0;
+      this.invulnerabilityElapsed = 0;
+      this.onInvulnerabilityComplete = undefined;
+      this.setAlpha(1);
+      complete?.();
+    }
+  }
+
+  private setDeathAnimation(progress: number): void {
+    const bodyMetadata = (
+      this as unknown as HasLayersMetadata
+    ).layersMetadata?.get("body");
+    if (!bodyMetadata) return;
+
+    const clamped = Math.max(0, Math.min(1, progress));
+    const mouthAmplitude = 160 + clamped * 560;
+    bodyMetadata.animations = [
+      {
+        type: "chomp",
+        frequency: 0,
+        amplitude: mouthAmplitude,
+      },
+    ];
+    this.setScale((this.tileSize / 30) * (1 - clamped * 0.15));
+    this.setAlpha(1 - Math.max(0, clamped - 0.82) / 0.18);
+  }
+
+  private restoreBaseAnimation(): void {
+    const bodyMetadata = (
+      this as unknown as HasLayersMetadata
+    ).layersMetadata?.get("body");
+    if (bodyMetadata) {
+      bodyMetadata.animations = [...this.baseBodyAnimations];
+    }
+    this.setScale(this.tileSize / 30);
   }
 
   getGridX(): number {
@@ -413,16 +543,42 @@ export class Player extends VectorPuppet {
     this.y = this.offsetY + this.gridY * this.tileSize + this.tileSize / 2;
   }
 
-  private enforceCenterline(): void {
+  private easeOntoCenterline(maxCorrection: number): void {
+    const center = getCellCenter(
+      this.gridX,
+      this.gridY,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+    );
     const currentVDir = (this as any).currentDirection as VectorDirection;
     const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
     const dx = directionToDx(currentDir);
     const dy = directionToDy(currentDir);
+    const correction = Math.max(1, maxCorrection);
+
     if (dx !== 0) {
-      this.y = this.offsetY + this.gridY * this.tileSize + this.tileSize / 2;
+      const delta = center.y - this.y;
+      this.y += Math.sign(delta) * Math.min(Math.abs(delta), correction);
     }
     if (dy !== 0) {
-      this.x = this.offsetX + this.gridX * this.tileSize + this.tileSize / 2;
+      const delta = center.x - this.x;
+      this.x += Math.sign(delta) * Math.min(Math.abs(delta), correction);
+    }
+  }
+
+  private getOppositeDirection(dir: Direction): Direction {
+    switch (dir) {
+      case Direction.UP:
+        return Direction.DOWN;
+      case Direction.DOWN:
+        return Direction.UP;
+      case Direction.LEFT:
+        return Direction.RIGHT;
+      case Direction.RIGHT:
+        return Direction.LEFT;
+      default:
+        return Direction.NONE;
     }
   }
 
@@ -434,7 +590,11 @@ export class Player extends VectorPuppet {
     this.isDying = false;
     this.deathTimer = 0;
     this.onDeathComplete = undefined;
+    this.invulnerabilityDuration = 0;
+    this.invulnerabilityElapsed = 0;
+    this.onInvulnerabilityComplete = undefined;
     this.animationState = PlayerAnimationState.IDLE;
+    this.restoreBaseAnimation();
     this.setAlpha(1);
     this.playAnimationForState();
   }

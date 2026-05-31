@@ -34,6 +34,8 @@ type HasLayersMetadata = {
   layersMetadata?: Map<string, BodyLayerMetadata>;
 };
 
+export type EnemyCrowdBehavior = "trail" | "reroute" | "yield";
+
 export enum EnemyState {
   SCATTER = "scatter",
   CHASE = "chase",
@@ -70,6 +72,8 @@ export abstract class Enemy extends VectorPuppet {
   protected deadReturnTargetX: number;
   protected deadReturnTargetY: number;
   private exitingPen = true;
+  private blockedCells = new Set<string>();
+  private crowdBehavior: EnemyCrowdBehavior = "reroute";
 
   declare public scene: Scene;
   declare public x: number;
@@ -191,6 +195,14 @@ export abstract class Enemy extends VectorPuppet {
     playerY: number,
     playerDir: Direction,
   ): { x: number; y: number } | null;
+
+  setCrowdContext(
+    blockedCells: Set<string>,
+    behavior: EnemyCrowdBehavior,
+  ): void {
+    this.blockedCells = blockedCells;
+    this.crowdBehavior = behavior;
+  }
 
   setEnemyState(newState: EnemyState): void {
     this._state = newState;
@@ -448,7 +460,7 @@ export abstract class Enemy extends VectorPuppet {
       nextGridY >= 0 &&
       nextGridY < this.gridHeight
     ) {
-      if (this.canMoveTo(nextGridX, nextGridY)) {
+      if (this.canMoveTo(nextGridX, nextGridY, true)) {
         this.x = newX;
         this.y = newY;
         this.maybeCompletePenExit(
@@ -499,18 +511,23 @@ export abstract class Enemy extends VectorPuppet {
     const canReverse = this._state === EnemyState.DEAD;
     let bestDir = Direction.NONE;
     let bestDist = Infinity;
-
-    for (const dir of [
+    const candidateDirs = [
       Direction.UP,
       Direction.DOWN,
       Direction.LEFT,
       Direction.RIGHT,
-    ]) {
+    ];
+    const dirs =
+      this.crowdBehavior === "yield"
+        ? Phaser.Utils.Array.Shuffle([...candidateDirs])
+        : candidateDirs;
+
+    for (const dir of dirs) {
       const nx = this.gridX + directionToDx(dir);
       const ny = this.gridY + directionToDy(dir);
       if (nx < 0 || nx >= this.gridWidth || ny < 0 || ny >= this.gridHeight)
         continue;
-      if (!this.canMoveTo(nx, ny)) continue;
+      if (!this.canMoveTo(nx, ny, true)) continue;
       if (!canReverse && dir === oppositeDirection(this.movementDirection))
         continue;
 
@@ -530,7 +547,7 @@ export abstract class Enemy extends VectorPuppet {
       const ry = this.gridY + directionToDy(reverseDir);
       if (rx >= 0 && rx < this.gridWidth && ry >= 0 && ry < this.gridHeight) {
         if (this.grid[ry][rx].type === CellType.PASSAGE) {
-          if (this.canMoveTo(rx, ry)) {
+          if (this.canMoveTo(rx, ry, this.crowdBehavior !== "trail")) {
             bestDir = reverseDir;
           }
         }
@@ -538,7 +555,9 @@ export abstract class Enemy extends VectorPuppet {
     }
 
     if (bestDir === Direction.NONE) {
-      return this.movementDirection;
+      return this.crowdBehavior === "trail"
+        ? this.movementDirection
+        : Direction.NONE;
     }
 
     return bestDir;
@@ -564,7 +583,7 @@ export abstract class Enemy extends VectorPuppet {
     const legal = dirs.filter((d) => {
       const nx = this.gridX + directionToDx(d);
       const ny = this.gridY + directionToDy(d);
-      return this.canMoveTo(nx, ny);
+      return this.canMoveTo(nx, ny, true);
     });
 
     const filtered = allowReverse
@@ -668,7 +687,7 @@ export abstract class Enemy extends VectorPuppet {
     return { x: pen.exitCell.gridX, y: pen.exitCell.gridY };
   }
 
-  private canMoveTo(nx: number, ny: number): boolean {
+  private canMoveTo(nx: number, ny: number, avoidCrowd = false): boolean {
     if (this._state === EnemyState.DEAD) {
       return true;
     }
@@ -697,7 +716,15 @@ export abstract class Enemy extends VectorPuppet {
       return false;
     }
 
+    if (avoidCrowd && this.isCrowdedCell(nx, ny)) {
+      return false;
+    }
+
     return true;
+  }
+
+  private isCrowdedCell(nx: number, ny: number): boolean {
+    return this.blockedCells.has(`${nx},${ny}`);
   }
 
   private alignToMovementCenterline(): void {
