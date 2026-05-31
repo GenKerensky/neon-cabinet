@@ -154,6 +154,8 @@ import { EnemyState } from "../../src/game/objects/Enemy";
 
 type MockEnemy = {
   getState: ReturnType<typeof vi.fn>;
+  getGridX: ReturnType<typeof vi.fn>;
+  getGridY: ReturnType<typeof vi.fn>;
   setEnemyState: ReturnType<typeof vi.fn>;
   setDeadReturnTarget: ReturnType<typeof vi.fn>;
   forcePenExit: ReturnType<typeof vi.fn>;
@@ -166,13 +168,15 @@ type MockEnemy = {
 function createMockEnemy(state: EnemyState): MockEnemy {
   return {
     getState: vi.fn(() => state),
+    getGridX: vi.fn(() => 0),
+    getGridY: vi.fn(() => 0),
     setEnemyState: vi.fn(),
     setDeadReturnTarget: vi.fn(),
     forcePenExit: vi.fn(),
     activateFrightened: vi.fn(),
     update: vi.fn(),
-    x: 10,
-    y: 20,
+    x: 15,
+    y: 15,
   };
 }
 
@@ -194,6 +198,28 @@ function createGameHarness() {
   (game as any).scatterDuration = 1000;
   (game as any).chaseDuration = 2000;
   (game as any).scoreValue = 0;
+  (game as any).tileSize = 30;
+  (game as any).offsetX = 0;
+  (game as any).offsetY = 0;
+  (game as any).gridWidth = 3;
+  (game as any).gridHeight = 3;
+  (game as any).grid = [
+    [
+      { type: 1, visited: false },
+      { type: 1, visited: false },
+      { type: 1, visited: false },
+    ],
+    [
+      { type: 1, visited: false },
+      { type: 1, visited: false },
+      { type: 1, visited: false },
+    ],
+    [
+      { type: 1, visited: false },
+      { type: 1, visited: false },
+      { type: 1, visited: false },
+    ],
+  ];
   (game as any).scoreText = { setText };
   (game as any).highScoreText = { setText: vi.fn() };
   (game as any).registry = { get: vi.fn(() => "Orbitron") };
@@ -208,8 +234,8 @@ function createGameHarness() {
     createBonusItem: vi.fn(),
   };
   (game as any).player = {
-    x: 0,
-    y: 0,
+    x: 15,
+    y: 15,
     update: vi.fn(),
     getCurrentDirection: vi.fn(() => 0),
     getGridX: vi.fn(() => 0),
@@ -513,6 +539,46 @@ describe("Game", () => {
     expect((game as any).scoreValue).toBe(200);
     expect(setText).toHaveBeenCalledWith("SCORE: 200");
     expect(frightenedEnemy.setEnemyState).toHaveBeenCalledWith(EnemyState.DEAD);
+  });
+
+  it("ignores enemy sprite overlap when player and enemy are in different grid cells", () => {
+    const { game } = createGameHarness();
+    const enemy = createMockEnemy(EnemyState.CHASE);
+    enemy.getGridX.mockReturnValue(1);
+    enemy.getGridY.mockReturnValue(0);
+    enemy.x = 45;
+    enemy.y = 15;
+    (game as any).loseLife = vi.fn();
+
+    game.onEnemyHit({}, enemy);
+
+    expect((game as any).loseLife).not.toHaveBeenCalled();
+  });
+
+  it("resolves contact when both actors cover at least half of the same tile", () => {
+    const { game } = createGameHarness();
+    const enemy = createMockEnemy(EnemyState.CHASE);
+    enemy.getGridX.mockReturnValue(1);
+    enemy.getGridY.mockReturnValue(0);
+    enemy.x = 30;
+    enemy.y = 15;
+    (game as any).loseLife = vi.fn();
+
+    game.onEnemyHit({}, enemy);
+
+    expect((game as any).loseLife).toHaveBeenCalled();
+  });
+
+  it("resolves enemy contact during update when enemy enters the player grid cell", () => {
+    const { game } = createGameHarness();
+    const enemy = createMockEnemy(EnemyState.CHASE);
+    (game as any).enemies = [enemy];
+    (game as any).activeGhostDefinitions = [{ id: "alpha" }];
+    (game as any).loseLife = vi.fn();
+
+    game.update(0, 16);
+
+    expect((game as any).loseLife).toHaveBeenCalledWith({ id: "alpha" });
   });
 
   it("calls forcePenExit for each ghost rebuilt from definitions", () => {

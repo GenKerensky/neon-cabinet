@@ -61,6 +61,7 @@ export class Game extends Scene {
   private deathSequenceActive = false;
   private levelTransitionActive = false;
   private respawnDelayMs = 0;
+  private readonly contactTileOverlapThreshold = 0.5;
 
   constructor() {
     super("Game");
@@ -419,6 +420,8 @@ export class Game extends Scene {
       }
     }
 
+    this.resolveGridEnemyContacts();
+
     if (
       !this.levelTransitionActive &&
       this.collectibleManager.isLevelComplete()
@@ -453,6 +456,29 @@ export class Game extends Scene {
     if (this.deathSequenceActive) return;
 
     const enemy = enemyObj as Enemy;
+    if (!this.isEnemyOverlappingPlayerTile(enemy)) return;
+
+    this.resolveEnemyContact(enemy);
+  }
+
+  private resolveGridEnemyContacts(): void {
+    if (
+      this.deathSequenceActive ||
+      this.player.isDyingState?.() ||
+      this.playerInvincible ||
+      this.activeGhostDefinitions.length === 0
+    ) {
+      return;
+    }
+
+    for (const enemy of this.enemies) {
+      if (!this.isEnemyOverlappingPlayerTile(enemy)) continue;
+      this.resolveEnemyContact(enemy);
+      if (this.deathSequenceActive) return;
+    }
+  }
+
+  private resolveEnemyContact(enemy: Enemy): void {
     if (enemy.getState() === EnemyState.FRIGHTENED) {
       this.scoreValue += 200;
       this.refreshScoreHud();
@@ -468,6 +494,81 @@ export class Game extends Scene {
         killerIndex >= 0 ? this.activeGhostDefinitions[killerIndex] : undefined;
       this.loseLife(killerDefinition);
     }
+  }
+
+  private isEnemyOverlappingPlayerTile(enemy: Enemy): boolean {
+    const playerCoverage = this.getActorTileCoverage(this.player);
+    const enemyCoverage = this.getActorTileCoverage(enemy);
+
+    for (const [key, playerRatio] of playerCoverage) {
+      const enemyRatio = enemyCoverage.get(key) ?? 0;
+      if (
+        playerRatio >= this.contactTileOverlapThreshold &&
+        enemyRatio >= this.contactTileOverlapThreshold
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private getActorTileCoverage(actor: {
+    x: number;
+    y: number;
+  }): Map<string, number> {
+    const coverage = new Map<string, number>();
+    const footprintSize = this.tileSize * 0.75;
+    const halfSize = footprintSize / 2;
+    const bounds = {
+      left: actor.x - halfSize,
+      right: actor.x + halfSize,
+      top: actor.y - halfSize,
+      bottom: actor.y + halfSize,
+    };
+    const footprintArea = footprintSize * footprintSize;
+    const minGridX = Math.max(
+      0,
+      Math.floor((bounds.left - this.offsetX) / this.tileSize),
+    );
+    const maxGridX = Math.min(
+      this.gridWidth - 1,
+      Math.floor((bounds.right - this.offsetX) / this.tileSize),
+    );
+    const minGridY = Math.max(
+      0,
+      Math.floor((bounds.top - this.offsetY) / this.tileSize),
+    );
+    const maxGridY = Math.min(
+      this.gridHeight - 1,
+      Math.floor((bounds.bottom - this.offsetY) / this.tileSize),
+    );
+
+    for (let gridY = minGridY; gridY <= maxGridY; gridY++) {
+      for (let gridX = minGridX; gridX <= maxGridX; gridX++) {
+        if (this.grid?.[gridY]?.[gridX]?.type !== CellType.PASSAGE) continue;
+
+        const tileLeft = this.offsetX + gridX * this.tileSize;
+        const tileRight = tileLeft + this.tileSize;
+        const tileTop = this.offsetY + gridY * this.tileSize;
+        const tileBottom = tileTop + this.tileSize;
+        const overlapWidth = Math.max(
+          0,
+          Math.min(bounds.right, tileRight) - Math.max(bounds.left, tileLeft),
+        );
+        const overlapHeight = Math.max(
+          0,
+          Math.min(bounds.bottom, tileBottom) - Math.max(bounds.top, tileTop),
+        );
+        const overlapRatio = (overlapWidth * overlapHeight) / footprintArea;
+
+        if (overlapRatio > 0) {
+          coverage.set(`${gridX},${gridY}`, overlapRatio);
+        }
+      }
+    }
+
+    return coverage;
   }
 
   private triggerScreenFlash(): void {
