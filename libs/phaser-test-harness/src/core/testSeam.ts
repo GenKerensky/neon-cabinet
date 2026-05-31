@@ -19,8 +19,10 @@ export function createTestHarness<TState, TCommands>(
   }
 
   const errorCapture = new ErrorCapture();
-  const timeController = new TimeController(game, errorCapture);
   const detMode = options.deterministicMode ?? new DeterministicMode();
+  const timeController = detMode.isDeterministic
+    ? new TimeController(game, errorCapture)
+    : null;
 
   const harness: GameTestHarness<TState, TCommands> = {
     get state() {
@@ -37,7 +39,7 @@ export function createTestHarness<TState, TCommands>(
     ready: false,
     errors: errorCapture as ErrorCaptureApi,
     seed: detMode.seed,
-    time: timeController,
+    time: timeController ?? TimeController.createPassthrough(),
     isTestMode: detMode.isDeterministic,
   };
 
@@ -49,7 +51,19 @@ export function createTestHarness<TState, TCommands>(
     getSeed: () => harness.seed,
   });
 
-  timeController.onAfterFrame(() => overlay.update());
+  if (timeController) {
+    timeController.onAfterFrame(() => overlay.update());
+  } else {
+    const updateOverlay = () => {
+      if (
+        (window as unknown as Record<string, unknown>).__TEST__ === harness
+      ) {
+        overlay.update();
+        requestAnimationFrame(updateOverlay);
+      }
+    };
+    requestAnimationFrame(updateOverlay);
+  }
 
   harness.ready = true;
 

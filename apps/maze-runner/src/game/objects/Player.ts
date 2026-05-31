@@ -53,9 +53,6 @@ export enum PlayerAnimationState {
 }
 
 export class Player extends VectorPuppet {
-  declare anims: any;
-  declare play: (key: string, ignoreIfPlaying?: boolean) => void;
-
   private grid: MazeCell[][];
   private gridWidth: number;
   private gridHeight: number;
@@ -194,7 +191,6 @@ export class Player extends VectorPuppet {
     this.isDying = true;
     this._onDeathComplete = onComplete;
     this.animationState = PlayerAnimationState.DEATH;
-    this.play("player_death", true);
   }
 
   override update(time: number, delta: number): void {
@@ -232,9 +228,10 @@ export class Player extends VectorPuppet {
       (this.isAtIntersection() || !this.canMove(currentDir))
     ) {
       if (this.canMove(this.nextDirection)) {
-        (this as any).currentDirection = DIR_TO_VDIR[this.nextDirection];
+        const committedDirection = this.nextDirection;
+        (this as any).currentDirection = DIR_TO_VDIR[committedDirection];
         this.nextDirection = Direction.NONE;
-        super.setDirection(DIR_TO_VDIR[this.nextDirection] || "RIGHT");
+        super.setDirection(DIR_TO_VDIR[committedDirection]);
       }
     }
 
@@ -274,30 +271,23 @@ export class Player extends VectorPuppet {
       this.playAnimationForState();
     }
 
-    if (this.animationState === PlayerAnimationState.IDLE) {
-      this.anims.pause();
-    } else if (!this.anims.isPlaying) {
-      this.anims.resume();
-    }
   }
 
   private playAnimationForState(): void {
     switch (this.animationState) {
       case PlayerAnimationState.IDLE:
-        this.play("player_chomp_right");
-        this.anims.pause();
         break;
       case PlayerAnimationState.WALK_RIGHT:
-        this.play("player_chomp_right", true);
+        super.setDirection("RIGHT");
         break;
       case PlayerAnimationState.WALK_LEFT:
-        this.play("player_chomp_left", true);
+        super.setDirection("LEFT");
         break;
       case PlayerAnimationState.WALK_UP:
-        this.play("player_chomp_up", true);
+        super.setDirection("UP");
         break;
       case PlayerAnimationState.WALK_DOWN:
-        this.play("player_chomp_down", true);
+        super.setDirection("DOWN");
         break;
       case PlayerAnimationState.DEATH:
         break;

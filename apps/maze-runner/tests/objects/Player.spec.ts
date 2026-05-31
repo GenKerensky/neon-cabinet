@@ -493,6 +493,40 @@ describe("Player", () => {
       setDirectionSpy.mockRestore();
     });
 
+    it("commits queued non-right turn with the matching visual direction", () => {
+      const grid = gridFromPattern([
+        "WWWWWWW",
+        "W.....W",
+        "W.....W",
+        "W.....W",
+        "W.....W",
+        "W.....W",
+        "WWWWWWW",
+      ]);
+      const player = createPlayer(grid, 7, 7, 16, 0, 0, 16);
+      const p = player as any;
+      const setDirectionSpy = vi.spyOn(
+        VectorPuppet.prototype as any,
+        "setDirection",
+      );
+
+      player.setDirection(Direction.RIGHT);
+      p.movementDirection = Direction.RIGHT;
+      p.gridX = 3;
+      p.gridY = 3;
+      player.x = 3 * 16 + 8;
+      player.y = 3 * 16 + 8.8;
+
+      setDirectionSpy.mockClear();
+      player.setDirection(Direction.UP);
+      player.update(16, 250);
+
+      expect(player.getCurrentDirection()).toBe(Direction.UP);
+      expect(setDirectionSpy).toHaveBeenCalledWith("UP");
+
+      setDirectionSpy.mockRestore();
+    });
+
     it("keeps late queued turn until next valid center without snapping backward", () => {
       const grid = gridFromPattern([
         "WWWWWWW",

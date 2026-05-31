@@ -25,6 +25,61 @@ export class TimeController implements TimeControllerApi {
     this.wrapGameLoop();
   }
 
+  static createPassthrough(): TimeControllerApi {
+    const afterFrameCallbacks: Array<() => void> = [];
+
+    return {
+      pause: () => undefined,
+      resume: () => undefined,
+      setSpeed: () => undefined,
+      step: async () => undefined,
+      stepSync: () => ({ took: 0, frameTimes: [], hasCallback: false }),
+      waitFor: async (condition: () => boolean, timeoutMs = 10000) => {
+        const startTime = Date.now();
+        await new Promise<void>((resolve, reject) => {
+          const check = () => {
+            try {
+              if (condition()) {
+                resolve();
+                return;
+              }
+            } catch (err) {
+              reject(err);
+              return;
+            }
+
+            if (Date.now() - startTime >= timeoutMs) {
+              reject(new Error(`waitFor timed out after ${timeoutMs}ms`));
+              return;
+            }
+
+            requestAnimationFrame(check);
+          };
+          requestAnimationFrame(check);
+        });
+      },
+      advance: async () => undefined,
+      freeze: () => ({
+        state: (window as unknown as Record<string, unknown>).__TEST__,
+      }),
+      onAfterFrame: (callback: () => void) => {
+        afterFrameCallbacks.push(callback);
+      },
+      get isPaused() {
+        return false;
+      },
+      get speed() {
+        return 1;
+      },
+      get totalFrames() {
+        return 0;
+      },
+      get elapsed() {
+        return 0;
+      },
+    };
+  }
+
   private wrapGameLoop(): void {
     const loop = this.game.loop as unknown as Record<string, unknown>;
     if (!loop) return;
