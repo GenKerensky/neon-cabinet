@@ -58,6 +58,8 @@ export class Game extends Scene {
   private playerInvincible = false;
   private countdownActive = false;
   private deathSequenceActive = false;
+  private levelTransitionActive = false;
+  private respawnDelayMs = 0;
 
   constructor() {
     super("Game");
@@ -74,6 +76,8 @@ export class Game extends Scene {
     this.playerInvincible = false;
     this.countdownActive = false;
     this.deathSequenceActive = false;
+    this.levelTransitionActive = false;
+    this.respawnDelayMs = 0;
   }
 
   create(): void {
@@ -343,7 +347,16 @@ export class Game extends Scene {
 
   update(time: number, delta: number): void {
     if (this.countdownActive) return;
-    if (this.deathSequenceActive) return;
+    if (this.deathSequenceActive) {
+      this.player.update(time, delta);
+      if (this.respawnDelayMs > 0) {
+        this.respawnDelayMs -= delta;
+        if (this.respawnDelayMs <= 0) {
+          this.respawnPlayer();
+        }
+      }
+      return;
+    }
 
     if (this.ghostsFrozen) {
       this.ghostFreezeTimer -= delta;
@@ -399,7 +412,11 @@ export class Game extends Scene {
       }
     }
 
-    if (this.collectibleManager.isLevelComplete()) {
+    if (
+      !this.levelTransitionActive &&
+      this.collectibleManager.isLevelComplete()
+    ) {
+      this.levelTransitionActive = true;
       this.time.delayedCall(1000, () => this.nextLevel());
     }
   }
@@ -704,7 +721,7 @@ export class Game extends Scene {
           killerGhostId: killer?.id,
         });
       } else {
-        this.time.delayedCall(500, () => this.respawnPlayer());
+        this.respawnDelayMs = 500;
       }
     });
   }
@@ -724,6 +741,7 @@ export class Game extends Scene {
     this.player.y = spawnCenter.y;
     this.player.respawn();
     this.deathSequenceActive = false;
+    this.respawnDelayMs = 0;
     this.playerInvincible = true;
     this.player.startInvulnerability(2000, () => {
       this.playerInvincible = false;
@@ -766,6 +784,7 @@ export class Game extends Scene {
 
   private nextLevel(): void {
     this.levelValue++;
+    this.levelTransitionActive = false;
     this.levelText.setText(`LEVEL: ${this.levelValue}`);
 
     // Destroy old collectibles before creating new ones

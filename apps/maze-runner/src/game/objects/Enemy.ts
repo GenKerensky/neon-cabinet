@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import { VectorPuppet, SVGParser } from "@neon-cabinet/sprite-tools";
+import type { Direction as VectorDirection } from "@neon-cabinet/sprite-tools";
 import type { MazeCell } from "../utils/MazeGenerator";
 import { CellType } from "../utils/MazeGenerator";
 import {
@@ -380,7 +381,7 @@ export abstract class Enemy extends VectorPuppet {
   }
 
   private updatePuppetDirection(): void {
-    const dirMap = {
+    const dirMap: Record<Direction, VectorDirection> = {
       [Direction.RIGHT]: "RIGHT",
       [Direction.LEFT]: "LEFT",
       [Direction.UP]: "UP",

@@ -40,6 +40,8 @@ const createPassiveDebugOverlay = (
   gameInstance: Game,
   getGame: () => Game | undefined,
 ) => {
+  (window as unknown as Record<string, unknown>).__NEON_DEBUG_GAME__ =
+    gameInstance;
   document.getElementById("neon-debug")?.remove();
 
   const container = document.createElement("div");
@@ -154,6 +156,8 @@ const initDebugBridge = (
     import("@neon-cabinet/phaser-debug-bridge").then(
       ({ createDebugBridge }) => {
         if (getGame() !== gameInstance) return;
+        (window as unknown as Record<string, unknown>).__NEON_DEBUG_GAME__ =
+          gameInstance;
         const commands: Record<string, (...args: unknown[]) => void> = {};
         registerHarnessCommands(
           gameInstance,
@@ -175,10 +179,12 @@ const initDebugBridge = (
   });
 };
 
-const cleanupDebugBridge = () => {
+const cleanupDebugBridge = (gameInstance?: Game) => {
   const w = window as unknown as Record<string, unknown>;
+  if (gameInstance && w.__NEON_DEBUG_GAME__ !== gameInstance) return;
   delete w.__PHASER_BRIDGE__;
   delete w.__TEST__;
+  delete w.__NEON_DEBUG_GAME__;
   document.getElementById("neon-debug")?.remove();
 };
 
@@ -271,11 +277,11 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
 
       return () => {
         if (game.current) {
+          if (import.meta.env.DEV) {
+            cleanupDebugBridge(game.current);
+          }
           game.current.destroy(true);
           game.current = undefined;
-        }
-        if (import.meta.env.DEV) {
-          cleanupDebugBridge();
         }
       };
     }, []);

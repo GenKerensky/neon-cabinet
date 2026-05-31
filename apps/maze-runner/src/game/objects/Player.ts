@@ -65,7 +65,10 @@ export class Player extends VectorPuppet {
   private offsetY: number;
   private animationState: PlayerAnimationState = PlayerAnimationState.IDLE;
   private isDying = false;
-  private _onDeathComplete?: () => void;
+  private deathTimer = 0;
+  private onDeathComplete?: () => void;
+  private invulnerabilityTimer?: Phaser.Time.TimerEvent;
+  private invulnerabilityTween?: Phaser.Tweens.Tween;
 
   set movementDirection(dir: Direction) {
     (this as any).currentDirection = DIR_TO_VDIR[dir];
@@ -189,13 +192,57 @@ export class Player extends VectorPuppet {
   triggerDeath(onComplete?: () => void): void {
     if (this.isDying) return;
     this.isDying = true;
-    this._onDeathComplete = onComplete;
+    this.nextDirection = Direction.NONE;
+    (this as any).currentDirection = "NONE";
     this.animationState = PlayerAnimationState.DEATH;
+    this.deathTimer = 900;
+    this.onDeathComplete = onComplete;
+  }
+
+  startInvulnerability(durationMs: number, onComplete?: () => void): void {
+    this.invulnerabilityTimer?.remove?.();
+    this.invulnerabilityTween?.stop?.();
+
+    this.setAlpha(0.45);
+    this.invulnerabilityTween = this.scene.tweens.add({
+      targets: this,
+      alpha: 1,
+      duration: 120,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
+
+    const finish = () => {
+      this.invulnerabilityTween?.stop?.();
+      this.invulnerabilityTween = undefined;
+      this.invulnerabilityTimer = undefined;
+      this.setAlpha(1);
+      onComplete?.();
+    };
+
+    if (this.scene.time?.delayedCall) {
+      this.invulnerabilityTimer = this.scene.time.delayedCall(
+        durationMs,
+        finish,
+      );
+    } else {
+      finish();
+    }
   }
 
   override update(time: number, delta: number): void {
     super.update(time, delta);
-    if (this.isDying) return;
+    if (this.isDying) {
+      this.deathTimer -= delta;
+      if (this.deathTimer <= 0) {
+        const complete = this.onDeathComplete;
+        this.onDeathComplete = undefined;
+        this.deathTimer = 0;
+        complete?.();
+      }
+      return;
+    }
 
     const dt = delta / 1000;
     const moveAmount = this.speed * dt;
@@ -270,7 +317,6 @@ export class Player extends VectorPuppet {
       this.animationState = newState;
       this.playAnimationForState();
     }
-
   }
 
   private playAnimationForState(): void {
@@ -381,10 +427,15 @@ export class Player extends VectorPuppet {
   }
 
   respawn(): void {
+    this.gridX = Math.floor((this.x - this.offsetX) / this.tileSize);
+    this.gridY = Math.floor((this.y - this.offsetY) / this.tileSize);
     (this as any).currentDirection = "NONE";
     this.nextDirection = Direction.NONE;
     this.isDying = false;
+    this.deathTimer = 0;
+    this.onDeathComplete = undefined;
     this.animationState = PlayerAnimationState.IDLE;
+    this.setAlpha(1);
     this.playAnimationForState();
   }
 }
