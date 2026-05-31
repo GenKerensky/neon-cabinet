@@ -798,6 +798,51 @@ describe("Enemy", () => {
     });
   });
 
+  describe("update - freezeMovement", () => {
+    it("freezeMovement=true does NOT call moveStep on living enemy", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setGridPosition(1, 1);
+      enemy.setCurrentDirection(Direction.RIGHT);
+
+      const moveStepSpy = vi.spyOn(enemy as any, "moveStep");
+
+      enemy.update(0, 100, 0, 0, Direction.NONE, true);
+
+      expect(moveStepSpy).not.toHaveBeenCalled();
+    });
+
+    it("freezeMovement=true does NOT call moveDeadReturnStep on DEAD enemy", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setGridPosition(1, 1);
+      enemy.setEnemyState(EnemyState.DEAD);
+      enemy.setDeadReturnTarget(3, 3);
+
+      const moveDeadReturnStepSpy = vi.spyOn(
+        enemy as any,
+        "moveDeadReturnStep",
+      );
+
+      enemy.update(0, 100, 0, 0, Direction.NONE, true);
+
+      expect(moveDeadReturnStepSpy).not.toHaveBeenCalled();
+    });
+
+    it("freezeMovement=false allows normal moveStep calls", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setGridPosition(1, 1);
+      enemy.setCurrentDirection(Direction.RIGHT);
+
+      const moveStepSpy = vi.spyOn(enemy as any, "moveStep");
+
+      enemy.update(0, 100, 0, 0, Direction.NONE, false);
+
+      expect(moveStepSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe("findNearestPassage", () => {
     it("finds adjacent passage cell", () => {
       const grid = gridFromPattern(["WWWWW", "W...W", "WWWWW"]);

@@ -17,6 +17,7 @@ import { registerClearCollectiblesCommand } from "../support/helpers/clear-colle
 import { registerEatPowerPelletCommand } from "../support/helpers/eat-power-pellet";
 import { registerSetEnemyStateCommand } from "../support/helpers/set-enemy-state";
 import { registerSetEnemyAtGridCommand } from "../support/helpers/set-enemy-at-grid";
+import { registerFreezeGhostsCommand } from "../support/helpers/freeze-ghosts";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const getGameScene = (gameInstance: any): any => {
@@ -64,6 +65,7 @@ const registerHarnessCommands = (
   registerEatPowerPelletCommand(gameInstance, commands);
   registerSetEnemyStateCommand(gameInstance, commands);
   registerSetEnemyAtGridCommand(gameInstance, commands);
+  registerFreezeGhostsCommand(gameInstance, commands);
 };
 
 const initDebugBridge = (

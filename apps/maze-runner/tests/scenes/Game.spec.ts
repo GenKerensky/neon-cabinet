@@ -582,4 +582,117 @@ describe("Game", () => {
     expect(highScoreSetText).toHaveBeenLastCalledWith("HIGH: 000600");
     expect(mockHighScore.writeHighScore).not.toHaveBeenCalled();
   });
+
+  describe("harness freeze commands", () => {
+    it("freezeGhosts(true) sets ghostsFrozen=true and prevents enemy movement while player still updates", () => {
+      const { game } = createGameHarness();
+      const enemy = createMockEnemy(EnemyState.CHASE);
+      const playerUpdate = vi.fn();
+      (game as any).enemies = [enemy];
+      (game as any).player = {
+        x: 0,
+        y: 0,
+        update: playerUpdate,
+        getCurrentDirection: () => 0,
+        getGridX: () => 0,
+        getGridY: () => 0,
+      };
+
+      game.freezeGhosts(true);
+
+      expect((game as any).ghostsFrozen).toBe(true);
+
+      game.update(0, 16);
+
+      expect(playerUpdate).toHaveBeenCalled();
+      expect(enemy.update).toHaveBeenCalledWith(0, 16, 0, 0, 0, true);
+    });
+
+    it("unfreezeGhosts() resumes enemy movement", () => {
+      const { game } = createGameHarness();
+      const enemy = createMockEnemy(EnemyState.CHASE);
+      (game as any).enemies = [enemy];
+      (game as any).ghostsFrozen = true;
+      (game as any).ghostFreezeTimer = 500;
+      (game as any).player = {
+        x: 0,
+        y: 0,
+        update: vi.fn(),
+        getCurrentDirection: () => 0,
+        getGridX: () => 0,
+        getGridY: () => 0,
+      };
+
+      game.unfreezeGhosts();
+
+      expect((game as any).ghostsFrozen).toBe(false);
+
+      game.update(0, 16);
+
+      expect(enemy.update).toHaveBeenCalledWith(0, 16, 0, 0, 0, false);
+    });
+
+    it("multiple toggles work correctly", () => {
+      const { game } = createGameHarness();
+      (game as any).enemies = [];
+      (game as any).player = {
+        x: 0,
+        y: 0,
+        update: vi.fn(),
+        getCurrentDirection: () => 0,
+        getGridX: () => 0,
+        getGridY: () => 0,
+      };
+
+      game.toggleFreezeGhosts();
+      expect((game as any).ghostsFrozen).toBe(true);
+
+      game.toggleFreezeGhosts();
+      expect((game as any).ghostsFrozen).toBe(false);
+
+      game.toggleFreezeGhosts();
+      expect((game as any).ghostsFrozen).toBe(true);
+
+      game.toggleFreezeGhosts();
+      expect((game as any).ghostsFrozen).toBe(false);
+    });
+
+    it("freeze while power-pellet active then unfreeze clears freeze", () => {
+      const { game } = createGameHarness();
+      const enemy = createMockEnemy(EnemyState.CHASE);
+      (game as any).enemies = [enemy];
+      (game as any).ghostFreezeTimer = 300;
+
+      const collectible = {
+        getPoints: vi.fn(() => 50),
+        getType: vi.fn(() => CollectibleType.POWER_PELLET),
+      };
+
+      game.onCollectibleHit({}, collectible);
+      expect((game as any).ghostsFrozen).toBe(true);
+
+      game.freezeGhosts(true);
+      expect((game as any).ghostsFrozen).toBe(true);
+
+      game.unfreezeGhosts();
+      expect((game as any).ghostsFrozen).toBe(false);
+    });
+
+    it("regression: power-pellet still sets ghostsFrozen", () => {
+      const { game } = createGameHarness();
+      const enemy = createMockEnemy(EnemyState.CHASE);
+      (game as any).enemies = [enemy];
+
+      const collectible = {
+        getPoints: vi.fn(() => 50),
+        getType: vi.fn(() => CollectibleType.POWER_PELLET),
+      };
+
+      game.onCollectibleHit({}, collectible);
+
+      expect((game as any).ghostsFrozen).toBe(true);
+      expect((game as any).ghostFreezeTimer).toBe(300);
+      expect(enemy.activateFrightened).toHaveBeenCalledTimes(1);
+    });
+  });
 });

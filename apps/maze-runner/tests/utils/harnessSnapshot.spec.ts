@@ -248,6 +248,7 @@ describe("getMazeRunnerStateSnapshot", () => {
         },
       },
       scene: "Game",
+      ghostsFrozen: false,
     });
   });
 
@@ -284,5 +285,43 @@ describe("getMazeRunnerStateSnapshot", () => {
       formattedHighScore: "000000",
       transitionState: "idle",
     });
+  });
+
+  it("includes ghostsFrozen as a boolean when the Game scene is present", () => {
+    vi.stubGlobal("localStorage", {
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+      key: vi.fn(),
+      length: 0,
+    } as unknown as Storage);
+
+    const gameScene: any = createScene("Game", {
+      highScore: 0,
+      transitionState: "idle",
+    });
+    gameScene.player = {
+      x: 0,
+      y: 0,
+      scaleX: 1,
+      scaleY: 1,
+      getGridX: vi.fn(() => 0),
+      getGridY: vi.fn(() => 0),
+      getCurrentDirection: vi.fn(() => 0),
+      isDyingState: vi.fn(() => false),
+    };
+    gameScene.gridWidth = 28;
+    gameScene.gridHeight = 31;
+    gameScene.tileSize = 30;
+    gameScene.offsetX = 0;
+    gameScene.offsetY = 0;
+
+    const snapshot = getMazeRunnerStateSnapshot(
+      createGameInstance([gameScene]),
+    );
+
+    expect(snapshot).toHaveProperty("ghostsFrozen");
+    expect(typeof snapshot.ghostsFrozen).toBe("boolean");
   });
 });

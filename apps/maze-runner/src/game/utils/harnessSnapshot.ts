@@ -30,6 +30,7 @@ type SceneLike = {
   levelText?: HudTextLike;
   highScoreText?: HudTextLike;
   lifeIcons?: LifeIconLike[];
+  ghostsFrozen?: boolean;
 };
 
 type HudTextLike = {
@@ -306,6 +307,7 @@ export function getMazeRunnerStateSnapshot(gameInstance: unknown) {
       },
     };
     snapshot.scene = gameScene.scene?.key ?? "";
+    snapshot.ghostsFrozen = gameScene.ghostsFrozen ?? false;
 
     return snapshot;
   } catch {

@@ -1,4 +1,10 @@
-import { GameObjects, Scene } from "phaser";
+import { Scene } from "phaser";
+import {
+  VectorPuppet,
+  SVGParser,
+  Direction as VectorDirection,
+} from "@neon-cabinet/sprite-tools";
+import type { SVGPuppetMetadata } from "@neon-cabinet/sprite-tools";
 import type { MazeCell } from "../utils/MazeGenerator";
 import { CellType } from "../utils/MazeGenerator";
 import {
@@ -6,6 +12,36 @@ import {
   directionToDx,
   directionToDy,
 } from "../utils/DirectionUtils";
+import {
+  isEnteringPenFromOutside,
+  isAtCellCenter,
+  getCenterTolerance,
+} from "../utils/gridGeometry";
+
+const DIR_TO_VDIR: Record<number, VectorDirection> = {
+  [Direction.UP]: "UP",
+  [Direction.DOWN]: "DOWN",
+  [Direction.LEFT]: "LEFT",
+  [Direction.RIGHT]: "RIGHT",
+  [Direction.NONE]: "RIGHT",
+};
+
+const VDIR_TO_DIR: Record<VectorDirection, Direction> = {
+  UP: Direction.UP,
+  DOWN: Direction.DOWN,
+  LEFT: Direction.LEFT,
+  RIGHT: Direction.RIGHT,
+};
+
+function toVDir(d: Direction | VectorDirection): VectorDirection {
+  if (typeof d === "string") return d;
+  return DIR_TO_VDIR[d] ?? "RIGHT";
+}
+
+function toDir(d: Direction | VectorDirection): Direction {
+  if (typeof d === "number") return d;
+  return VDIR_TO_DIR[d] ?? Direction.NONE;
+}
 
 export enum PlayerAnimationState {
   IDLE = "idle",
@@ -16,13 +52,15 @@ export enum PlayerAnimationState {
   DEATH = "death",
 }
 
-export class Player extends GameObjects.Sprite {
+export class Player extends VectorPuppet {
+  declare anims: any;
+  declare play: (key: string, ignoreIfPlaying?: boolean) => void;
+
   private grid: MazeCell[][];
   private gridWidth: number;
   private gridHeight: number;
   private tileSize: number;
   private speed: number;
-  private currentDirection: Direction = Direction.NONE;
   private nextDirection: Direction = Direction.NONE;
   private gridX: number;
   private gridY: number;
@@ -30,111 +68,173 @@ export class Player extends GameObjects.Sprite {
   private offsetY: number;
   private animationState: PlayerAnimationState = PlayerAnimationState.IDLE;
   private isDying = false;
-  private onDeathComplete?: () => void;
+  private _onDeathComplete?: () => void;
+
+  set movementDirection(dir: Direction) {
+    (this as any).currentDirection = DIR_TO_VDIR[dir];
+  }
+
+  get movementDirection(): Direction {
+    return (
+      VDIR_TO_DIR[(this as any).currentDirection as VectorDirection] ??
+      Direction.NONE
+    );
+  }
 
   constructor(
     scene: Scene,
     x: number,
     y: number,
-    texture: string,
-    grid: MazeCell[][],
-    gridWidth: number,
-    gridHeight: number,
-    tileSize: number,
-    offsetX: number,
-    offsetY: number,
-    speed?: number,
+    gridOrTexture: MazeCell[][] | string,
+    gridWidthOrGrid?: number | MazeCell[][],
+    gridHeightOrWidth?: number,
+    tileSizeOrHeight?: number,
+    offsetXOrSize?: number,
+    offsetYOrX?: number,
+    speedOrY?: number,
   ) {
-    super(scene, x, y, texture);
-    this.grid = grid;
-    this.gridWidth = gridWidth;
-    this.gridHeight = gridHeight;
-    this.tileSize = tileSize;
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
-    this.speed = speed ?? 200;
-    this.gridX = Math.floor((x - offsetX) / tileSize);
-    this.gridY = Math.floor((y - offsetY) / tileSize);
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
+    const isGrid = Array.isArray(gridOrTexture);
 
-    if (typeof this.on === "function") {
-      this.on("animationcomplete", this.onAnimationComplete, this);
+    let metadata: SVGPuppetMetadata;
+    let gw: number, gh: number, ts: number, ox: number, oy: number, sp: number;
+
+    if (isGrid) {
+      gw = gridWidthOrGrid as number;
+      gh = gridHeightOrWidth!;
+      ts = tileSizeOrHeight ?? 16;
+      ox = offsetXOrSize ?? 0;
+      oy = offsetYOrX ?? 0;
+      sp = speedOrY ?? 200;
+
+      const svgText = (scene.cache.text as any)?.get?.("player_svg") ?? "";
+      let parsed: SVGPuppetMetadata | null = null;
+      if (svgText) {
+        try {
+          const parser = new SVGParser();
+          parsed = parser.parse(svgText);
+        } catch {
+          /* fallback */
+        }
+      }
+      metadata = parsed ?? {
+        viewBox: { x: 0, y: 0, width: 32, height: 32 },
+        layers: [],
+        sockets: [],
+      };
+    } else {
+      gw = gridHeightOrWidth!;
+      gh = tileSizeOrHeight!;
+      ts = offsetXOrSize ?? 16;
+      ox = offsetYOrX ?? 0;
+      oy = speedOrY ?? 0;
+      sp = 200;
+
+      const parser = new SVGParser();
+      metadata = parser.parse(gridOrTexture);
     }
+
+    super(scene, x, y, metadata);
+
+    this.grid = isGrid ? gridOrTexture : (gridWidthOrGrid as MazeCell[][]);
+    this.gridWidth = gw;
+    this.gridHeight = gh;
+    this.tileSize = ts;
+    this.offsetX = ox;
+    this.offsetY = oy;
+    this.speed = sp;
+    this.gridX = Math.floor((x - ox) / ts);
+    this.gridY = Math.floor((y - oy) / ts);
+    this.scale = ts / 30;
+    scene.physics.add.existing(this);
   }
 
-  setDirection(dir: Direction): void {
+  private isCentered(): boolean {
+    const tolerance = getCenterTolerance(this.tileSize);
+    return isAtCellCenter(
+      this.x,
+      this.y,
+      this.gridX,
+      this.gridY,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+      tolerance,
+    );
+  }
+
+  override setDirection(dir: Direction | VectorDirection): void {
+    const mazeDir = toDir(dir);
+    const vDir = toVDir(dir);
     if (this.isDying) return;
 
-    if (this.currentDirection === Direction.NONE) {
-      this.currentDirection = dir;
+    const currentDir =
+      VDIR_TO_DIR[(this as any).currentDirection as VectorDirection] ??
+      Direction.NONE;
+    if (currentDir === Direction.NONE) {
+      (this as any).currentDirection = vDir;
+      super.setDirection(vDir);
       return;
     }
 
-    if (this.isAtIntersection()) {
-      if (this.canMove(dir)) {
-        this.currentDirection = dir;
+    if (this.isAtIntersection() && this.isCentered()) {
+      if (this.canMove(mazeDir)) {
+        (this as any).currentDirection = vDir;
         this.nextDirection = Direction.NONE;
+        super.setDirection(vDir);
       } else {
-        this.nextDirection = dir;
+        this.nextDirection = mazeDir;
       }
     } else {
-      this.nextDirection = dir;
+      this.nextDirection = mazeDir;
     }
   }
 
   triggerDeath(onComplete?: () => void): void {
     if (this.isDying) return;
     this.isDying = true;
-    this.onDeathComplete = onComplete;
+    this._onDeathComplete = onComplete;
     this.animationState = PlayerAnimationState.DEATH;
     this.play("player_death", true);
   }
 
-  private onAnimationComplete(
-    _animation: Phaser.Animations.Animation,
-    _frame: Phaser.Animations.AnimationFrame,
-  ): void {
-    if (_animation.key === "player_death") {
-      this.isDying = false;
-      this.onDeathComplete?.();
-      this.onDeathComplete = undefined;
-    }
-  }
-
-  update(delta: number): void {
+  override update(time: number, delta: number): void {
+    super.update(time, delta);
     if (this.isDying) return;
 
     const dt = delta / 1000;
     const moveAmount = this.speed * dt;
+    const currentVDir = (this as any).currentDirection as VectorDirection;
+    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
 
-    if (this.currentDirection === Direction.NONE) {
+    if (currentDir === Direction.NONE) {
       this.updateAnimationState();
       return;
     }
 
-    const dx = directionToDx(this.currentDirection);
-    const dy = directionToDy(this.currentDirection);
+    const dx = directionToDx(currentDir);
+    const dy = directionToDy(currentDir);
 
     const newX = this.x + dx * moveAmount;
     const newY = this.y + dy * moveAmount;
 
-    if (this.canMove(this.currentDirection)) {
+    if (this.canMove(currentDir)) {
       this.gridX = Math.floor((newX - this.offsetX) / this.tileSize);
       this.gridY = Math.floor((newY - this.offsetY) / this.tileSize);
       this.x = newX;
       this.y = newY;
+      this.enforceCenterline();
     } else {
       this.snapToGrid();
     }
 
     if (
       this.nextDirection !== Direction.NONE &&
-      (this.isAtIntersection() || !this.canMove(this.currentDirection))
+      (this.isAtIntersection() || !this.canMove(currentDir))
     ) {
       if (this.canMove(this.nextDirection)) {
-        this.currentDirection = this.nextDirection;
+        (this as any).currentDirection = DIR_TO_VDIR[this.nextDirection];
         this.nextDirection = Direction.NONE;
+        super.setDirection(DIR_TO_VDIR[this.nextDirection] || "RIGHT");
       }
     }
 
@@ -143,13 +243,15 @@ export class Player extends GameObjects.Sprite {
 
   private updateAnimationState(): void {
     let newState: PlayerAnimationState;
+    const currentVDir = (this as any).currentDirection as VectorDirection;
+    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
 
     if (this.isDying) {
       newState = PlayerAnimationState.DEATH;
-    } else if (this.currentDirection === Direction.NONE) {
+    } else if (currentDir === Direction.NONE) {
       newState = PlayerAnimationState.IDLE;
     } else {
-      switch (this.currentDirection) {
+      switch (currentDir) {
         case Direction.RIGHT:
           newState = PlayerAnimationState.WALK_RIGHT;
           break;
@@ -211,7 +313,10 @@ export class Player extends GameObjects.Sprite {
   }
 
   getCurrentDirection(): Direction {
-    return this.currentDirection;
+    return (
+      VDIR_TO_DIR[(this as any).currentDirection as VectorDirection] ??
+      Direction.NONE
+    );
   }
 
   isDyingState(): boolean {
@@ -233,7 +338,22 @@ export class Player extends GameObjects.Sprite {
       return false;
     }
 
-    return this.grid[checkY][checkX].type === CellType.PASSAGE;
+    if (this.grid[checkY][checkX].type !== CellType.PASSAGE) {
+      return false;
+    }
+
+    if (
+      isEnteringPenFromOutside(
+        { gridX: this.gridX, gridY: this.gridY },
+        { gridX: checkX, gridY: checkY },
+        this.gridWidth,
+        this.gridHeight,
+      )
+    ) {
+      return false;
+    }
+
+    return true;
   }
 
   private isAtIntersection(): boolean {
@@ -257,8 +377,21 @@ export class Player extends GameObjects.Sprite {
     this.y = this.offsetY + this.gridY * this.tileSize + this.tileSize / 2;
   }
 
+  private enforceCenterline(): void {
+    const currentVDir = (this as any).currentDirection as VectorDirection;
+    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
+    const dx = directionToDx(currentDir);
+    const dy = directionToDy(currentDir);
+    if (dx !== 0) {
+      this.y = this.offsetY + this.gridY * this.tileSize + this.tileSize / 2;
+    }
+    if (dy !== 0) {
+      this.x = this.offsetX + this.gridX * this.tileSize + this.tileSize / 2;
+    }
+  }
+
   respawn(): void {
-    this.currentDirection = Direction.NONE;
+    (this as any).currentDirection = "NONE";
     this.nextDirection = Direction.NONE;
     this.isDying = false;
     this.animationState = PlayerAnimationState.IDLE;

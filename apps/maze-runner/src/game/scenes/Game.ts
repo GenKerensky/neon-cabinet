@@ -669,6 +669,27 @@ export class Game extends Scene {
     g.fillPath();
   }
 
+  freezeGhosts(enabled: boolean): void {
+    this.ghostsFrozen = enabled;
+    if (enabled) {
+      this.ghostFreezeTimer = Infinity;
+    }
+  }
+
+  unfreezeGhosts(): void {
+    this.ghostsFrozen = false;
+    this.ghostFreezeTimer = 0;
+  }
+
+  toggleFreezeGhosts(): void {
+    this.ghostsFrozen = !this.ghostsFrozen;
+    if (this.ghostsFrozen) {
+      this.ghostFreezeTimer = Infinity;
+    } else {
+      this.ghostFreezeTimer = 0;
+    }
+  }
+
   private loseLife(killer?: GhostDefinition): void {
     if (this.deathSequenceActive) return;
 
