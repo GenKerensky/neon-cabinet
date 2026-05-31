@@ -212,6 +212,7 @@ export abstract class Enemy extends VectorPuppet {
 
     switch (newState) {
       case EnemyState.FRIGHTENED:
+        this.setDeadEyesVisible(false);
         this.speed = this.baseSpeed * 0.5;
         this.frightenedTimer = Enemy.FRIGHTENED_DURATION_MS;
         if (bodyMetadata) {
@@ -227,6 +228,7 @@ export abstract class Enemy extends VectorPuppet {
         break;
       case EnemyState.CHASE:
       case EnemyState.SCATTER:
+        this.setDeadEyesVisible(false);
         this.speed = this.baseSpeed;
         if (bodyMetadata) {
           bodyMetadata.animations = [
@@ -243,6 +245,7 @@ export abstract class Enemy extends VectorPuppet {
         this.setAlpha(1);
         break;
       case EnemyState.DEAD:
+        this.setDeadEyesVisible(true);
         this.speed = this.baseSpeed * 4;
         if (bodyMetadata) {
           bodyMetadata.animations = [];
@@ -252,6 +255,11 @@ export abstract class Enemy extends VectorPuppet {
         this.setAlpha(0.5);
         break;
     }
+  }
+
+  private setDeadEyesVisible(isDead: boolean): void {
+    this.setLayerVisibility("eyes", !isDead);
+    this.setLayerVisibility("dead_eyes", isDead);
   }
 
   activateFrightened(durationMs = Enemy.FRIGHTENED_DURATION_MS): void {

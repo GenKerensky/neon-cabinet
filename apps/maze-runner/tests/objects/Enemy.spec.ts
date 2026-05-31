@@ -658,6 +658,24 @@ describe("Enemy", () => {
       enemy.setEnemyState(EnemyState.DEAD);
       expect(enemy.getSpeed()).toBe(320);
     });
+
+    it("shows X eyes while DEAD and restores normal eyes after reviving", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+
+      expect(enemy.getLayer("eyes")?.visible).not.toBe(false);
+      expect(enemy.getLayer("dead_eyes")?.visible).toBe(false);
+
+      enemy.setEnemyState(EnemyState.DEAD);
+
+      expect(enemy.getLayer("eyes")?.visible).toBe(false);
+      expect(enemy.getLayer("dead_eyes")?.visible).toBe(true);
+
+      enemy.setEnemyState(EnemyState.CHASE);
+
+      expect(enemy.getLayer("eyes")?.visible).toBe(true);
+      expect(enemy.getLayer("dead_eyes")?.visible).toBe(false);
+    });
   });
 
   describe("update", () => {
