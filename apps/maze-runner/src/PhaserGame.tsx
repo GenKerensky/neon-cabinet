@@ -8,6 +8,98 @@ import { Game as MainGame } from "./game/scenes/Game";
 import { Pause } from "./game/scenes/Pause";
 import { GameOver } from "./game/scenes/GameOver";
 import { VectorShader } from "@neon-cabinet/shaders";
+import { CollectibleType } from "./game/objects/Collectible";
+import { getMazeRunnerStateSnapshot } from "./game/utils/harnessSnapshot";
+import { registerStartCommand } from "../support/helpers/start";
+import { registerPositionPlayerCommand } from "../support/helpers/position-player";
+import { registerSpawnEnemyAtCommand } from "../support/helpers/spawn-enemy-at";
+import { registerClearCollectiblesCommand } from "../support/helpers/clear-collectibles";
+import { registerEatPowerPelletCommand } from "../support/helpers/eat-power-pellet";
+import { registerSetEnemyStateCommand } from "../support/helpers/set-enemy-state";
+import { registerSetEnemyAtGridCommand } from "../support/helpers/set-enemy-at-grid";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const getGameScene = (gameInstance: any): any => {
+  const scenes = gameInstance.scene.getScenes(true);
+  return scenes.find((scene: any) => scene.scene.key === "Game");
+};
+
+const registerHarnessCommands = (
+  gameInstance: any,
+  commands: Record<string, (...args: any[]) => void>,
+) => {
+  commands.move = (direction: number) => {
+    const gameScene = getGameScene(gameInstance);
+    gameScene?.player?.setDirection?.(direction);
+  };
+
+  commands.killPlayer = () => {
+    const gameScene = getGameScene(gameInstance);
+    gameScene?.loseLife?.();
+  };
+
+  commands.eatDot = () => {
+    const gameScene = getGameScene(gameInstance);
+    if (!gameScene?.collectibleManager) return;
+
+    const collectibles = gameScene.collectibleManager.getCollectibles?.() ?? [];
+    const dot = collectibles.find(
+      (collectible: any) =>
+        collectible.active && collectible.getType?.() === CollectibleType.DOT,
+    );
+
+    if (!dot) return;
+    gameScene.onCollectibleHit(null, dot);
+  };
+
+  commands.triggerLevelTransition = () => {
+    const gameScene = getGameScene(gameInstance);
+    gameScene?.nextLevel?.();
+  };
+
+  registerStartCommand(gameInstance, commands);
+  registerPositionPlayerCommand(gameInstance, commands);
+  registerSpawnEnemyAtCommand(gameInstance, commands);
+  registerClearCollectiblesCommand(gameInstance, commands);
+  registerEatPowerPelletCommand(gameInstance, commands);
+  registerSetEnemyStateCommand(gameInstance, commands);
+  registerSetEnemyAtGridCommand(gameInstance, commands);
+};
+
+const initDebugBridge = (
+  gameInstance: Game,
+  getGame: () => Game | undefined,
+) => {
+  import("@neon-cabinet/phaser-test-harness").then(({ createTestHarness }) => {
+    import("@neon-cabinet/phaser-debug-bridge").then(
+      ({ createDebugBridge }) => {
+        if (getGame() !== gameInstance) return;
+        const commands: Record<string, (...args: unknown[]) => void> = {};
+        registerHarnessCommands(
+          gameInstance,
+          commands as Record<string, (...args: any[]) => void>,
+        );
+        const harness = createTestHarness(gameInstance, {
+          state: () => getMazeRunnerStateSnapshot(gameInstance),
+          commands,
+        });
+        if (harness) {
+          createDebugBridge(
+            gameInstance,
+            harness,
+            () => getMazeRunnerStateSnapshot(gameInstance) as any,
+          );
+        }
+      },
+    );
+  });
+};
+
+const cleanupDebugBridge = () => {
+  const w = window as unknown as Record<string, unknown>;
+  delete w.__PHASER_BRIDGE__;
+  delete w.__TEST__;
+};
 
 const FONT_FAMILY = "Orbitron, sans-serif";
 
@@ -23,6 +115,7 @@ interface IProps {
 export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
   function PhaserGame({ currentActiveScene }, ref) {
     const game = useRef<Game | undefined>(undefined);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
       if (game.current === undefined) {
@@ -78,6 +171,10 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
                   gameInstance.scale.setZoom(scale);
                 }
               }
+
+              if (import.meta.env.DEV) {
+                initDebugBridge(gameInstance, () => game.current);
+              }
             },
           },
         };
@@ -95,6 +192,9 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         if (game.current) {
           game.current.destroy(true);
           game.current = undefined;
+        }
+        if (import.meta.env.DEV) {
+          cleanupDebugBridge();
         }
       };
     }, []);
@@ -121,6 +221,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
     return (
       <div
         id="phaser-game"
+        ref={containerRef}
         tabIndex={0}
         style={{ outline: "none", fontFamily: FONT_FAMILY }}
         onMouseDown={(e) => {

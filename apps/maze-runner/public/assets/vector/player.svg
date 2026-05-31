@@ -1,0 +1,6 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <circle id="body" class="physics-collider" cx="16" cy="16" r="14" fill="#ffff00" stroke="#ffaa00" stroke-width="2"
+    data-anim-chomp='{"frequency": 15, "amplitude": 80}' data-direction-rotation="true" />
+
+  <g id="socket_exhaust" transform="translate(2, 16)" data-socket-type="particle" />
+</svg>

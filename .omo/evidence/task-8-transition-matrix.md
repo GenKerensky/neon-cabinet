@@ -1,0 +1,12 @@
+# Transition Matrix
+
+| Path             | Trigger                                 | Expected behavior                                                                              | Transition state                                                            |
+| ---------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Boot → Title     | Boot scene create                       | Boot starts Title after setup; Title fades in after it becomes active                          | `idle` after fade-in completes                                              |
+| Title → Game     | SPACE / ENTER / click / test auto-start | Title fades out, Game starts, Game fades in, high-score fields remain in bridge state          | `fading-out` during handoff, then `idle` on Game fade-in completion         |
+| Game → Pause     | ESC                                     | Game fades out, Pause launches, paused scene is shown without losing active game state         | `fading-out` during handoff, then `idle` on Pause fade-in completion        |
+| Pause → Game     | ESC                                     | Pause resumes Game, Pause stops, resumed Game fades in                                         | `fading-out` during handoff, then `idle` on resumed Game fade-in completion |
+| Pause → Title    | Q                                       | Pause quits to Title, stopping Game and Pause, then Title fades in                             | `fading-out` during handoff, then `idle` on Title fade-in completion        |
+| Game → GameOver  | Lose last life                          | GameOver launches with score/killer data, then fades in and preserves high-score observability | `fading-out` during handoff, then `idle` on GameOver fade-in completion     |
+| GameOver → Game  | Restart                                 | GameOver starts Game, stops GameOver, and Game fades in                                        | `fading-out` during handoff, then `idle` on Game fade-in completion         |
+| GameOver → Title | Menu                                    | GameOver starts Title, stops GameOver, and Title fades in                                      | `fading-out` during handoff, then `idle` on Title fade-in completion        |

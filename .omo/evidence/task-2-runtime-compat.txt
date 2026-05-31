@@ -1,0 +1,10 @@
+
+ RUN  v2.1.9 /var/home/falco/code/neon-cabinet/libs/sprite-tools
+
+ ✓ |@neon-cabinet/sprite-tools| src/lib/vector-puppet.spec.ts (10 tests) 5ms
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  00:55:42
+   Duration  859ms (transform 103ms, setup 23ms, collect 46ms, tests 5ms, environment 341ms, prepare 129ms)
+

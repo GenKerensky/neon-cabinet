@@ -4,7 +4,7 @@ import { Direction } from "../utils/DirectionUtils";
 import { Enemy, EnemyState } from "../objects/Enemy";
 
 export class Timid extends Enemy {
-  private distanceThreshold = 8;
+  private distanceThreshold: number;
 
   constructor(
     scene: Scene,
@@ -21,6 +21,8 @@ export class Timid extends Enemy {
     speed?: number,
     gateOpenTime?: number,
     gameStartTime?: number,
+    svgCacheKey?: string,
+    distanceThreshold = 8,
   ) {
     super(
       scene,
@@ -37,7 +39,10 @@ export class Timid extends Enemy {
       speed,
       gateOpenTime,
       gameStartTime,
+      svgCacheKey,
     );
+
+    this.distanceThreshold = distanceThreshold;
   }
 
   getTargetPosition(

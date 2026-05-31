@@ -1,6 +1,11 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { VectorMode } from "../utils/settings";
+import {
+  fadeInScene,
+  resumeSceneWithFade,
+  startSceneWithFade,
+} from "../utils/sceneTransitions";
 
 export class Pause extends Scene {
   constructor() {
@@ -15,6 +20,7 @@ export class Pause extends Scene {
 
     // Overlay
     this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.7);
+    fadeInScene(this);
 
     // Title
     this.add
@@ -71,8 +77,7 @@ export class Pause extends Scene {
 
     // Key listeners
     this.input.keyboard?.on("keydown-ESC", () => {
-      this.scene.resume("Game");
-      this.scene.stop("Pause");
+      resumeSceneWithFade(this, "Game", "Pause");
     });
 
     this.input.keyboard?.on("keydown-V", () => {
@@ -81,9 +86,9 @@ export class Pause extends Scene {
     });
 
     this.input.keyboard?.on("keydown-Q", () => {
-      this.scene.stop("Game");
-      this.scene.stop("Pause");
-      this.scene.start("Title");
+      startSceneWithFade(this, "Title", undefined, {
+        stop: ["Game", "Pause"],
+      });
     });
 
     EventBus.emit("current-scene-ready", this);

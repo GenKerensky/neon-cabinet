@@ -26,10 +26,12 @@ export class Collectible extends GameObjects.Sprite {
     texture: string,
     type: CollectibleType,
     points: number,
+    tileSize: number,
   ) {
     super(scene, x, y, texture);
     this._type = type;
     this.points = points;
+    this.setScale(tileSize / 30);
     scene.add.existing(this);
     scene.physics.add.existing(this);
   }
@@ -182,6 +184,7 @@ export class CollectibleManager {
       textureName,
       type,
       points,
+      this.tileSize,
     );
     this.collectibles.push(collectible);
     return collectible;

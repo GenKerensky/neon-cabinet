@@ -1,0 +1,17 @@
+Command: bunx nx test maze-runner -- --run tests/scenes/Game.spec.ts
+
+Result:
+- Test file: tests/scenes/Game.spec.ts
+- Status: PASS
+- Summary: 12 passed, 0 failed
+
+Key assertions covered in this run:
+- Gameplay HUD layout (score top-center, level top-right, high score bottom-center)
+- Life icon graphics rendering and count
+- No numeric lives text display in gameplay HUD
+- High-score HUD display updates via max(readHighScore, score)
+
+Excerpt:
+|maze-runner| tests/scenes/Game.spec.ts (12 tests) 14ms
+Test Files 1 passed (1)
+Tests 12 passed (12)

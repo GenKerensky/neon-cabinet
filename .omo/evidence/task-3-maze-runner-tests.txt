@@ -1,0 +1,56 @@
+
+ NX   Running target test for project maze-runner and 5 tasks it depends on:
+
+
+
+> nx run phaser-test-harness:build  [local cache]
+
+
+> nx run browser-test-runner:build  [local cache]
+
+
+> nx run phaser-debug-bridge:build  [local cache]
+
+
+> nx run typed-event-emitter:build
+
+> tsc --build tsconfig.lib.json
+
+[96mtsconfig.lib.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "baseUrl": ".",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error.
+
+Warning: command "tsc --build tsconfig.lib.json" exited with non-zero status code
+> nx run @neon-cabinet/sprite-tools:build
+
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 6 modules transformed.
+rendering chunks...
+
+[vite:dts] Start generate declaration files...
+computing gzip size...
+[2mdist/[22m[36mindex.js  [39m[1m[2m20.19 kB[22m[1m[22m[2m │ gzip: 5.86 kB[22m
+[vite:dts] Declaration files built in 1257ms.
+
+[32m✓ built in 1.36s[39m
+
+
+
+ NX   Running target test for project maze-runner and 5 tasks it depends on failed
+
+Failed tasks:
+
+- typed-event-emitter:build
+
+Hint: run the command with --verbose for more details.
+
+View structured, searchable error logs at https://cloud.nx.app/runs/2OkcfizRFe
+

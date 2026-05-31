@@ -1,0 +1,871 @@
+[
+  {
+    "description": "  As a player, I want the game to load correctly so I can play.",
+    "elements": [
+      {
+        "description": "",
+        "id": "game-loads;title-screen-is-displayed",
+        "keyword": "Scenario",
+        "line": 8,
+        "name": "Title screen is displayed",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 96029448
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4175041219
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "the scene should be \"Title\"",
+            "match": {
+              "location": "step-definitions/game.steps.ts:44"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1251770520
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 52299378
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "game-loads;debug-overlay-is-available",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Debug overlay is available",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 66341411
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4528999947
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the state should contain \"scene\"",
+            "match": {
+              "location": "step-definitions/assert.steps.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1181665047
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 42294330
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "game-loads;start-transitions-to-game-scene",
+        "keyword": "Scenario",
+        "line": 14,
+        "name": "Start transitions to Game scene",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 65322315
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4184309577
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 15,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1254729880
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "1 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2460824743
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 17,
+            "name": "the scene should be \"Game\"",
+            "match": {
+              "location": "step-definitions/game.steps.ts:44"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1029314
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "take a screenshot \"game-start\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 87578961
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 45008408
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "game-loads",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Game Loads",
+    "tags": [
+      {
+        "name": "@smoke",
+        "line": 1
+      }
+    ],
+    "uri": "features/smoke/01-game-loads.feature"
+  },
+  {
+    "description": "  As a player, I want to move through the maze so I can collect dots and avoid enemies.",
+    "elements": [
+      {
+        "description": "",
+        "id": "player-moves;player-moves-right",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Player moves right",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 66062086
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5001852956,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at <anonymous> (/var/home/falco/code/neon-cabinet/node_modules/.bun/@cucumber+cucumber@12.9.0+341438118fbf9124/node_modules/@cucumber/cucumber/lib/time.js:64:24)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "I press RIGHT",
+            "match": {
+              "location": "step-definitions/player.steps.ts:6"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "the player's gridX should be greater than the initial value",
+            "match": {
+              "location": "step-definitions/player.steps.ts:61"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "failed",
+              "duration": 5001154177,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at <anonymous> (/var/home/falco/code/neon-cabinet/node_modules/.bun/@cucumber+cucumber@12.9.0+341438118fbf9124/node_modules/@cucumber/cucumber/lib/time.js:64:24)"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "player-moves;player-moves-left",
+        "keyword": "Scenario",
+        "line": 16,
+        "name": "Player moves left",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 74148818
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3994637964
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1162577245
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 17,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1289379995
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5006491331,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at <anonymous> (/var/home/falco/code/neon-cabinet/node_modules/.bun/@cucumber+cucumber@12.9.0+341438118fbf9124/node_modules/@cucumber/cucumber/lib/time.js:64:24)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "I press LEFT",
+            "match": {
+              "location": "step-definitions/player.steps.ts:6"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 21,
+            "name": "the player's gridX should be less than the initial value",
+            "match": {
+              "location": "step-definitions/player.steps.ts:76"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 47923087
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "player-moves;player-moves-up",
+        "keyword": "Scenario",
+        "line": 23,
+        "name": "Player moves up",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 74179667
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4094785538
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1194691426
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1197210691
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 25,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5001418022,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at <anonymous> (/var/home/falco/code/neon-cabinet/node_modules/.bun/@cucumber+cucumber@12.9.0+341438118fbf9124/node_modules/@cucumber/cucumber/lib/time.js:64:24)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "I press UP",
+            "match": {
+              "location": "step-definitions/player.steps.ts:6"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 28,
+            "name": "the player's gridY should be less than the initial value",
+            "match": {
+              "location": "step-definitions/player.steps.ts:91"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 46872802
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "player-moves",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Player Moves",
+    "tags": [
+      {
+        "name": "@smoke",
+        "line": 1
+      }
+    ],
+    "uri": "features/smoke/02-player-moves.feature"
+  },
+  {
+    "description": "  As a player, I want to see death feedback when an enemy catches me.",
+    "elements": [
+      {
+        "description": "",
+        "id": "player-dies;player-loses-a-life-on-death",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Player loses a life on death",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 67914482
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4218473335
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1306211376
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1203814112
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5000897474,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at <anonymous> (/var/home/falco/code/neon-cabinet/node_modules/.bun/@cucumber+cucumber@12.9.0+341438118fbf9124/node_modules/@cucumber/cucumber/lib/time.js:64:24)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "the player is killed",
+            "match": {
+              "location": "step-definitions/player.steps.ts:20"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "60 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "the lives should be 2",
+            "match": {
+              "location": "step-definitions/assert.steps.ts:25"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 45677347
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "player-dies;death-screenshot-captured",
+        "keyword": "Scenario",
+        "line": 16,
+        "name": "Death screenshot captured",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 68316217
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3951502402
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1281375776
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 17,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1279786603
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 4999569415,
+              "error_message": "Error: function timed out, ensure the promise resolves within 5000 milliseconds\n    at <anonymous> (/var/home/falco/code/neon-cabinet/node_modules/.bun/@cucumber+cucumber@12.9.0+341438118fbf9124/node_modules/@cucumber/cucumber/lib/time.js:64:24)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "the player is killed",
+            "match": {
+              "location": "step-definitions/player.steps.ts:20"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "take a screenshot \"player-death\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 52856994
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "player-dies",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Player Dies",
+    "tags": [
+      {
+        "name": "@smoke",
+        "line": 1
+      }
+    ],
+    "uri": "features/smoke/03-player-dies.feature"
+  }
+]

@@ -1,0 +1,416 @@
+This Node.js version (v26.0.0) has not been tested with this version of Cucumber; it should work normally, but please raise an issue if you see anything unexpected.
+[CONFIG] cucumber.cjs loaded, timeout: { timeout: 30000 }
+You have specified paths in both your configuration file and as CLI arguments.
+In a future major version, the CLI argument will override the configuration file instead of being merged.
+To prepare for this change, see https://github.com/cucumber/cucumber-js/blob/main/docs/deprecations.md
+  Current result:     features/**/*.feature, features/gameplay/power-pellets.feature
+  Future result:      features/gameplay/power-pellets.feature
+Cannot use 'progress-bar' formatter for output to 'stdout' as not a TTY. Switching to 'progress' formatter.
+.[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x3c540012bc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x3c540012c200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(5) hasCb=true took=493ms frames=[459.3,10.2,10.2,7.8,5.5]
+[TIME] stepSync(5) wall=496ms
+.F-[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x60c00157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x60c00157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=484.8ms frames=[398,17.6,10.8,10.2,6.5,5.9,12.1,6.1,6.8,10.8]
+[TIME] stepSync(10) wall=488ms
+..[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=59.3ms frames=[7.7,5.1,5.7,7.9,4.7,5.4,5.4,5.3,5.9,6]
+[TIME] stepSync(10) wall=61ms
+..[HOOKS] warning: [__TEST__] stepSync(5) hasCb=true took=29.4ms frames=[8,5.5,5.6,5.1,5.2]
+[TIME] stepSync(5) wall=32ms
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x183400157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x183400157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=494.6ms frames=[421.7,12.5,9.5,8.9,12.7,6.3,6.1,6.3,6,4.6]
+[TIME] stepSync(10) wall=496ms
+.F-[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x37d400157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x37d400157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(30) hasCb=true took=635.2ms frames=[483,11.8,8.5,8.7,5.1,5,12,5.6,5.7,5,5.3,5.2,4.6,4.1,4,4.1,4.2,4.1,4.2,4,4.1,3.9,4.3,4,4,4,3.9,4.6,4,3.9]
+[TIME] stepSync(30) wall=637ms
+..[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x25a400157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x25a400157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=89.8ms frames=[19.4,10.5,8.5,13.4,8.3,6.8,7.1,5.6,5.3,4.9]
+[TIME] stepSync(10) wall=554ms
+...[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x357c00157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x357c00157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=501ms frames=[421.9,13.5,11.2,9.5,5.9,5.6,13,6.7,6.8,6.9]
+[TIME] stepSync(10) wall=503ms
+.....[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x14d400153600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x14d400153c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(30) hasCb=true took=571.1ms frames=[411.4,10.5,9.1,8.7,12.6,6.3,6.2,4.9,4.9,5.3,5.6,5.2,4.5,4.6,4.3,4.4,4.3,4.3,4.4,4.4,4.3,4.3,4.6,4.4,4.6,4.5,4.4,5,4.4,4.4]
+[TIME] stepSync(30) wall=573ms
+.F-[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x252400161000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x25240015bc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=500.1ms frames=[420.9,14.4,9.8,10,7.6,5.6,13.2,6.4,6.1,6.1]
+[TIME] stepSync(10) wall=502ms
+..[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=51.3ms frames=[7.5,5,4.8,5.6,4.8,4.8,4.9,4.6,4.6,4.7]
+[TIME] stepSync(10) wall=52ms
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x22540015b600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x22540015bc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=633.1ms frames=[563.7,10.9,9.1,8.6,12.5,6.1,5.9,5.7,5.9,4.7]
+[TIME] stepSync(10) wall=635ms
+.F--[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x316400157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x316400157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=570.9ms frames=[496,11.9,10.3,8.2,5.8,5.7,13.7,6.9,6.4,6]
+[TIME] stepSync(10) wall=573ms
+.....[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x15740014f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x15740014fc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=624.4ms frames=[551.2,11.6,9.6,9.3,6.8,5.7,12.6,6.2,5.8,5.6]
+[TIME] stepSync(10) wall=626ms
+..[HOOKS] warning: [__TEST__] stepSync(5) hasCb=true took=25.3ms frames=[6.6,4.7,4.6,4.8,4.6]
+[TIME] stepSync(5) wall=26ms
+.F-[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x369400157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x369400157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=611.6ms frames=[530.9,13.3,11.6,13.7,9.8,7.2,7.2,6.7,5.8,5.4]
+[TIME] stepSync(10) wall=613ms
+..F-[HOOKS] Page closed!
+[TIME] stepSync(1000) failed: page.evaluate: Target page, context or browser has been closed, using lastState
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x5c00153600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x5c00153c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=446.4ms frames=[376.7,12.6,10.4,8.1,5.5,4.7,11.9,5.4,5.4,5.7]
+[TIME] stepSync(10) wall=451ms
+..[HOOKS] warning: [__TEST__] stepSync(120) hasCb=true took=536.6ms frames=[6.4,5.5,5.2,4.9,4.3,4.2,4.4,4.3,4.3,4.2,4.2,4.3,4.1,4.1,4,4.4,3.9,4.3,4.3,4,4,4.2,4.3,5.1,4.6,4.9,5.1,5.6,5.9,4.8,4.5,4.3,5.2,6.7,5.2,4.6,4.8,4.2,4.1,4.9,4.7,5,4.3,4.3,4.4,4.5,4.1,4.4,4.2,4.5,4.4,4.4,4.6,4.4,4.4,4,4.1,4.3,4.3,5.1,4.4,4.4,4.3,4.3,4.3,4.4,4.5,4.3,4.2,4.5,4.4,4.3,4.1,4.5,4,4.3,4.1,4.5,4.1,4.3,4.6,4.2,5.4,6.7,4.7,4.7,5,5,4.9,4.3,4.4,4.3,4.6,4,4.2,4.3,4.5,4.8,4,3.9,3.9,4,3.9,3.9,3.9,4,3.9,4.5,4.1,5.2,3.9,4,4.9,4.4,4.1,3.9,4.2,4.1,4,4.2]
+[TIME] stepSync(120) wall=538ms
+..[HOOKS] warning: [__TEST__] stepSync(520) hasCb=true took=2088.4ms frames=[4.6,4.1,4.1,4.1,4.8,4.9,3.9,4.5,4.1,4.2,3.8,5,4.1,4,4,3.9,4,4.3,3.9,4.1,3.8,4.1,3.9,4.4,4.1,4,4.2,4.3,5,4.6,5.3,4.4,4,4,4,4,4.4,4.2,4,4.4,4.1,4.1,4.2,4.1,4.7,3.9,4.2,4.7,4.1,4,4.3,4.1,4.2,4.1,4.1,4.3,4.2,4,3.9,4.3,4.1,4.1,4.1,4,4.2,4,4.4,3.9,4.1,4.2,4.1,4,4,3.9,4,4,4,4.3,4,4.3,4,3.9,4.1,5.6,4.6,6.5,6.6,5.2,6.3,4.4,5,4.1,4.1,4.2,4.2,3.9,4.1,4,4.2,4,4,4,4,3.9,3.8,3.9,4,4.1,3.9,4,3.9,3.9,4,3.9,4,4,3.8,4,4.1,4,4,3.9,3.9,3.9,3.9,4.1,4,3.9,4,3.9,4,4.1,3.8,3.9,4.1,4.4,3.9,4.2,4.8,4.2,4.9,4,5.3,4.1,4.1,5.6,4.3,5,4,4.2,4.1,4.1,4,4,6,3.9,4,4,3.9,3.9,3.7,4.6,4.3,3.8,3.8,4.2,4.8,4.1,3.8,3.9,3.9,3.8,3.9,4.1,3.9,4,4.2,3.9,4.7,3.7,3.8,3.7,3.8,3.8,3.9,4,4.7,4,4.5,4,4.5,4.4,3.9,4.1,4,4,4,4,4,4,3.9,3.9,3.9,3.9,3.9,3.8,3.8,3.9,3.9,3.9,3.9,3.9,3.9,3.9,4,3.6,4.1,4,4,3.9,3.9,4.1,3.8,3.8,4,4.1,4,4.2,3.8,4,3.9,3.8,3.8,3.9,3.9,3.8,3.8,4,3.9,3.7,3.9,3.8,3.8,3.9,3.9,3.6,3.9,5,3.9,3.8,3.9,3.8,3.8,3.9,3.8,3.8,3.9,4.1,3.8,4,3.7,3.7,3.9,3.8,3.9,3.8,3.8,3.9,3.8,3.8,3.9,3.7,3.8,3.8,3.8,4,3.8,3.9,3.9,3.8,3.8,3.8,3.7,3.9,3.9,3.9,4.1,4.1,3.9,3.7,4,3.8,4,3.9,4,3.9,3.8,3.9,3.9,3.9,4,3.8,4,3.9,4,3.9,3.9,3.9,3.8,4,4,3.9,4,3.8,3.9,3.9,3.9,3.9,3.8,3.9,3.8,3.9,3.8,3.8,3.9,3.7,3.8,3.7,3.9,4.1,4.4,3.9,3.8,4.6,4,3.8,3.8,3.9,3.8,3.8,3.9,3.9,3.7,3.8,3.9,3.7,3.9,4,3.9,3.8,5.2,6.2,4.4,7.1,3.8,3.7,3.9,3.8,3.8,3.8,3.9,5.5,3.9,3.8,3.8,4,3.7,4,3.7,3.9,3.8,4.2,3.8,3.8,3.8,4,4,4.3,4,3.8,4,3.8,3.8,4,3.9,3.9,3.8,4,4,4.5,3.8,3.7,4.1,3.8,4,3.8,3.9,3.9,4,4,3.8,4.2,3.8,3.9,3.8,3.9,3.9,4.2,3.9,3.7,3.9,3.8,3.9,3.8,4,3.8,3.9,3.8,3.8,3.9,3.8,4,3.7,4,4,3.9,3.8,3.9,4,3.8,3.9,3.8,3.8,3.7,3.9,3.7,3.8,4.1,3.8,3.8,3.7,3.8,3.7,4,3.8,3.7,3.9,3.6,4.1,3.7,3.9,4.1,3.7,3.8,3.7,3.8,4.1,3.9,4.1,3.9,4,4,3.6,3.9,3.7,3.7,3.9,4.1,3.8,3.7,3.9,3.7,3.7,3.8,3.7,3.8,3.6,4,3.9,3.8,3.6,3.8,4,3.7,4.2,3.7,3.9,3.9,4,3.8,3.7,4,3.8,3.8,3.8,3.8,3.8,4.1,3.7,4,3.8,3.7,3.8,3.9,3.8,3.9,3.8,3.7,3.8,4,3.9,3.9,3.7,4.2,3.7,3.9,3.8,3.7,4.1,3.7]
+[TIME] stepSync(520) wall=2090ms
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x3dc400157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x3dc400157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=455.3ms frames=[375,14,11.2,8.8,14.5,6.7,7.1,6.8,6,5.2]
+[TIME] stepSync(10) wall=457ms
+...[HOOKS] warning: [__TEST__] stepSync(220) hasCb=true took=1109.9ms frames=[5.5,5,5.4,5.2,5.1,5.2,5.2,5,5.2,5.4,5.1,5.6,5.1,5.3,4.9,5.3,5.2,5.2,4.9,5.4,5.7,5.5,6,5.1,5.2,5.2,5.2,5.3,5.1,5.2,4.9,5.1,5.2,4.9,5.1,5.1,4.9,5,5.1,5.2,5.4,5,5,5.6,5.4,5.3,5.7,6.6,5.2,5.5,6.8,5.4,5.5,5.3,5.7,5.5,5.6,5.4,5.7,5.1,5.1,4.9,5.2,4.9,4.9,5.4,5.3,5.1,5.5,6.5,6.6,5,6.2,5.3,5.8,5.1,5.3,5.3,5.8,5,5.6,6,5,5.7,5.3,4.8,5.5,5,5,5,5.1,4.8,4.8,4.9,5,4.6,5,5.6,5.6,4.8,4.8,4.9,4.7,4.8,4.9,4.8,5,5,5.1,4.6,4.8,4.7,4.8,4.7,4.8,4.9,4.8,4.6,4.9,4.9,4.8,4.7,4.7,4.8,4.7,4.9,4.7,4.7,4.7,4.8,4.7,4.8,4.6,4.7,4.7,4.8,4.9,4.8,4.7,4.8,4.9,4.9,4.8,4.7,4.7,4.8,4.8,4.7,5.2,4.9,4.9,4.8,4.7,4.8,4.9,4.6,4.7,4.9,4.8,4.7,4.8,4.6,4.7,4.7,4.7,5.1,4.9,4.8,4.8,4.6,4.9,4.7,4.7,5.2,4.7,5.1,4.9,5,4.8,4.9,4.8,4.7,4.6,4.9,4.7,4.7,5.3,5.2,4.9,5,4.8,5.3,4.9,4.6,4.7,6,5.2,4.7,4.6,5,4.8,5,4.7,5.4,4.6,4.9,4.7,4.9,4.8,4.9,4.6,5.1,4.6,4.7,4.8,4.8,4.7,4.6,4.6,4.7]
+[TIME] stepSync(220) wall=1112ms
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x221c00153600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x221c00153c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x21bc00157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x21bc00157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x381400157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x381400157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+..[HOOKS] warning: [__TEST__] stepSync(1) hasCb=true took=15.9ms frames=[15.9]
+[TIME] stepSync(1) wall=445ms
+.F-[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x146c00157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x146c00157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=91.3ms frames=[17.8,11,8.3,13.7,9,6.9,7.7,6,5.4,5.5]
+[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=52.4ms frames=[5.4,5.5,5.2,5.3,5,5.3,5.1,5.2,5.3,5.1]
+[PLAYER] Captured pos (10,14) and pressed RIGHT in 469ms
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x344c00157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x344c00157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=96.7ms frames=[17.5,10.6,11.8,17.6,7.3,7.3,7.3,6.6,5.8,4.8]
+[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=49.8ms frames=[5,5.1,4.9,4.7,5.1,4.8,4.8,5.8,4.9,4.7]
+[PLAYER] Captured pos (10,14) and pressed LEFT in 467ms
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x124c00157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x124c00157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=539.8ms frames=[465.6,12.2,10.2,8.9,5.4,5.2,13.6,6.6,6.2,5.8]
+[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=50.1ms frames=[5.3,4.8,5.1,5,5.8,4.8,4.9,4.6,4.7,4.9]
+[PLAYER] Captured pos (10,14) and pressed UP in 592ms
+.F[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0xd2c00157600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0xd2c00157c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[HOOKS] warning: [__TEST__] stepSync(10) hasCb=true took=580.7ms frames=[507.6,11.5,10.3,8,5.8,5.6,12.9,6.6,6.2,6.2]
+[TIME] stepSync(10) wall=583ms
+.[HOOKS] warning: [__TEST__] stepSync(60) hasCb=true took=316.2ms frames=[5.9,5.7,5.2,5.4,5.3,5.1,5.1,4.7,4.9,5,4.9,4.9,5.4,4.7,4.8,4.9,5.1,4.9,4.9,5.7,5,5.4,5.4,6.2,6.1,5.3,4.8,5,4.8,4.8,4.9,5,4.8,4.9,4.7,5.9,5.7,5,5.2,5.3,6.4,5.7,5.3,5.1,5.6,5.4,5.7,5.1,4.8,8.6,5.1,5.5,5.7,5.3,4.8,4.9,5.2,5,5.3,4.7]
+[PLAYER] Killed player and stepped 60 frames in 318ms
+..[HOOKS] Page closed!
+..[HOOKS] Frame navigated: ?test=1&seed=42
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] log: %c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390 background: #ff0000 background: #ffff00 background: #00ff00 background: #00ffff color: #ffffff; background: #000000 background: transparent
+[HOOKS] warning: [.WebGL-0x313c00153600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[HOOKS] warning: [.WebGL-0x313c00153c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+...[PLAYER] Screenshot saved to test-results/player-death-1780072911274.png
+[PLAYER] Killed player and captured screenshot in 566ms
+.[HOOKS] Page closed!
+.
+
+Failures:
+
+1) Scenario: Step through frames and inspect state # features/debug/frame-inspection.feature:9
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 0.1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 5 frames pass # step-definitions/time.steps.ts:4
+   ✖ Then the scene should be "Game" # step-definitions/game.steps.ts:44
+       Error: Expected scene "Game" but got ""
+           at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/game.steps.ts:49:11)
+   - And take a screenshot "frame-5" # step-definitions/screenshot.steps.ts:5
+   ✔ After # support/hooks.ts:12
+
+2) Scenario: Pause and resume game # features/debug/frame-inspection.feature:15
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 0.1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✔ And the game is paused # step-definitions/game.steps.ts:32
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✔ And the game is resumed # step-definitions/game.steps.ts:38
+   ✔ And 5 frames pass # step-definitions/time.steps.ts:4
+   ✖ Then the scene should be "Game" # step-definitions/game.steps.ts:44
+       Error: Expected scene "Game" but got ""
+           at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/game.steps.ts:49:11)
+   ✔ After # support/hooks.ts:12
+
+3) Scenario: Same seed produces same initial state # features/debug/seed-reproduction.feature:9
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✖ Then the scene should be "Game" # step-definitions/game.steps.ts:44
+       Error: Expected scene "Game" but got ""
+           at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/game.steps.ts:49:11)
+   - And take a screenshot "seed-42-frame-10" # step-definitions/screenshot.steps.ts:5
+   ✔ After # support/hooks.ts:12
+
+4) Scenario: Chaser pursues player # features/gameplay/enemy-ai.feature:9
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 30 frames pass # step-definitions/time.steps.ts:4
+   ✖ Then the enemy "chaser" should be in state "scatter" # step-definitions/enemy.steps.ts:77
+       Error: Expected enemy "chaser" in state "scatter" but got ""
+           at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/enemy.steps.ts:89:13)
+   - And take a screenshot "chaser-initial" # step-definitions/screenshot.steps.ts:5
+   ✔ After # support/hooks.ts:12
+
+5) Scenario: Enemies move on frame advance # features/gameplay/enemy-ai.feature:15
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✔ And I capture the enemy positions # step-definitions/enemy.steps.ts:6
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✖ Then at least one enemy should have moved # step-definitions/enemy.steps.ts:59
+       Error: Expected at least one enemy to have moved
+           at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/enemy.steps.ts:73:11)
+   ✔ After # support/hooks.ts:12
+
+6) Scenario: Spawn enemy at specific position # features/gameplay/enemy-ai.feature:22
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✖ And an enemy "chaser" is spawned at grid 5 3 # step-definitions/enemy.steps.ts:13
+       page.evaluate: Error: Invalid SVG: No <svg> element found.
+           at B.parse (http://localhost:4200/@fs/var/home/falco/code/neon-cabinet/libs/sprite-tools/dist/index.js?t=1780072851629:348:13)
+           at new Enemy (http://localhost:4200/src/game/objects/Enemy.ts?t=1780072851629:46:38)
+           at new Chaser (http://localhost:4200/src/game/ai/Chaser.ts?t=1780072851629:4:5)
+           at commands.spawnEnemyAt (http://localhost:4200/support/helpers/spawn-enemy-at.ts?t=1780072851629:20:17)
+           at eval (eval at evaluate (:302:30), <anonymous>:2:45)
+           at UtilityScript.evaluate (<anonymous>:304:16)
+           at UtilityScript.<anonymous> (<anonymous>:1:44)
+           at B.parse (http://localhost:4200/@fs/var/home/falco/code/neon-cabinet/libs/sprite-tools/dist/index.js?t=1780072851629:348:13)
+           at new Enemy (http://localhost:4200/src/game/objects/Enemy.ts?t=1780072851629:46:38)
+           at new Chaser (http://localhost:4200/src/game/ai/Chaser.ts?t=1780072851629:4:5)
+           at commands.spawnEnemyAt (http://localhost:4200/support/helpers/spawn-enemy-at.ts?t=1780072851629:20:17)
+           at eval (:302:30)
+           at UtilityScript.evaluate (<anonymous>:304:16)
+           at UtilityScript.<anonymous> (<anonymous>:1:44)
+           at MazeRunnerWorld.<anonymous> (/var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/enemy.steps.ts:16:30)
+   - And 5 frames pass # step-definitions/time.steps.ts:4
+   - Then the enemy at grid 5 3 should exist # step-definitions/enemy.steps.ts:115
+   ✔ After # support/hooks.ts:12
+
+7) Scenario: Power pellet activates frightened mode # features/gameplay/power-pellets.feature:9
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✔ And a power pellet is collected # step-definitions/player.steps.ts:138
+   ✔ And 5 frames pass # step-definitions/time.steps.ts:4
+   ✖ Then the enemy "chaser" should be in state "frightened" # step-definitions/enemy.steps.ts:77
+       Error: Expected enemy "chaser" in state "frightened" but got ""
+           at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/enemy.steps.ts:89:13)
+   - And take a screenshot "frightened-mode" # step-definitions/screenshot.steps.ts:5
+   ✔ After # support/hooks.ts:12
+
+8) Scenario: Frightened mode has a duration # features/gameplay/power-pellets.feature:17
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✔ And a power pellet is collected # step-definitions/player.steps.ts:138
+   ✖ And 1000 frames pass # step-definitions/time.steps.ts:4
+       Error: function timed out, ensure the promise resolves within 5000 milliseconds
+           at Timeout.<anonymous> (/var/home/falco/code/neon-cabinet/node_modules/.bun/@cucumber+cucumber@12.9.0+341438118fbf9124/node_modules/@cucumber/cucumber/lib/time.js:64:20)
+           at listOnTimeout (node:internal/timers:605:17)
+           at process.processTimers (node:internal/timers:541:7)
+   - Then the enemy "chaser" should not be in state "frightened" # step-definitions/enemy.steps.ts:96
+   ✔ After # support/hooks.ts:12
+
+9) Scenario: Repeated power pellets extend frightened window # features/gameplay/power-pellets.feature:24
+   ✔ Before # support/hooks.ts:7
+   ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+   ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+   ✔ When I start the game # step-definitions/game.steps.ts:26
+   ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+   ✔ And a power pellet is collected # step-definitions/player.steps.ts:138
+   ✔ And 120 frames pass # step-definitions/time.steps.ts:4
+   ✔ And a power pellet is collected # step-definitions/player.steps.ts:138
+   ✔ And 520 frames pass # step-definitions/time.steps.ts:4
+   ✖ Then the enemy "chaser" should be in state "frightened" # step-definitions/enemy.steps.ts:77
+       Error: Expected enemy "chaser" in state "frightened" but got ""
+           at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/enemy.steps.ts:89:13)
+   ✔ After # support/hooks.ts:12
+
+10) Scenario: Eaten ghost returns to pen and revives # features/gameplay/power-pellets.feature:33
+    ✔ Before # support/hooks.ts:7
+    ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+    ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+    ✔ When I start the game # step-definitions/game.steps.ts:26
+    ✔ And 10 frames pass # step-definitions/time.steps.ts:4
+    ✔ And the enemy "chaser" state is set to "dead" # step-definitions/enemy.steps.ts:29
+    ✔ And the enemy "chaser" is moved to grid 1 1 # step-definitions/enemy.steps.ts:44
+    ✔ And 220 frames pass # step-definitions/time.steps.ts:4
+    ✖ Then the enemy "chaser" should arrive at the pen # step-definitions/enemy.steps.ts:160
+        Error: Expected enemy "chaser" to exist
+            at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/enemy.steps.ts:178:13)
+    ✔ After # support/hooks.ts:12
+
+11) Scenario: Title screen is displayed # features/smoke/01-game-loads.feature:8
+    ✔ Before # support/hooks.ts:7
+    ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+    ✖ Then the scene should be "Title" # step-definitions/game.steps.ts:44
+        Error: Expected scene "Title" but got ""
+            at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/game.steps.ts:49:11)
+    ✔ After # support/hooks.ts:12
+
+12) Scenario: Debug overlay is available # features/smoke/01-game-loads.feature:11
+    ✔ Before # support/hooks.ts:7
+    ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+    ✖ Then the state should contain "scene" # step-definitions/assert.steps.ts:11
+        Error: Expected state to contain key "scene"
+            at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/assert.steps.ts:14:11)
+    ✔ After # support/hooks.ts:12
+
+13) Scenario: Start transitions to Game scene # features/smoke/01-game-loads.feature:14
+    ✔ Before # support/hooks.ts:7
+    ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+    ✔ When I start the game # step-definitions/game.steps.ts:26
+    ✔ And 1 frames pass # step-definitions/time.steps.ts:4
+    ✖ Then the scene should be "Game" # step-definitions/game.steps.ts:44
+        Error: Expected scene "Game" but got ""
+            at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/game.steps.ts:49:11)
+    - And take a screenshot "game-start" # step-definitions/screenshot.steps.ts:5
+    ✔ After # support/hooks.ts:12
+
+14) Scenario: Player moves right # features/smoke/02-player-moves.feature:9
+    ✔ Before # support/hooks.ts:7
+    ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+    ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+    ✔ When I start the game # step-definitions/game.steps.ts:26
+    ✔ And I capture the player position and press RIGHT # step-definitions/player.steps.ts:26
+    ✖ Then the player's gridX should be greater than the initial value # step-definitions/player.steps.ts:168
+        Error: Expected player gridX > 10 but got 10
+            at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/player.steps.ts:175:13)
+    ✔ After # support/hooks.ts:12
+
+15) Scenario: Player moves left # features/smoke/02-player-moves.feature:14
+    ✔ Before # support/hooks.ts:7
+    ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+    ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+    ✔ When I start the game # step-definitions/game.steps.ts:26
+    ✔ And I capture the player position and press LEFT # step-definitions/player.steps.ts:26
+    ✖ Then the player's gridX should be less than the initial value # step-definitions/player.steps.ts:182
+        Error: Expected player gridX < 10 but got 10
+            at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/player.steps.ts:189:13)
+    ✔ After # support/hooks.ts:12
+
+16) Scenario: Player moves up # features/smoke/02-player-moves.feature:19
+    ✔ Before # support/hooks.ts:7
+    ✔ Given the game is configured with seed 42 # step-definitions/game.steps.ts:4
+    ✔ And the game is running at 1x speed # step-definitions/game.steps.ts:17
+    ✔ When I start the game # step-definitions/game.steps.ts:26
+    ✔ And I capture the player position and press UP # step-definitions/player.steps.ts:26
+    ✖ Then the player's gridY should be less than the initial value # step-definitions/player.steps.ts:196
+        Error: Expected player gridY < 14 but got 14
+            at MazeRunnerWorld.<anonymous> (file:///var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/player.steps.ts:203:13)
+    ✔ After # support/hooks.ts:12
+
+22 scenarios (16 failed, 6 passed)
+134 steps (16 failed, 8 skipped, 110 passed)
+0m37.304s (executing steps: 0m37.249s)

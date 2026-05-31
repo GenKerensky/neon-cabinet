@@ -19,6 +19,7 @@ export class Chaser extends Enemy {
     speed?: number,
     gateOpenTime?: number,
     gameStartTime?: number,
+    svgCacheKey?: string,
   ) {
     super(
       scene,
@@ -35,6 +36,7 @@ export class Chaser extends Enemy {
       speed,
       gateOpenTime,
       gameStartTime,
+      svgCacheKey,
     );
   }
 

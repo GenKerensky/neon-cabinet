@@ -8,10 +8,13 @@
     ".": "./dist/index.js"
   },
   "dependencies": {
+    "@neon-cabinet/phaser-debug-bridge": "workspace:*",
+    "@neon-cabinet/phaser-test-harness": "workspace:*",
     "@neon-cabinet/shaders": "workspace:*",
     "phaser": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "@neon-cabinet/typed-event-emitter": "workspace:*"
+    "@neon-cabinet/typed-event-emitter": "workspace:*",
+    "@neon-cabinet/sprite-tools": "workspace:*"
   }
 }

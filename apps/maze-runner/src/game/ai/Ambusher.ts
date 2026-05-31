@@ -4,7 +4,7 @@ import { Direction } from "../utils/DirectionUtils";
 import { Enemy, EnemyState } from "../objects/Enemy";
 
 export class Ambusher extends Enemy {
-  private predictionCells = 4;
+  private predictionCells: number;
 
   constructor(
     scene: Scene,
@@ -21,6 +21,8 @@ export class Ambusher extends Enemy {
     speed?: number,
     gateOpenTime?: number,
     gameStartTime?: number,
+    svgCacheKey?: string,
+    predictionCells = 4,
   ) {
     super(
       scene,
@@ -37,7 +39,10 @@ export class Ambusher extends Enemy {
       speed,
       gateOpenTime,
       gameStartTime,
+      svgCacheKey,
     );
+
+    this.predictionCells = predictionCells;
   }
 
   getTargetPosition(

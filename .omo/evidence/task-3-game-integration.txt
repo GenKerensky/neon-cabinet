@@ -1,0 +1,42 @@
+Task 3 — Game power-pellet integration and per-ghost return targets
+
+Date: 2026-05-29
+
+Modified file:
+- apps/maze-runner/src/game/scenes/Game.ts
+
+Implemented checks:
+1) Mode switching skips FRIGHTENED and DEAD enemies
+   - update() lines ~314-326 now guard with:
+     if (enemy.getState() === EnemyState.FRIGHTENED || enemy.getState() === EnemyState.DEAD) continue;
+
+2) Power-pellet branch uses activateFrightened and freeze timer max-extend
+   - onCollectibleHit() lines ~364-369 now:
+     this.ghostFreezeTimer = Math.max(this.ghostFreezeTimer, 300);
+     this.enemies.forEach((e) => e.activateFrightened());
+
+3) onEnemyHit frightened branch preserved score +200 and DEAD transition
+   - onEnemyHit() lines ~380-385 still awards 200 and calls enemy.setEnemyState(EnemyState.DEAD)
+   - DEAD branch skip for life-loss remains intact.
+
+4) Per-ghost dead return targets assigned from getGhostPenSpawnPosition(index)
+   - resetPositions() line ~521: this.enemies[i].setDeadReturnTarget(spawn.x, spawn.y);
+   - rebuildActiveGhosts() line ~570: enemy.setDeadReturnTarget(spawn.x, spawn.y);
+
+Verification evidence:
+
+A) Command: bunx vitest run --config apps/maze-runner/vite.config.mts
+   Result: PASS
+   - Test Files: 12 passed (12)
+   - Tests: 190 passed (190)
+   - Duration: 34.82s
+
+B) Command: bun nx test maze-runner
+   Result: PASS
+   - NX successfully ran target test for project maze-runner and dependencies
+   - Test Files: 12 passed (12)
+   - Tests: 190 passed (190)
+
+Note on diagnostics tooling:
+- lsp_diagnostics for TypeScript could not run because typescript-language-server is not installed in this environment.
+- Behavioral/type confidence is backed by full passing vitest/Nx test runs above.

@@ -66,7 +66,8 @@ export class Pathfinder {
       if (iterations > maxIters) return null;
 
       openSet.sort((a, b) => a.f - b.f);
-      const current = openSet.shift()!;
+      const current = openSet.shift();
+      if (!current) return null;
 
       if (current.x === endX && current.y === endY) {
         return this.reconstructPath(current);

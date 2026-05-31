@@ -14,6 +14,9 @@ vi.mock("phaser", () => {
     destroy() {
       this.active = false;
     }
+    setScale(_scale: number) {
+      return this;
+    }
   }
   return { GameObjects: { Sprite: MockGameObject }, Scene: class {} };
 });

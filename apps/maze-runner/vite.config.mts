@@ -20,6 +20,10 @@ export default defineConfig(() => ({
       insertTypesEntry: true,
     }),
   ],
+  define: {
+    CANVAS_RENDERER: JSON.stringify(true),
+    WEBGL_RENDERER: JSON.stringify(true),
+  },
   // Configuration for building your library.
   // See: https://vite.dev/guide/build.html#library-mode
   build: {

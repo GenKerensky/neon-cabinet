@@ -1,0 +1,2281 @@
+[
+  {
+    "description": "  As a developer, I want to inspect game state at specific frames for debugging.",
+    "elements": [
+      {
+        "description": "",
+        "id": "frame-inspection;step-through-frames-and-inspect-state",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Step through frames and inspect state",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 99096413
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 636221625
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 0.1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1772976
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1245321
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "5 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 33930430
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the scene should be \"Game\"",
+            "match": {
+              "location": "step-definitions/game.steps.ts:44"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1801226
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "take a screenshot \"frame-5\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 23469097
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 45822544
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@debug",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "frame-inspection;pause-and-resume-game",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Pause and resume game",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 84405964
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 623469743
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 0.1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1176199
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 925149
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 37109257
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "the game is paused",
+            "result": {
+              "status": "ambiguous",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "the game is resumed",
+            "result": {
+              "status": "ambiguous",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "5 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 22,
+            "name": "the scene should be \"Game\"",
+            "match": {
+              "location": "step-definitions/game.steps.ts:44"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 42007470
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@debug",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "frame-inspection",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Frame Inspection",
+    "tags": [
+      {
+        "name": "@debug",
+        "line": 1
+      }
+    ],
+    "uri": "features/debug/frame-inspection.feature"
+  },
+  {
+    "description": "  As a developer, I want to reproduce exact game states using seeds.",
+    "elements": [
+      {
+        "description": "",
+        "id": "seed-reproduction;same-seed-produces-same-initial-state",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Same seed produces same initial state",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 74832780
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 593411036
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 804166
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 680756
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 41788299
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the scene should be \"Game\"",
+            "match": {
+              "location": "step-definitions/game.steps.ts:44"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1046578
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "take a screenshot \"seed-42-frame-10\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 26963138
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 40574517
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@debug",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "seed-reproduction;different-seeds-produce-different-states",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Different seeds produce different states",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 78558043
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 617893544
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 964269
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 761526
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "30 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 48735000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "take a screenshot \"seed-42-frame-30\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 27352110
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 42624416
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@debug",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "seed-reproduction",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Seed Reproduction",
+    "tags": [
+      {
+        "name": "@debug",
+        "line": 1
+      }
+    ],
+    "uri": "features/debug/seed-reproduction.feature"
+  },
+  {
+    "description": "  As a player, I want to collect dots to increase my score.",
+    "elements": [
+      {
+        "description": "",
+        "id": "collectibles;collecting-a-dot-increases-score",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Collecting a dot increases score",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 77632064
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 607953566
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1001868
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 852547
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 40091954
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "a dot is collected",
+            "match": {
+              "location": "step-definitions/player.steps.ts:127"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2186208
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 13,
+            "name": "the score should be 10",
+            "match": {
+              "location": "step-definitions/assert.steps.ts:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 162122
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 42526796
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@gameplay",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "collectibles;clear-collectibles-by-type",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Clear collectibles by type",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 79966406
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 586624336
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 973437
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 691026
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 41712708
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "collectibles of type \"dot\" are cleared",
+            "match": {
+              "location": "step-definitions/player.steps.ts:154"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2314671,
+              "error_message": "page.evaluate: TypeError: collectibles.getChildren is not a function\n    at commands.clearCollectibles (http://localhost:4200/support/helpers/clear-collectibles.ts:8:18)\n    at eval (eval at evaluate (:302:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at commands.clearCollectibles (http://localhost:4200/support/helpers/clear-collectibles.ts:8:18)\n    at eval (:302:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at MazeRunnerWorld.<anonymous> (/var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/player.steps.ts:157:44)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "take a screenshot \"dots-cleared\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "the collectibles count should be less than the initial value",
+            "match": {
+              "location": "step-definitions/assert.steps.ts:42"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 44225261
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@gameplay",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "collectibles",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Collectibles",
+    "tags": [
+      {
+        "name": "@gameplay",
+        "line": 1
+      }
+    ],
+    "uri": "features/gameplay/collectibles.feature"
+  },
+  {
+    "description": "  As a tester, I want to verify enemy AI behaviors are deterministic with a given seed.",
+    "elements": [
+      {
+        "description": "",
+        "id": "enemy-ai;chaser-pursues-player",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Chaser pursues player",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 79478570
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 622998929
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 791647
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 668115
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "30 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 48671918
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the enemy \"chaser\" should be in state \"scatter\"",
+            "match": {
+              "location": "step-definitions/enemy.steps.ts:47"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1100139
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "take a screenshot \"chaser-initial\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 20937095
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 45394290
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@ai",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "enemy-ai;enemies-move-on-frame-advance",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Enemies move on frame advance",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 81927204
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 592829692
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 945158
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 743975
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 45582382
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "I capture the enemy positions",
+            "match": {
+              "location": "step-definitions/enemy.steps.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1526934
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 6980000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "at least one enemy should have moved",
+            "match": {
+              "location": "step-definitions/enemy.steps.ts:29"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1145520
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 41773529
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@ai",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "enemy-ai;spawn-enemy-at-specific-position",
+        "keyword": "Scenario",
+        "line": 22,
+        "name": "Spawn enemy at specific position",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 77981628
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 628897890
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 886767
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 23,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 724406
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 41517606
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 25,
+            "name": "an enemy \"chaser\" is spawned at grid 5 3",
+            "match": {
+              "location": "step-definitions/enemy.steps.ts:13"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1674834
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "5 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4946174
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 27,
+            "name": "the enemy at grid 5 3 should exist",
+            "match": {
+              "location": "step-definitions/enemy.steps.ts:85"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1208700
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 42354424
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@ai",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "enemy-ai",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Enemy AI",
+    "tags": [
+      {
+        "name": "@ai",
+        "line": 1
+      }
+    ],
+    "uri": "features/gameplay/enemy-ai.feature"
+  },
+  {
+    "description": "  As a player, I want to advance to the next level when all dots are collected.",
+    "elements": [
+      {
+        "description": "",
+        "id": "level-transition;level-increases-when-all-dots-collected",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Level increases when all dots collected",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 75694498
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 593595019
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1061819
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 861477
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 44541763
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "all collectibles are cleared",
+            "match": {
+              "location": "step-definitions/player.steps.ts:145"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 1978427,
+              "error_message": "page.evaluate: TypeError: collectibles.getChildren is not a function\n    at commands.clearCollectibles (http://localhost:4200/support/helpers/clear-collectibles.ts:8:18)\n    at eval (eval at evaluate (:302:30), <anonymous>:1:49)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at commands.clearCollectibles (http://localhost:4200/support/helpers/clear-collectibles.ts:8:18)\n    at eval (:302:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at MazeRunnerWorld.<anonymous> (/var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/player.steps.ts:146:42)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "60 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "the level should be 2",
+            "match": {
+              "location": "step-definitions/assert.steps.ts:34"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "take a screenshot \"level-2\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 40104884
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@gameplay",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "level-transition",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Level Transition",
+    "tags": [
+      {
+        "name": "@gameplay",
+        "line": 1
+      }
+    ],
+    "uri": "features/gameplay/level-transition.feature"
+  },
+  {
+    "description": "  As a player, I want power pellets to make enemies vulnerable.",
+    "elements": [
+      {
+        "description": "",
+        "id": "power-pellets;power-pellet-activates-frightened-mode",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Power pellet activates frightened mode",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 74440247
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 622023950
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 923548
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 953698
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 45131908
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "a power pellet is collected",
+            "match": {
+              "location": "step-definitions/player.steps.ts:136"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1553143
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "5 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4700632
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "the enemy \"chaser\" should be in state \"frightened\"",
+            "match": {
+              "location": "step-definitions/enemy.steps.ts:47"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 1000658,
+              "error_message": "Error: Expected enemy \"chaser\" in state \"frightened\" but got \"scatter\"\n    at MazeRunnerWorld.<anonymous> (/var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/enemy.steps.ts:59:13)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "take a screenshot \"frightened-mode\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 37145888
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@gameplay",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "power-pellets;frightened-mode-has-a-duration",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "Frightened mode has a duration",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 86866997
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 600391058
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 858707
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 18,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 730396
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "10 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 38951043
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "a power pellet is collected",
+            "match": {
+              "location": "step-definitions/player.steps.ts:136"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1573924
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "300 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 80841662
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 22,
+            "name": "the enemy \"chaser\" should not be in state \"frightened\"",
+            "match": {
+              "location": "step-definitions/enemy.steps.ts:66"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1256121
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 44202230
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@gameplay",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "power-pellets",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Power Pellets",
+    "tags": [
+      {
+        "name": "@gameplay",
+        "line": 1
+      }
+    ],
+    "uri": "features/gameplay/power-pellets.feature"
+  },
+  {
+    "description": "  As a player, I want the game to load correctly so I can play.",
+    "elements": [
+      {
+        "description": "",
+        "id": "game-loads;title-screen-is-displayed",
+        "keyword": "Scenario",
+        "line": 8,
+        "name": "Title screen is displayed",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 74791471
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 603537267
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "the scene should be \"Title\"",
+            "match": {
+              "location": "step-definitions/game.steps.ts:44"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1310670
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 41964450
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "game-loads;debug-overlay-is-available",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Debug overlay is available",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 76336903
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 922842095
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the state should contain \"scene\"",
+            "match": {
+              "location": "step-definitions/assert.steps.ts:11"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1634884
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 39820331
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "game-loads;start-transitions-to-game-scene",
+        "keyword": "Scenario",
+        "line": 14,
+        "name": "Start transitions to Game scene",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 78478943
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 589617624
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 15,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 976209
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "1 frames pass",
+            "match": {
+              "location": "step-definitions/time.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 29201397
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 17,
+            "name": "the scene should be \"Game\"",
+            "match": {
+              "location": "step-definitions/game.steps.ts:44"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1102170
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "take a screenshot \"game-start\"",
+            "match": {
+              "location": "step-definitions/screenshot.steps.ts:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 25615305
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 41626877
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "game-loads",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Game Loads",
+    "tags": [
+      {
+        "name": "@smoke",
+        "line": 1
+      }
+    ],
+    "uri": "features/smoke/01-game-loads.feature"
+  },
+  {
+    "description": "  As a player, I want to move through the maze so I can collect dots and avoid enemies.",
+    "elements": [
+      {
+        "description": "",
+        "id": "player-moves;player-moves-right",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Player moves right",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 80350818
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 583897933
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1042578
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 831967
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "I capture the player position and press RIGHT",
+            "match": {
+              "location": "step-definitions/player.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 38771231
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the player's gridX should be greater than the initial value",
+            "match": {
+              "location": "step-definitions/player.steps.ts:166"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 160582
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 45201269
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "player-moves;player-moves-left",
+        "keyword": "Scenario",
+        "line": 14,
+        "name": "Player moves left",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 76909059
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 613783607
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1236490
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 15,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1002398
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "I capture the player position and press LEFT",
+            "match": {
+              "location": "step-definitions/player.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 39143304
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 17,
+            "name": "the player's gridX should be less than the initial value",
+            "match": {
+              "location": "step-definitions/player.steps.ts:180"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 195831,
+              "error_message": "Error: Expected player gridX < 0 but got 10\n    at MazeRunnerWorld.<anonymous> (/var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/player.steps.ts:187:13)"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 39763471
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "player-moves;player-moves-up",
+        "keyword": "Scenario",
+        "line": 19,
+        "name": "Player moves up",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 79030796
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 608601131
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000049
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 20,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 919508
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "I capture the player position and press UP",
+            "match": {
+              "location": "step-definitions/player.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 41718677
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 22,
+            "name": "the player's gridY should be less than the initial value",
+            "match": {
+              "location": "step-definitions/player.steps.ts:194"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 230231,
+              "error_message": "Error: Expected player gridY < 0 but got 14\n    at MazeRunnerWorld.<anonymous> (/var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/player.steps.ts:201:13)"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 40927681
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "player-moves",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Player Moves",
+    "tags": [
+      {
+        "name": "@smoke",
+        "line": 1
+      }
+    ],
+    "uri": "features/smoke/02-player-moves.feature"
+  },
+  {
+    "description": "  As a player, I want to see death feedback when an enemy catches me.",
+    "elements": [
+      {
+        "description": "",
+        "id": "player-dies;player-loses-a-life-on-death",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Player loses a life on death",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 77753457
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 596832086
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 929917
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 744787
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "the player is killed and 60 frames pass",
+            "match": {
+              "location": "step-definitions/player.steps.ts:70"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 59707957
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the lives should be 2",
+            "match": {
+              "location": "step-definitions/assert.steps.ts:26"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 197152,
+              "error_message": "Error: Expected lives 2 but got 3\n    at MazeRunnerWorld.<anonymous> (/var/home/falco/code/neon-cabinet/apps/maze-runner/step-definitions/assert.steps.ts:30:11)"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 42582975
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "player-dies;death-screenshot-captured",
+        "keyword": "Scenario",
+        "line": 14,
+        "name": "Death screenshot captured",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 83630587
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the game is configured with seed 42",
+            "match": {
+              "location": "step-definitions/game.steps.ts:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 637864019
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "the game is running at 1x speed",
+            "match": {
+              "location": "step-definitions/game.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 860147
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 15,
+            "name": "I start the game",
+            "match": {
+              "location": "step-definitions/game.steps.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 672405
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "the player is killed and screenshot captured",
+            "match": {
+              "location": "step-definitions/player.steps.ts:88"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 54822543
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 38980994
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@smoke",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "player-dies",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Player Dies",
+    "tags": [
+      {
+        "name": "@smoke",
+        "line": 1
+      }
+    ],
+    "uri": "features/smoke/03-player-dies.feature"
+  }
+]

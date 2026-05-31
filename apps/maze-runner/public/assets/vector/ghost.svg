@@ -1,0 +1,52 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Aura / Glow -->
+  <g id="aura">
+    <path d="M 4 30 L 4 14 A 12 12 0 0 1 28 14 L 28 30 L 24 26 L 20 30 L 16 26 L 12 30 L 8 26 Z"
+      fill="none" stroke="#ff00ff" stroke-width="4" opacity="0.4"
+      data-slide-range="1.2"
+      data-direction-bend='{"amount": 3.5, "pivotY": 30}'
+      data-anim-wave='{"frequency": 15, "amplitude": 3, "points": 20, "yStart": 26, "yEnd": 14}' />
+  </g>
+
+  <!-- Ghost Body with wavy skirt -->
+  <path id="body" d="M 4 30 L 4 14 A 12 12 0 0 1 28 14 L 28 30 L 24 26 L 20 30 L 16 26 L 12 30 L 8 26 Z"
+    fill="#ff0000" stroke="#ffccff" stroke-width="1.5" opacity="0.25"
+    data-slide-range="1.2"
+    data-direction-bend='{"amount": 3.5, "pivotY": 30}'
+    data-anim-wave='{"frequency": 15, "amplitude": 2, "points": 20, "yStart": 26, "yEnd": 14}' />
+
+  <!-- Frightened State Overlay (hidden by default) -->
+  <g id="frightened_overlay" display="none">
+    <path d="M 4 30 L 4 14 A 12 12 0 0 1 28 14 L 28 30 L 24 26 L 20 30 L 16 26 L 12 30 L 8 26 Z"
+      fill="#005599" stroke="#00ffff" stroke-width="1.5"
+      data-slide-range="1.2"
+      data-direction-bend='{"amount": 3.5, "pivotY": 30}'
+      data-anim-wave='{"frequency": 15, "amplitude": 2, "points": 20, "yStart": 26, "yEnd": 14}' />
+  </g>
+
+  <!-- Eyes Container -->
+  <g id="eyes" data-slide-range="5">
+    <!-- Left Eye Shield (Black) -->
+    <circle cx="11.5" cy="14" r="5.0" fill="#000000" opacity="0.75" />
+    <!-- Right Eye Shield (Black) -->
+    <circle cx="20.5" cy="14" r="5.0" fill="#000000" opacity="0.75" />
+
+    <!-- Left Eye Sclera -->
+    <circle cx="11.5" cy="14" r="3.6" fill="#5f7480" opacity="0.9" />
+    <!-- Left Eye Pupil -->
+    <circle cx="11.5" cy="14" r="2.0" fill="#001a55" />
+    <circle cx="12.1" cy="13.4" r="0.75" fill="#00aacc" opacity="0.65" />
+
+    <!-- Right Eye Sclera -->
+    <circle cx="20.5" cy="14" r="3.6" fill="#5f7480" opacity="0.9" />
+    <!-- Right Eye Pupil -->
+    <circle cx="20.5" cy="14" r="2.0" fill="#001a55" />
+    <circle cx="21.1" cy="13.4" r="0.75" fill="#00aacc" opacity="0.65" />
+  </g>
+
+  <!-- Dead State Eyes (hidden by default) -->
+  <g id="dead_eyes" display="none" data-slide-range="5">
+    <path d="M 8.5 11 L 14.5 17 M 14.5 11 L 8.5 17" stroke="#ffffff" stroke-width="1.8" />
+    <path d="M 17.5 11 L 23.5 17 M 23.5 11 L 17.5 17" stroke="#ffffff" stroke-width="1.8" />
+  </g>
+</svg>

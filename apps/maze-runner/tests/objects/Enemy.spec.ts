@@ -7,41 +7,180 @@ vi.mock("phaser", () => {
     y: number;
     active = true;
     alpha = 1;
+    scale = 1;
+    visible = true;
+    depth = 0;
+    parent: any = null;
     tint = 0xffffff;
     texture: { key: string } = { key: "test" };
     anims: {
-      play: () => {};
+      play: () => void;
       isPlaying: boolean;
-      pause: () => {};
-      resume: () => {};
+      pause: () => void;
+      resume: () => void;
     } = {
-      play: () => ({}),
+      play: () => void 0,
       isPlaying: false,
-      pause: () => ({}),
-      resume: () => ({}),
+      pause: () => void 0,
+      resume: () => void 0,
     };
     constructor(scene: any, x: number, y: number, _texture?: string) {
       this.scene = scene;
       this.x = x;
       this.y = y;
     }
-    setTexture(_key: string): void {}
-    setAlpha(_value: number): void {}
-    clearTint(): void {}
-    setTint(_color: number): void {}
-    play(_key: string, _ignoreIfPlaying?: boolean): void {}
-    stop(): void {}
+    setTexture(_key: string): void {
+      /* noop */
+    }
+    setAlpha(_value: number): void {
+      this.alpha = _value;
+    }
+    setScale(_value: number): void {
+      this.scale = _value;
+    }
+    setVisible(_value: boolean): void {
+      this.visible = _value;
+    }
+    setDepth(_value: number): void {
+      this.depth = _value;
+    }
+    setPosition(x: number, y: number) {
+      this.x = x;
+      this.y = y;
+      return this;
+    }
+    clearTint(): void {
+      /* noop */
+    }
+    setTint(_color: number): void {
+      /* noop */
+    }
+    play(_key: string, _ignoreIfPlaying?: boolean): void {
+      /* noop */
+    }
+    stop(): void {
+      /* noop */
+    }
     destroy() {
       this.active = false;
     }
   }
-  return { GameObjects: { Sprite: MockGameObject }, Scene: class {} };
+
+  class MockContainer extends MockGameObject {
+    list: any[] = [];
+    update(_time: number, _delta: number) {
+      for (const child of this.list) {
+        if (child && typeof child.update === "function")
+          child.update(_time, _delta);
+      }
+    }
+    add(child: any) {
+      if (Array.isArray(child)) {
+        child.forEach((c) => {
+          if (c) c.parent = this;
+        });
+        this.list.push(...child);
+      } else {
+        if (child) child.parent = this;
+        this.list.push(child);
+      }
+    }
+    remove(child: any) {
+      const idx = this.list.indexOf(child);
+      if (idx !== -1) this.list.splice(idx, 1);
+    }
+    getWorldTransformMatrix() {
+      return {
+        transformPoint: (x: number, y: number, point: any) => {
+          const px = this.parent ? this.parent.x : 0;
+          const py = this.parent ? this.parent.y : 0;
+          point.x = px + this.x + x;
+          point.y = py + this.y + y;
+        },
+      };
+    }
+  }
+
+  class MockGraphics extends MockGameObject {
+    lineStyle() {
+      return this;
+    }
+    fillStyle() {
+      return this;
+    }
+    beginPath() {
+      return this;
+    }
+    moveTo() {
+      return this;
+    }
+    lineTo() {
+      return this;
+    }
+    fillPath() {
+      return this;
+    }
+    strokePath() {
+      return this;
+    }
+    strokeCircle() {
+      return this;
+    }
+    fillCircle() {
+      return this;
+    }
+    strokeRoundedRect() {
+      return this;
+    }
+    fillRoundedRect() {
+      return this;
+    }
+    fillRect() {
+      return this;
+    }
+    strokeRect() {
+      return this;
+    }
+    closePath() {
+      return this;
+    }
+    clear() {
+      return this;
+    }
+  }
+
+  class MockVector2 {
+    constructor(
+      public x = 0,
+      public y = 0,
+    ) {}
+  }
+
+  return {
+    GameObjects: {
+      Sprite: MockGameObject,
+      Container: MockContainer,
+      Graphics: MockGraphics,
+    },
+    Scene: class {},
+    Math: {
+      Vector2: MockVector2,
+    },
+    Display: {
+      Color: {
+        HexStringToColor: (hex: string) => {
+          return { color: parseInt(hex.replace("#", ""), 16) || 0 };
+        },
+      },
+    },
+  };
 });
 
 import { CellType } from "../../src/game/utils/MazeGenerator";
 import type { MazeCell } from "../../src/game/utils/MazeGenerator";
 import { Direction } from "../../src/game/utils/DirectionUtils";
 import { EnemyState } from "../../src/game/objects/Enemy";
+import { getCellCenter } from "../../src/game/utils/gridGeometry";
 import { Chaser } from "../../src/game/ai/Chaser";
 import { Ambusher } from "../../src/game/ai/Ambusher";
 import { Timid } from "../../src/game/ai/Timid";
@@ -58,8 +197,12 @@ function gridFromPattern(pattern: string[]): MazeCell[][] {
 }
 
 class TestEnemy extends Chaser {
-  constructor(grid: MazeCell[][], gridWidth: number, gridHeight: number) {
-    const mockScene = createMockScene();
+  constructor(
+    grid: MazeCell[][],
+    gridWidth: number,
+    gridHeight: number,
+    mockScene = createMockScene(),
+  ) {
     const tileSize = 16;
     const offsetX = 0;
     const offsetY = 0;
@@ -79,7 +222,7 @@ class TestEnemy extends Chaser {
       { x: 100, y: 100 },
       80,
     );
-    this.currentDirection = Direction.NONE;
+    this.movementDirection = Direction.NONE;
   }
 
   chooseDirection(
@@ -111,11 +254,11 @@ class TestEnemy extends Chaser {
   }
 
   setCurrentDirection(dir: Direction): void {
-    this.currentDirection = dir;
+    this.movementDirection = dir;
   }
 
   getCurrentDirection(): Direction {
-    return this.currentDirection;
+    return this.movementDirection;
   }
 
   setGridPosition(gx: number, gy: number): void {
@@ -141,6 +284,14 @@ class TestEnemy extends Chaser {
   getFrightenedTimer(): number {
     return this.frightenedTimer;
   }
+
+  forcePenExitPublic(): void {
+    this.forcePenExit();
+  }
+
+  isExitingPenPublic(): boolean {
+    return this.isExitingPen();
+  }
 }
 
 function allPassageGrid(w: number, h: number): MazeCell[][] {
@@ -155,7 +306,12 @@ function allPassageGrid(w: number, h: number): MazeCell[][] {
 }
 
 class TestAmbusher extends Ambusher {
-  constructor(grid: MazeCell[][], gridWidth: number, gridHeight: number) {
+  constructor(
+    grid: MazeCell[][],
+    gridWidth: number,
+    gridHeight: number,
+    predictionCells?: number,
+  ) {
     const mockScene = createMockScene();
     const tileSize = 16;
     const offsetX = 0;
@@ -175,8 +331,12 @@ class TestAmbusher extends Ambusher {
       offsetY,
       { x: 100, y: 100 },
       80,
+      undefined,
+      undefined,
+      undefined,
+      predictionCells,
     );
-    this.currentDirection = Direction.NONE;
+    this.movementDirection = Direction.NONE;
   }
 
   setGridPosition(gx: number, gy: number): void {
@@ -193,7 +353,12 @@ class TestAmbusher extends Ambusher {
 }
 
 class TestTimid extends Timid {
-  constructor(grid: MazeCell[][], gridWidth: number, gridHeight: number) {
+  constructor(
+    grid: MazeCell[][],
+    gridWidth: number,
+    gridHeight: number,
+    distanceThreshold?: number,
+  ) {
     const mockScene = createMockScene();
     const tileSize = 16;
     const offsetX = 0;
@@ -213,8 +378,12 @@ class TestTimid extends Timid {
       offsetY,
       { x: 100, y: 100 },
       80,
+      undefined,
+      undefined,
+      undefined,
+      distanceThreshold,
     );
-    this.currentDirection = Direction.NONE;
+    this.movementDirection = Direction.NONE;
   }
 
   setGridPosition(gx: number, gy: number): void {
@@ -231,7 +400,12 @@ class TestTimid extends Timid {
 }
 
 class TestWanderer extends Wanderer {
-  constructor(grid: MazeCell[][], gridWidth: number, gridHeight: number) {
+  constructor(
+    grid: MazeCell[][],
+    gridWidth: number,
+    gridHeight: number,
+    vectorScale?: number,
+  ) {
     const mockScene = createMockScene();
     const tileSize = 16;
     const offsetX = 0;
@@ -251,8 +425,12 @@ class TestWanderer extends Wanderer {
       offsetY,
       { x: 100, y: 100 },
       80,
+      undefined,
+      undefined,
+      undefined,
+      vectorScale,
     );
-    this.currentDirection = Direction.NONE;
+    this.movementDirection = Direction.NONE;
   }
 
   setGridPosition(gx: number, gy: number): void {
@@ -269,16 +447,28 @@ class TestWanderer extends Wanderer {
 }
 
 describe("Enemy", () => {
+  describe("constructor", () => {
+    it("registers an Arcade body for ghost enemies", () => {
+      const grid = allPassageGrid(7, 7);
+      const mockScene = createMockScene();
+
+      const enemy = new TestEnemy(grid, 7, 7, mockScene);
+
+      expect(mockScene.physics.add.existing).toHaveBeenCalledWith(enemy);
+      expect((enemy as any).body).toBeDefined();
+    });
+  });
+
   describe("chooseDirection - target selection", () => {
     it("picks direction closest to target", () => {
-      const grid = allPassageGrid(7, 7);
-      const enemy = new TestEnemy(grid, 7, 7);
-      enemy.setGridPosition(3, 3);
+      const grid = allPassageGrid(9, 9);
+      const enemy = new TestEnemy(grid, 9, 9);
+      enemy.setGridPosition(1, 1);
       enemy.setCurrentDirection(Direction.UP);
 
       const dir = enemy.chooseDirection(
-        5 * 16 + 8,
-        3 * 16 + 8,
+        7 * 16 + 8,
+        1 * 16 + 8,
         Direction.RIGHT,
       );
 
@@ -287,23 +477,21 @@ describe("Enemy", () => {
 
     it("avoids wall cells even if shortest path", () => {
       const grid = gridFromPattern([
-        "WWWWWWW",
-        "W.....W",
-        "W.W...W",
-        "W.....W",
-        "W.....W",
-        "W.....W",
-        "WWWWWWW",
+        "WWWWWWWWW",
+        "W.W.....W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "WWWWWWWWW",
       ]);
-      const enemy = new TestEnemy(grid, 7, 7);
-      enemy.setGridPosition(3, 3);
-      enemy.setCurrentDirection(Direction.UP);
+      const enemy = new TestEnemy(grid, 9, 9);
+      enemy.setGridPosition(2, 2);
+      enemy.setCurrentDirection(Direction.RIGHT);
 
-      const dir = enemy.chooseDirection(
-        5 * 16 + 8,
-        3 * 16 + 8,
-        Direction.RIGHT,
-      );
+      const dir = enemy.chooseDirection(2 * 16 + 8, 0 * 16 + 8, Direction.UP);
 
       expect(dir).not.toBe(Direction.UP);
       expect([Direction.DOWN, Direction.LEFT, Direction.RIGHT]).toContain(dir);
@@ -312,7 +500,7 @@ describe("Enemy", () => {
     it("prefers current direction on distance tie", () => {
       const grid = allPassageGrid(7, 7);
       const enemy = new TestEnemy(grid, 7, 7);
-      enemy.setGridPosition(2, 2);
+      enemy.setGridPosition(1, 1);
       enemy.setCurrentDirection(Direction.DOWN);
 
       const dir = enemy.chooseDirection(
@@ -473,6 +661,118 @@ describe("Enemy", () => {
   });
 
   describe("update", () => {
+    it("activateFrightened adds duration while already FRIGHTENED", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+
+      enemy.activateFrightened(2000);
+      enemy.activateFrightened(500);
+
+      expect(enemy.getState()).toBe(EnemyState.FRIGHTENED);
+      expect(enemy.getFrightenedTimer()).toBe(2500);
+    });
+
+    it("activateFrightened is no-op in DEAD state", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setEnemyState(EnemyState.DEAD);
+
+      enemy.activateFrightened(3000);
+
+      expect(enemy.getState()).toBe(EnemyState.DEAD);
+      expect(enemy.getSpeed()).toBe(320);
+      expect(enemy.getFrightenedTimer()).toBe(0);
+    });
+
+    it("DEAD return movement ignores walls and snaps to return target", () => {
+      const grid = gridFromPattern([
+        "WWWWWWW",
+        "W.....W",
+        "W.W.W.W",
+        "W.....W",
+        "W.W.W.W",
+        "W.....W",
+        "WWWWWWW",
+      ]);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setGridPosition(1, 1);
+      enemy.setDeadReturnTarget(3, 3);
+      enemy.setEnemyState(EnemyState.DEAD);
+
+      enemy.update(0, 1000, 0, 0, Direction.NONE);
+
+      expect(enemy.getGridX()).toBe(3);
+      expect(enemy.getGridY()).toBe(3);
+      expect(enemy.getState()).toBe(EnemyState.CHASE);
+      expect(enemy.isExitingPenPublic()).toBe(true);
+
+      enemy.setCurrentDirection(Direction.NONE);
+      enemy.update(1001, 50, 0, 0, Direction.NONE);
+      expect(enemy.getCurrentDirection()).toBe(Direction.UP);
+    });
+
+    it("initial/inside-pen ghosts prioritize pen exit even when FRIGHTENED", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setGridPosition(3, 3);
+      enemy.forcePenExitPublic();
+      enemy.setCurrentDirection(Direction.NONE);
+      enemy.setEnemyState(EnemyState.FRIGHTENED);
+
+      enemy.update(0, 16, 0, 0, Direction.NONE);
+
+      expect(enemy.getCurrentDirection()).toBe(Direction.UP);
+      expect(enemy.isExitingPenPublic()).toBe(true);
+    });
+
+    it("living ghosts outside pen cannot choose re-entry through gate", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setGridPosition(3, 1);
+      enemy.setCurrentDirection(Direction.RIGHT);
+
+      const dir = enemy.chooseDirection(3 * 16 + 8, 3 * 16 + 8, Direction.DOWN);
+
+      expect(dir).not.toBe(Direction.DOWN);
+    });
+
+    it("dead ghosts ignore walls only while DEAD and still revive to pen-exit cycle", () => {
+      const grid = gridFromPattern([
+        "WWWWWWW",
+        "WWWWWWW",
+        "WWW.WWW",
+        "WWW.WWW",
+        "WWW.WWW",
+        "WWWWWWW",
+        "WWWWWWW",
+      ]);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setGridPosition(1, 1);
+      enemy.setDeadReturnTarget(3, 3);
+      enemy.setEnemyState(EnemyState.DEAD);
+
+      enemy.update(0, 1200, 0, 0, Direction.NONE);
+
+      expect(enemy.getGridX()).toBe(3);
+      expect(enemy.getGridY()).toBe(3);
+      expect(enemy.getState()).toBe(EnemyState.CHASE);
+      expect(enemy.isExitingPenPublic()).toBe(true);
+    });
+
+    it("keeps movement on centerlines while moving along axis", () => {
+      const grid = allPassageGrid(7, 7);
+      const enemy = new TestEnemy(grid, 7, 7);
+      enemy.setGridPosition(1, 1);
+      enemy.setCurrentDirection(Direction.RIGHT);
+
+      const center = getCellCenter(1, 1, 16, 0, 0);
+      (enemy as any).y = center.y + 3;
+
+      enemy.update(0, 100, 0, 0, Direction.NONE);
+
+      expect((enemy as any).y).toBe(center.y);
+    });
+
     it("FRIGHTENED timer expiry transitions to CHASE", () => {
       const grid = allPassageGrid(7, 7);
       const enemy = new TestEnemy(grid, 7, 7);
@@ -480,7 +780,7 @@ describe("Enemy", () => {
       enemy.setCurrentDirection(Direction.RIGHT);
       enemy.setEnemyState(EnemyState.FRIGHTENED);
 
-      enemy.update(8001, 0, 0, Direction.NONE);
+      enemy.update(0, 8001, 0, 0, Direction.NONE);
 
       expect(enemy.getState()).toBe(EnemyState.CHASE);
     });
@@ -492,7 +792,7 @@ describe("Enemy", () => {
       enemy.setCurrentDirection(Direction.RIGHT);
       enemy.setEnemyState(EnemyState.FRIGHTENED);
 
-      enemy.update(100, 0, 0, Direction.NONE);
+      enemy.update(0, 100, 0, 0, Direction.NONE);
 
       expect(enemy.getState()).toBe(EnemyState.FRIGHTENED);
     });
@@ -613,6 +913,21 @@ describe("Enemy", () => {
       expect(target!.y).toBe(5);
     });
 
+    it("uses custom prediction distance when provided", () => {
+      const grid = allPassageGrid(12, 12);
+      const enemy = new TestAmbusher(grid, 12, 12, 2);
+      enemy.setGridPosition(1, 1);
+      enemy.setEnemyState(EnemyState.CHASE);
+
+      const target = enemy.getTargetPosition(
+        3 * 16 + 8,
+        3 * 16 + 8,
+        Direction.RIGHT,
+      );
+
+      expect(target).toEqual({ x: 5, y: 3 });
+    });
+
     it("SCATTER state returns scatter target", () => {
       const grid = allPassageGrid(7, 7);
       const enemy = new TestAmbusher(grid, 7, 7);
@@ -667,6 +982,21 @@ describe("Enemy", () => {
       expect(target!.x).toBeLessThan(10);
       expect(target!.y).toBeGreaterThanOrEqual(1);
       expect(target!.y).toBeLessThan(12);
+    });
+
+    it("uses custom timid threshold when provided", () => {
+      const grid = allPassageGrid(10, 10);
+      const enemy = new TestTimid(grid, 10, 10, 2);
+      enemy.setGridPosition(1, 1);
+      enemy.setEnemyState(EnemyState.CHASE);
+
+      const target = enemy.getTargetPosition(
+        4 * 16 + 8,
+        1 * 16 + 8,
+        Direction.NONE,
+      );
+
+      expect(target).not.toEqual({ x: 4, y: 1 });
     });
 
     it("SCATTER state returns scatter target", () => {
@@ -738,6 +1068,22 @@ describe("Enemy", () => {
       );
 
       expect(target).toEqual({ x: 8, y: 8 });
+    });
+
+    it("uses custom pincer vector scale when provided", () => {
+      const grid = allPassageGrid(12, 12);
+      const enemy = new TestWanderer(grid, 12, 12, 1);
+      enemy.setGridPosition(1, 1);
+      enemy.setChaserPosition(1, 1);
+      enemy.setEnemyState(EnemyState.CHASE);
+
+      const target = enemy.getTargetPosition(
+        3 * 16 + 8,
+        1 * 16 + 8,
+        Direction.RIGHT,
+      );
+
+      expect(target).toEqual({ x: 5, y: 1 });
     });
 
     it("SCATTER state returns scatter target", () => {

@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["node", "vite/client"],
+    "rootDir": "src",
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
+    "paths": {
+      "@neon-cabinet/sprite-tools": ["../../libs/sprite-tools/src/index"],
+      "@neon-cabinet/shaders": ["../../libs/shaders/src/index"]
+    }
+  },
+  "exclude": ["out-tsc", "dist", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "include": ["src/**/*.ts"],
+  "references": [
+    {
+      "path": "../../libs/sprite-tools/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shaders/tsconfig.lib.json"
+    }
+  ]
+}

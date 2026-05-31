@@ -25,6 +25,21 @@
     },
     {
       "path": "./apps/maze-runner"
+    },
+    {
+      "path": "./libs/phaser-debug-bridge"
+    },
+    {
+      "path": "./libs/browser-test-runner"
+    },
+    {
+      "path": "./libs/phaser-test-harness"
+    },
+    {
+      "path": "./libs/sprite-tools"
+    },
+    {
+      "path": "./apps/vector-studio"
     }
   ]
 }

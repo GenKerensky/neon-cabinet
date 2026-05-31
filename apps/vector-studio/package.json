@@ -1,0 +1,10 @@
+{
+  "name": "@neon-cabinet/vector-studio",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@neon-cabinet/shaders": "workspace:*",
+    "@neon-cabinet/sprite-tools": "workspace:*",
+    "phaser": "catalog:"
+  }
+}

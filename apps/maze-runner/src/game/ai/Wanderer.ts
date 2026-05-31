@@ -6,6 +6,7 @@ import { Enemy, EnemyState } from "../objects/Enemy";
 export class Wanderer extends Enemy {
   private chaserGridX = 0;
   private chaserGridY = 0;
+  private vectorScale: number;
 
   constructor(
     scene: Scene,
@@ -22,6 +23,8 @@ export class Wanderer extends Enemy {
     speed?: number,
     gateOpenTime?: number,
     gameStartTime?: number,
+    svgCacheKey?: string,
+    vectorScale = 2,
   ) {
     super(
       scene,
@@ -38,7 +41,10 @@ export class Wanderer extends Enemy {
       speed,
       gateOpenTime,
       gameStartTime,
+      svgCacheKey,
     );
+
+    this.vectorScale = vectorScale;
   }
 
   setChaserPosition(chaserX: number, chaserY: number): void {
@@ -61,8 +67,10 @@ export class Wanderer extends Enemy {
     const playerGridX = Math.floor((playerX - this.offsetX) / this.tileSize);
     const playerGridY = Math.floor((playerY - this.offsetY) / this.tileSize);
 
-    const targetX = playerGridX + 2 * (playerGridX - this.chaserGridX);
-    const targetY = playerGridY + 2 * (playerGridY - this.chaserGridY);
+    const targetX =
+      playerGridX + this.vectorScale * (playerGridX - this.chaserGridX);
+    const targetY =
+      playerGridY + this.vectorScale * (playerGridY - this.chaserGridY);
 
     return {
       x: Math.max(1, Math.min(this.gridWidth - 2, targetX)),

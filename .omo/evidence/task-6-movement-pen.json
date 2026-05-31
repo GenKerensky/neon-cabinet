@@ -1,0 +1,192 @@
+{
+  "scene": "Game",
+  "state": {
+    "scene": "Game",
+    "activeScenes": ["Game"],
+    "highScore": 0,
+    "formattedHighScore": "000000",
+    "transitionState": "idle",
+    "tileSize": 58,
+    "expectedScale": 1.9333333333333333,
+    "player": {
+      "gridX": 10,
+      "gridY": 14,
+      "x": 800,
+      "y": 948,
+      "direction": 4,
+      "isDying": false,
+      "scale": {
+        "x": 1.9333333333333333,
+        "y": 1.9333333333333333,
+        "matchesExpected": true
+      },
+      "centerline": {
+        "isCentered": true,
+        "deltaX": 0,
+        "deltaY": 0,
+        "tolerance": 1.16
+      }
+    },
+    "enemies": [
+      {
+        "texture": "timid",
+        "state": "scatter",
+        "x": 742,
+        "y": 600,
+        "gridX": 9,
+        "gridY": 8,
+        "direction": 0,
+        "scale": {
+          "x": 1.9333333333333333,
+          "y": 1.9333333333333333,
+          "matchesExpected": true
+        },
+        "pen": {
+          "inPen": true,
+          "exitingPen": true,
+          "atGate": false,
+          "atExit": false
+        },
+        "centerline": {
+          "isCentered": true,
+          "deltaX": 0,
+          "deltaY": 0,
+          "tolerance": 1.16
+        }
+      },
+      {
+        "texture": "wanderer",
+        "state": "scatter",
+        "x": 800,
+        "y": 600,
+        "gridX": 10,
+        "gridY": 8,
+        "direction": 0,
+        "scale": {
+          "x": 1.9333333333333333,
+          "y": 1.9333333333333333,
+          "matchesExpected": true
+        },
+        "pen": {
+          "inPen": true,
+          "exitingPen": true,
+          "atGate": false,
+          "atExit": false
+        },
+        "centerline": {
+          "isCentered": true,
+          "deltaX": 0,
+          "deltaY": 0,
+          "tolerance": 1.16
+        }
+      },
+      {
+        "texture": "trickster",
+        "state": "scatter",
+        "x": 858,
+        "y": 600,
+        "gridX": 11,
+        "gridY": 8,
+        "direction": 0,
+        "scale": {
+          "x": 1.9333333333333333,
+          "y": 1.9333333333333333,
+          "matchesExpected": true
+        },
+        "pen": {
+          "inPen": true,
+          "exitingPen": true,
+          "atGate": false,
+          "atExit": false
+        },
+        "centerline": {
+          "isCentered": true,
+          "deltaX": 0,
+          "deltaY": 0,
+          "tolerance": 1.16
+        }
+      }
+    ],
+    "score": 10,
+    "lives": 3,
+    "level": 1,
+    "collectibles": 176,
+    "pen": {
+      "centerX": 10,
+      "centerY": 8,
+      "interiorCells": [
+        {
+          "gridX": 9,
+          "gridY": 8
+        },
+        {
+          "gridX": 10,
+          "gridY": 8
+        },
+        {
+          "gridX": 11,
+          "gridY": 8
+        },
+        {
+          "gridX": 9,
+          "gridY": 9
+        },
+        {
+          "gridX": 10,
+          "gridY": 9
+        },
+        {
+          "gridX": 11,
+          "gridY": 9
+        }
+      ],
+      "gateCell": {
+        "gridX": 10,
+        "gridY": 7
+      },
+      "exitCell": {
+        "gridX": 10,
+        "gridY": 6
+      },
+      "topGateRow": 7,
+      "bottomWallRow": 10
+    },
+    "hud": {
+      "score": {
+        "text": "SCORE: 10",
+        "x": 800,
+        "y": 20
+      },
+      "level": {
+        "text": "LEVEL: 1",
+        "x": 1580,
+        "y": 20
+      },
+      "highScore": {
+        "text": "HIGH: 000010",
+        "x": 800,
+        "y": 1176
+      },
+      "livesIcons": {
+        "count": 3,
+        "positions": [
+          {
+            "index": 0,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "index": 1,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "index": 2,
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    }
+  }
+}
