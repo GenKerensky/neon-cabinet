@@ -14,6 +14,16 @@ const mockSceneTransitions = vi.hoisted(() => ({
   startSceneWithFade: vi.fn(),
 }));
 
+const mockVectorPuppets = vi.hoisted(() => ({
+  instances: [] as Array<{
+    x: number;
+    y: number;
+    setScale: ReturnType<typeof vi.fn>;
+    setDirection: ReturnType<typeof vi.fn>;
+    update: ReturnType<typeof vi.fn>;
+  }>,
+}));
+
 vi.mock("phaser", () => ({
   GameObjects: {
     Container: class {},
@@ -57,6 +67,28 @@ vi.mock("phaser", () => ({
   },
 }));
 
+vi.mock("@neon-cabinet/sprite-tools", () => ({
+  SVGParser: class {
+    parse = vi.fn(() => ({
+      viewBox: { x: 0, y: 0, width: 30, height: 30 },
+      layers: [],
+    }));
+  },
+  VectorPuppet: class {
+    x: number;
+    y: number;
+    setScale = vi.fn(() => this);
+    setDirection = vi.fn(() => this);
+    update = vi.fn();
+
+    constructor(_scene: unknown, x: number, y: number, _metadata: unknown) {
+      this.x = x;
+      this.y = y;
+      mockVectorPuppets.instances.push(this);
+    }
+  },
+}));
+
 vi.mock("../../src/game/EventBus", () => ({
   EventBus: mockEventBus,
 }));
@@ -93,12 +125,15 @@ function createGraphicsMock() {
     slice: vi.fn(() => graphics),
     createGeometryMask: vi.fn(() => ({})),
     setVisible: vi.fn(() => graphics),
+    generateTexture: vi.fn(() => graphics),
+    destroy: vi.fn(() => graphics),
   };
   return graphics;
 }
 
 function createContainerMock() {
   const container = {
+    scaleX: 1,
     setDepth: vi.fn(() => container),
     setMask: vi.fn(() => container),
     add: vi.fn(() => container),
@@ -113,6 +148,17 @@ function createCircleMock() {
     setAlpha: vi.fn(() => circle),
   };
   return circle;
+}
+
+function createTileSpriteMock() {
+  const tileSprite = {
+    tilePositionX: 0,
+    tilePositionY: 0,
+    setOrigin: vi.fn(() => tileSprite),
+    setDepth: vi.fn(() => tileSprite),
+    setAlpha: vi.fn(() => tileSprite),
+  };
+  return tileSprite;
 }
 
 function createScene() {
@@ -136,6 +182,8 @@ function createScene() {
       graphics: vi.fn(() => createGraphicsMock()),
       circle: vi.fn(() => createCircleMock()),
       container: vi.fn(() => createContainerMock()),
+      tileSprite: vi.fn(() => createTileSpriteMock()),
+      existing: vi.fn(),
     },
     cameras: {
       main: {
@@ -166,6 +214,14 @@ function createScene() {
       play: vi.fn(),
       stopByKey: vi.fn(),
     },
+    textures: {
+      exists: vi.fn(() => false),
+    },
+    cache: {
+      text: {
+        get: vi.fn((key: string) => `<svg id="${key}"></svg>`),
+      },
+    },
   });
   return { handlers, scene };
 }
@@ -173,6 +229,7 @@ function createScene() {
 describe("Title", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockVectorPuppets.instances.length = 0;
   });
 
   afterEach(() => {
@@ -253,8 +310,104 @@ describe("Title", () => {
 
     expect(scene.add.graphics).toHaveBeenCalled();
     expect(scene.add.container).toHaveBeenCalled();
-    expect(scene.tweens.add).toHaveBeenCalled();
     expect(scene.tweens.chain).toHaveBeenCalled();
+  });
+
+  it("uses vector character assets for the full-width title chase", () => {
+    const { scene } = createScene();
+
+    scene.create();
+
+    expect(mockVectorPuppets.instances).toHaveLength(4);
+    expect((scene as any).cache.text.get).toHaveBeenCalledWith("player_svg");
+    expect((scene as any).cache.text.get).toHaveBeenCalledWith(
+      "ghost_chaser_svg",
+    );
+    expect((scene as any).cache.text.get).toHaveBeenCalledWith(
+      "ghost_ambusher_svg",
+    );
+    expect((scene as any).cache.text.get).toHaveBeenCalledWith(
+      "ghost_wanderer_svg",
+    );
+
+    for (const puppet of mockVectorPuppets.instances) {
+      expect(puppet.setScale).toHaveBeenCalledWith(1.15);
+      expect(puppet.setDirection).toHaveBeenCalledWith("RIGHT");
+    }
+    expect(mockVectorPuppets.instances.map((puppet) => puppet.x)).toEqual([
+      0, -44, -88, -132,
+    ]);
+
+    expect(scene.tweens.chain).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tweens: [
+          expect.objectContaining({
+            x: 884,
+            y: 120,
+            duration: 8500,
+          }),
+          expect.objectContaining({
+            x: 884,
+            y: 324,
+            duration: 1700,
+          }),
+          expect.objectContaining({
+            x: -84,
+            y: 324,
+            duration: 8500,
+          }),
+          expect.objectContaining({
+            x: -84,
+            y: 120,
+            duration: 1700,
+          }),
+        ],
+      }),
+    );
+
+    const chainConfig = vi.mocked(scene.tweens.chain).mock.calls[0][0] as {
+      tweens: Array<{ onStart?: () => void }>;
+    };
+    const chaseGroup = vi.mocked(scene.add.container).mock.results[1]
+      .value as ReturnType<typeof createContainerMock>;
+
+    chainConfig.tweens[2].onStart?.();
+
+    expect(chaseGroup.scaleX).toBe(1);
+    expect(chaseGroup.setPosition).toHaveBeenCalledWith(884, 324);
+    for (const puppet of mockVectorPuppets.instances) {
+      expect(puppet.setDirection).toHaveBeenCalledWith("LEFT");
+    }
+    expect(mockVectorPuppets.instances.map((puppet) => puppet.x)).toEqual([
+      0, 44, 88, 132,
+    ]);
+  });
+
+  it("pre-renders and scrolls a dim maze background", () => {
+    const { scene } = createScene();
+    scene.create();
+
+    expect(scene.add.tileSprite).toHaveBeenCalledWith(
+      400,
+      300,
+      800,
+      600,
+      "maze_runner_title_background_maze",
+    );
+
+    const tileSprite = vi.mocked(scene.add.tileSprite).mock.results[0]
+      .value as ReturnType<typeof createTileSpriteMock>;
+    expect(tileSprite.setDepth).toHaveBeenCalledWith(1);
+    expect(tileSprite.setAlpha).toHaveBeenCalledWith(0.33);
+
+    scene.update(1000, 1000);
+
+    expect(tileSprite.tilePositionX).toBe(25);
+    expect(tileSprite.tilePositionY).toBe(18);
+    expect(mockVectorPuppets.instances[0].update).toHaveBeenCalledWith(
+      1000,
+      1000,
+    );
   });
 
   it("starts Game with fade when SPACE is pressed", () => {

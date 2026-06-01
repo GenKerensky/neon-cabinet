@@ -1,9 +1,24 @@
 import { Scene } from "phaser";
+import { SVGParser, VectorPuppet } from "@neon-cabinet/sprite-tools";
 import { EventBus } from "../EventBus";
+import { ghostDefinitions } from "../config/ghostDefinitions";
+import { CellType, MazeGenerator } from "../utils/MazeGenerator";
 import { readHighScore, formatScore } from "../utils/highScore";
 import { fadeInScene, startSceneWithFade } from "../utils/sceneTransitions";
 
+const TITLE_MAZE_TEXTURE_KEY = "maze_runner_title_background_maze";
+const TITLE_MAZE_TILE_SIZE = 32;
+const TITLE_MAZE_SCROLL_X = 25;
+const TITLE_MAZE_SCROLL_Y = 18;
+const TITLE_CHASE_CHARACTER_SCALE = 2;
+const TITLE_CHASE_CHARACTER_SPACING = 100;
+const TITLE_CHASE_HORIZONTAL_DURATION = 8500;
+const TITLE_CHASE_OFFSCREEN_TRANSFER_DURATION = 300;
+
 export class Title extends Scene {
+  private mazeBackground?: Phaser.GameObjects.TileSprite;
+  private attractPuppets: VectorPuppet[] = [];
+
   constructor() {
     super("Title");
   }
@@ -20,6 +35,8 @@ export class Title extends Scene {
     const { width, height } = this.cameras.main;
     const fontFamily =
       (this.registry.get("fontFamily") as string) ?? "Orbitron";
+
+    this.createScrollingMazeBackground(width, height);
 
     // Background: Blue maze rail frame
     const mazeGraphics = this.add.graphics();
@@ -68,15 +85,15 @@ export class Title extends Scene {
     const frameWidth = width * 0.8;
     const frameHeight = height * 0.8;
     const attractBounds = {
-      x: frameLeft + 20,
-      y: frameTop + 20,
-      width: frameWidth - 40,
-      height: Math.min(120, frameHeight * 0.2),
+      x: frameLeft + 16,
+      y: frameTop + 16,
+      width: frameWidth - 32,
+      height: frameHeight - 32,
     };
 
     // Container for attract group
     const attractContainer = this.add.container(0, 0);
-    attractContainer.setDepth(9);
+    attractContainer.setDepth(12);
 
     // Mask
     const maskRect = this.add.graphics();
@@ -91,99 +108,7 @@ export class Title extends Scene {
     maskRect.setVisible(false);
     attractContainer.setMask(mask);
 
-    const chaseGroup = this.add.container(0, 0);
-    attractContainer.add(chaseGroup);
-
-    // Player visual
-    const playerVisual = this.add.container(0, 0);
-    const playerBody = this.add.graphics();
-    playerBody.fillStyle(0xffff00, 1);
-    playerBody.fillCircle(0, 0, 14);
-
-    const playerMouth = this.add.graphics();
-    playerMouth.fillStyle(0x000000, 1);
-    playerMouth.beginPath();
-    playerMouth.moveTo(0, 0);
-    playerMouth.arc(0, 0, 15, -Math.PI / 4, Math.PI / 4, false);
-    playerMouth.closePath();
-    playerMouth.fillPath();
-
-    playerVisual.add([playerBody, playerMouth]);
-    chaseGroup.add(playerVisual);
-
-    this.tweens.add({
-      targets: playerMouth,
-      scaleY: 0.1,
-      duration: 150,
-      yoyo: true,
-      repeat: -1,
-    });
-
-    const ghostColors = [0xff0000, 0xffb8ff, 0x00ffff];
-    ghostColors.forEach((color, i) => {
-      const ghost = this.add.graphics();
-      ghost.fillStyle(color, 1);
-      ghost.beginPath();
-      ghost.arc(0, 0, 14, Math.PI, 0, false);
-      ghost.lineTo(14, 14);
-      ghost.lineTo(-14, 14);
-      ghost.closePath();
-      ghost.fillPath();
-
-      ghost.fillStyle(0xffffff, 1);
-      ghost.fillCircle(-5, -3, 4);
-      ghost.fillCircle(5, -3, 4);
-      ghost.fillStyle(0x0000ff, 1);
-      ghost.fillCircle(-5, -3, 2);
-      ghost.fillCircle(5, -3, 2);
-
-      ghost.x = -34 * (i + 1);
-      chaseGroup.add(ghost);
-
-      this.tweens.add({
-        targets: ghost,
-        y: -4,
-        duration: 250,
-        yoyo: true,
-        repeat: -1,
-        delay: i * 100,
-      });
-    });
-
-    const startA = attractBounds.x - 90;
-    const endA = attractBounds.x + attractBounds.width + 90;
-    const yA = attractBounds.y + 35;
-
-    const startB = attractBounds.x + attractBounds.width + 90;
-    const endB = attractBounds.x - 90;
-    const yB = attractBounds.y + 85;
-
-    chaseGroup.setPosition(startA, yA);
-
-    this.tweens.chain({
-      targets: chaseGroup,
-      tweens: [
-        {
-          x: endA,
-          y: yA,
-          duration: 6000,
-          onStart: () => {
-            chaseGroup.scaleX = 1;
-            chaseGroup.setPosition(startA, yA);
-          },
-        },
-        {
-          x: endB,
-          y: yB,
-          duration: 6000,
-          onStart: () => {
-            chaseGroup.scaleX = -1;
-            chaseGroup.setPosition(startB, yB);
-          },
-        },
-      ],
-      loop: -1,
-    });
+    this.createAttractChase(attractContainer, attractBounds, height);
 
     // Animated title
     const titleGlow = this.add
@@ -302,5 +227,155 @@ export class Title extends Scene {
     }
 
     EventBus.emit("current-scene-ready", this);
+  }
+
+  update(_time: number, delta: number): void {
+    if (this.mazeBackground) {
+      this.mazeBackground.tilePositionX += (TITLE_MAZE_SCROLL_X * delta) / 1000;
+      this.mazeBackground.tilePositionY += (TITLE_MAZE_SCROLL_Y * delta) / 1000;
+    }
+
+    for (const puppet of this.attractPuppets) {
+      puppet.update(_time, delta);
+    }
+  }
+
+  private createAttractChase(
+    parent: Phaser.GameObjects.Container,
+    bounds: { x: number; y: number; width: number; height: number },
+    screenHeight: number,
+  ): void {
+    this.attractPuppets = [];
+
+    const group = this.add.container(0, 0);
+    parent.add(group);
+
+    const parser = new SVGParser();
+    const playerSvg = this.cache.text.get("player_svg") ?? "";
+    const player = new VectorPuppet(this, 0, 0, parser.parse(playerSvg));
+    player.setScale(TITLE_CHASE_CHARACTER_SCALE);
+    group.add(player);
+    this.attractPuppets.push(player);
+
+    ghostDefinitions.slice(0, 3).forEach((definition) => {
+      const ghostSvg = this.cache.text.get(definition.svgCacheKey) ?? "";
+      const ghost = new VectorPuppet(this, 0, 0, {
+        ...parser.parse(ghostSvg),
+      });
+      ghost.setScale(TITLE_CHASE_CHARACTER_SCALE);
+      group.add(ghost);
+      this.attractPuppets.push(ghost);
+    });
+
+    const trailWidth = TITLE_CHASE_CHARACTER_SPACING * 3 + 48;
+    const leftOffscreenX = bounds.x - trailWidth;
+    const rightOffscreenX = bounds.x + bounds.width + trailWidth;
+    const lanes = [
+      Math.max(bounds.y + 44, screenHeight * 0.18),
+      Math.min(bounds.y + bounds.height - 90, screenHeight * 0.54),
+    ];
+
+    this.setAttractDirection("RIGHT");
+    group.setPosition(leftOffscreenX, lanes[0]);
+
+    this.tweens.chain({
+      targets: group,
+      tweens: [
+        {
+          x: rightOffscreenX,
+          y: lanes[0],
+          duration: TITLE_CHASE_HORIZONTAL_DURATION,
+          onStart: () => {
+            group.scaleX = 1;
+            group.setPosition(leftOffscreenX, lanes[0]);
+            this.setAttractDirection("RIGHT");
+          },
+        },
+        {
+          x: rightOffscreenX,
+          y: lanes[1],
+          duration: TITLE_CHASE_OFFSCREEN_TRANSFER_DURATION,
+        },
+        {
+          x: leftOffscreenX,
+          y: lanes[1],
+          duration: TITLE_CHASE_HORIZONTAL_DURATION,
+          onStart: () => {
+            group.scaleX = 1;
+            group.setPosition(rightOffscreenX, lanes[1]);
+            this.setAttractDirection("LEFT");
+          },
+        },
+        {
+          x: leftOffscreenX,
+          y: lanes[0],
+          duration: TITLE_CHASE_OFFSCREEN_TRANSFER_DURATION,
+        },
+      ],
+      loop: -1,
+    });
+  }
+
+  private setAttractDirection(direction: "LEFT" | "RIGHT"): void {
+    this.attractPuppets.forEach((puppet, index) => {
+      puppet.x =
+        index === 0
+          ? 0
+          : TITLE_CHASE_CHARACTER_SPACING *
+            index *
+            (direction === "RIGHT" ? -1 : 1);
+      puppet.y = 0;
+      puppet.setDirection(direction);
+    });
+  }
+
+  private createScrollingMazeBackground(width: number, height: number): void {
+    this.prerenderTitleMazeTexture();
+
+    this.mazeBackground = this.add
+      .tileSprite(width / 2, height / 2, width, height, TITLE_MAZE_TEXTURE_KEY)
+      .setOrigin(0.5)
+      .setDepth(1)
+      .setAlpha(0.33);
+  }
+
+  private prerenderTitleMazeTexture(): void {
+    if (this.textures?.exists?.(TITLE_MAZE_TEXTURE_KEY)) return;
+
+    const generator = new MazeGenerator(3, 1, this.createTitleMazeRng());
+    const grid = generator.create();
+    const textureWidth = generator.getWidth() * TITLE_MAZE_TILE_SIZE;
+    const textureHeight = generator.getHeight() * TITLE_MAZE_TILE_SIZE;
+    const graphics = this.add.graphics();
+
+    graphics.fillStyle(0x0000ff, 0.14);
+    graphics.lineStyle(2, 0x00aaff, 0.24);
+
+    for (let y = 0; y < grid.length; y++) {
+      for (let x = 0; x < grid[y].length; x++) {
+        if (grid[y][x].type !== CellType.WALL) continue;
+
+        const px = x * TITLE_MAZE_TILE_SIZE;
+        const py = y * TITLE_MAZE_TILE_SIZE;
+        graphics.fillRect(px, py, TITLE_MAZE_TILE_SIZE, TITLE_MAZE_TILE_SIZE);
+        graphics.strokeRect(px, py, TITLE_MAZE_TILE_SIZE, TITLE_MAZE_TILE_SIZE);
+      }
+    }
+
+    graphics.generateTexture(
+      TITLE_MAZE_TEXTURE_KEY,
+      textureWidth,
+      textureHeight,
+    );
+    graphics.destroy();
+  }
+
+  private createTitleMazeRng(): () => number {
+    let seed = 0x4d415a45;
+
+    return () => {
+      seed = (1664525 * seed + 1013904223) >>> 0;
+      return seed / 0x100000000;
+    };
   }
 }

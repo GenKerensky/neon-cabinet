@@ -171,7 +171,7 @@ describe("Boot", () => {
     );
     expect(loadAudio).toHaveBeenCalledWith(
       "maze_runner_title_theme",
-      "assets/audio/title-theme.wav",
+      "assets/audio/title-music/Patreon Challenge 12.ogg",
     );
     expect(loadAudio).toHaveBeenCalledWith(
       "maze_runner_game_start",
