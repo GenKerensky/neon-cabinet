@@ -7,6 +7,7 @@ import { ENEMY_PROJECTILE } from "../models";
  */
 export class EnemyProjectile {
   position: Vector3D;
+  previousPosition: Vector3D;
   private velocity: Vector3D;
   private alive = true;
   private lifetime: number;
@@ -17,6 +18,7 @@ export class EnemyProjectile {
 
   constructor(position: Vector3D, direction: Vector3D, speed = 400) {
     this.position = position.clone();
+    this.previousPosition = this.position.clone();
     this.speed = speed;
     this.velocity = direction.normalize().scale(this.speed);
     this.lifetime = 0;
@@ -28,6 +30,7 @@ export class EnemyProjectile {
     const dt = delta / 1000;
 
     // Move projectile
+    this.previousPosition = this.position.clone();
     this.position = this.position.add(this.velocity.scale(dt));
 
     // Update lifetime
