@@ -122,4 +122,44 @@ describe("Boot", () => {
       "Neon Arcade",
     );
   });
+
+  it("preloads maze-runner sound effects", () => {
+    const scene = createScene();
+    const loadAudio = vi.fn();
+    const loadText = vi.fn();
+    Object.assign(scene, {
+      load: {
+        audio: loadAudio,
+        text: loadText,
+      },
+    });
+    (scene as any).generateCollectibleTextures = vi.fn();
+
+    scene.preload();
+
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_move",
+      "assets/audio/player-move.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_pellet",
+      "assets/audio/pellet.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_power_pellet",
+      "assets/audio/power-pellet.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_death",
+      "assets/audio/player-death.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_ghost_vulnerable",
+      "assets/audio/ghost-vulnerable.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_ghost_eaten",
+      "assets/audio/ghost-eaten.wav",
+    );
+  });
 });

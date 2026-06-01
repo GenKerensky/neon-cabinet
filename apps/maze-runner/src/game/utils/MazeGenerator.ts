@@ -57,6 +57,11 @@ export function buildProtectedCellSet(
     protectedCells.add(pointKey(width - 1, y));
   }
 
+  markProtected(1, 1);
+  markProtected(width - 2, 1);
+  markProtected(1, height - 2);
+  markProtected(width - 2, height - 2);
+
   for (let y = centerY; y <= centerY + 1; y++) {
     for (let x = centerX - 1; x <= centerX + 1; x++) {
       markProtected(x, y);

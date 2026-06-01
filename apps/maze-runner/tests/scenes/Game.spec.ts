@@ -227,6 +227,7 @@ function createGameHarness() {
   (game as any).screenFlashRect = { setAlpha: vi.fn() };
   (game as any).tweens = { add: tweensAdd };
   (game as any).time = { delayedCall };
+  (game as any).playSfx = vi.fn();
   (game as any).collectibleManager = {
     isLevelComplete: vi.fn(() => false),
     removeCollectible: vi.fn(),
@@ -322,10 +323,15 @@ describe("Game", () => {
     (game as any).levelText = { setOrigin: vi.fn() };
     (game as any).highScoreText = { setOrigin: vi.fn(), setText: vi.fn() };
     (game as any).screenFlashRect = { setAlpha: vi.fn() };
+    (game as any).playSfx = vi.fn();
 
     game.create();
 
     expect(mockSceneTransitions.fadeInScene).toHaveBeenCalledWith(game);
+    handlers["keydown-UP"]();
+    expect((game as any).playSfx).toHaveBeenCalledWith("maze_runner_move", {
+      volume: 0.25,
+    });
     handlers["keydown-ESC"]();
     expect(mockSceneTransitions.launchSceneWithFade).toHaveBeenCalledWith(
       game,
@@ -482,6 +488,38 @@ describe("Game", () => {
     expect(deadEnemy.activateFrightened).toHaveBeenCalledTimes(1);
   });
 
+  it("plays pellet and power-pellet sounds when collectibles are eaten", () => {
+    const { game } = createGameHarness();
+    const playSfx = (game as any).playSfx;
+
+    game.onCollectibleHit(
+      {},
+      {
+        getPoints: vi.fn(() => 10),
+        getType: vi.fn(() => CollectibleType.DOT),
+      },
+    );
+
+    expect(playSfx).toHaveBeenCalledWith("maze_runner_pellet", {
+      volume: 0.35,
+    });
+
+    game.onCollectibleHit(
+      {},
+      {
+        getPoints: vi.fn(() => 50),
+        getType: vi.fn(() => CollectibleType.POWER_PELLET),
+      },
+    );
+
+    expect(playSfx).toHaveBeenCalledWith("maze_runner_power_pellet", {
+      volume: 0.65,
+    });
+    expect(playSfx).toHaveBeenCalledWith("maze_runner_ghost_vulnerable", {
+      volume: 0.45,
+    });
+  });
+
   it("does not set FRIGHTENED directly on power pellet", () => {
     const { game } = createGameHarness();
     const enemy = createMockEnemy(EnemyState.CHASE);
@@ -539,6 +577,38 @@ describe("Game", () => {
     expect((game as any).scoreValue).toBe(200);
     expect(setText).toHaveBeenCalledWith("SCORE: 200");
     expect(frightenedEnemy.setEnemyState).toHaveBeenCalledWith(EnemyState.DEAD);
+    expect((game as any).playSfx).toHaveBeenCalledWith(
+      "maze_runner_ghost_eaten",
+      { volume: 0.6 },
+    );
+  });
+
+  it("plays player death sound when a life is lost", () => {
+    const { game } = createGameHarness();
+    const triggerDeath = vi.fn((callback: () => void) => callback());
+
+    (game as any).livesValue = 2;
+    (game as any).renderLivesHud = vi.fn();
+    (game as any).player = { triggerDeath };
+
+    (game as any).loseLife();
+
+    expect((game as any).playSfx).toHaveBeenCalledWith("maze_runner_death", {
+      volume: 0.75,
+    });
+  });
+
+  it("plays a sound key even before Phaser has created a sound instance", () => {
+    const game = new Game();
+    const play = vi.fn();
+    (game as any).sound = {
+      get: vi.fn(() => null),
+      play,
+    };
+
+    (game as any).playSfx("maze_runner_pellet", { volume: 0.35 });
+
+    expect(play).toHaveBeenCalledWith("maze_runner_pellet", { volume: 0.35 });
   });
 
   it("ignores enemy sprite overlap when player and enemy are in different grid cells", () => {

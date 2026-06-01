@@ -13,6 +13,18 @@ export class Boot extends Scene {
     for (const definition of ghostDefinitions) {
       this.load.text(definition.svgCacheKey, definition.assetPath);
     }
+    this.load.audio("maze_runner_move", "assets/audio/player-move.wav");
+    this.load.audio("maze_runner_pellet", "assets/audio/pellet.wav");
+    this.load.audio(
+      "maze_runner_power_pellet",
+      "assets/audio/power-pellet.wav",
+    );
+    this.load.audio("maze_runner_death", "assets/audio/player-death.wav");
+    this.load.audio(
+      "maze_runner_ghost_vulnerable",
+      "assets/audio/ghost-vulnerable.wav",
+    );
+    this.load.audio("maze_runner_ghost_eaten", "assets/audio/ghost-eaten.wav");
     this.generateCollectibleTextures();
   }
 

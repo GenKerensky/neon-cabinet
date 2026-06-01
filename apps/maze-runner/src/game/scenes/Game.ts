@@ -62,6 +62,7 @@ export class Game extends Scene {
   private levelTransitionActive = false;
   private respawnDelayMs = 0;
   private readonly contactTileOverlapThreshold = 0.5;
+  private lastMoveSfxAt = -Infinity;
 
   constructor() {
     super("Game");
@@ -161,7 +162,10 @@ export class Game extends Scene {
 
     this.rebuildActiveGhosts();
 
-    const setDir = (dir: Direction) => this.player.setDirection(dir);
+    const setDir = (dir: Direction) => {
+      this.player.setDirection(dir);
+      this.playMovementSfx();
+    };
     this.input.keyboard?.on("keydown-UP", () => setDir(Direction.UP));
     this.input.keyboard?.on("keydown-W", () => setDir(Direction.UP));
     this.input.keyboard?.on("keydown-DOWN", () => setDir(Direction.DOWN));
@@ -435,16 +439,21 @@ export class Game extends Scene {
     if (this.deathSequenceActive) return;
 
     const collectible = collectibleObj as Collectible;
+    const collectibleType = collectible.getType();
     const pts = collectible.getPoints();
     this.scoreValue += pts;
     this.refreshScoreHud();
     this.collectibleManager.removeCollectible(collectible);
 
-    if (collectible.getType() === CollectibleType.POWER_PELLET) {
+    if (collectibleType === CollectibleType.POWER_PELLET) {
+      this.playSfx("maze_runner_power_pellet", { volume: 0.65 });
+      this.playSfx("maze_runner_ghost_vulnerable", { volume: 0.45 });
       this.triggerScreenFlash();
       this.ghostsFrozen = true;
       this.ghostFreezeTimer = Math.max(this.ghostFreezeTimer, 300);
       this.enemies.forEach((e) => e.activateFrightened());
+    } else if (collectibleType === CollectibleType.DOT) {
+      this.playSfx("maze_runner_pellet", { volume: 0.35 });
     }
 
     if (this.collectibleManager.shouldSpawnBonus()) {
@@ -483,6 +492,7 @@ export class Game extends Scene {
       this.scoreValue += 200;
       this.refreshScoreHud();
       this.showFloatingScore(enemy.x, enemy.y, 200);
+      this.playSfx("maze_runner_ghost_eaten", { volume: 0.6 });
       enemy.setEnemyState(EnemyState.DEAD);
     } else if (
       enemy.getState() !== EnemyState.DEAD &&
@@ -579,6 +589,20 @@ export class Game extends Scene {
       duration: 150,
       ease: "Power2",
     });
+  }
+
+  private playMovementSfx(): void {
+    const now = this.time?.now ?? 0;
+    if (now - this.lastMoveSfxAt < 90) return;
+
+    this.lastMoveSfxAt = now;
+    this.playSfx("maze_runner_move", { volume: 0.25 });
+  }
+
+  private playSfx(key: string, config?: Phaser.Types.Sound.SoundConfig): void {
+    if (!this.sound?.play) return;
+
+    this.sound.play(key, config);
   }
 
   private showFloatingScore(x: number, y: number, points: number): void {
@@ -988,6 +1012,7 @@ export class Game extends Scene {
     this.deathSequenceActive = true;
     this.livesValue--;
     this.renderLivesHud();
+    this.playSfx("maze_runner_death", { volume: 0.75 });
 
     this.player.triggerDeath(() => {
       if (this.livesValue <= 0) {

@@ -14,6 +14,15 @@ function pointKey(x: number, y: number): string {
   return `${x},${y}`;
 }
 
+function getPowerPelletPositions(width: number, height: number): Point[] {
+  return [
+    { x: 1, y: 1 },
+    { x: width - 2, y: 1 },
+    { x: 1, y: height - 2 },
+    { x: width - 2, y: height - 2 },
+  ];
+}
+
 function gridFromPattern(pattern: string[]): Grid {
   return pattern.map((row) =>
     [...row].map((ch) => ({
@@ -414,20 +423,20 @@ describe("topology taxonomy helpers", () => {
   });
 
   it("detects a single-entry loop pocket connected by one choke point", () => {
-    const grid = makeAllWallGrid(13, 13);
+    const grid = makeAllWallGrid(19, 19);
 
     for (const [x, y] of [
-      [1, 1],
-      [2, 1],
-      [3, 1],
-      [1, 2],
+      [2, 2],
       [3, 2],
-      [1, 3],
-      [2, 3],
-      [3, 3],
       [4, 2],
-      [5, 2],
-      [6, 2],
+      [2, 3],
+      [4, 3],
+      [2, 4],
+      [3, 4],
+      [4, 4],
+      [5, 3],
+      [6, 3],
+      [7, 3],
     ] as Array<[number, number]>) {
       grid[y][x].type = CellType.PASSAGE;
     }
@@ -436,31 +445,31 @@ describe("topology taxonomy helpers", () => {
 
     expect(pockets).toHaveLength(1);
     expect(pockets[0]).toHaveLength(8);
-    expect(pockets[0]).toContainEqual({ x: 1, y: 1 });
-    expect(pockets[0]).toContainEqual({ x: 3, y: 3 });
+    expect(pockets[0]).toContainEqual({ x: 2, y: 2 });
+    expect(pockets[0]).toContainEqual({ x: 4, y: 4 });
   });
 
   it("excludes protected cells from wall-clump counts", () => {
-    const grid = makeAllPassageGrid(11, 11);
+    const grid = makeAllPassageGrid(15, 15);
 
-    for (let x = 0; x < 11; x++) {
+    for (let x = 0; x < 15; x++) {
       grid[0][x].type = CellType.WALL;
-      grid[10][x].type = CellType.WALL;
+      grid[14][x].type = CellType.WALL;
     }
-    for (let y = 0; y < 11; y++) {
+    for (let y = 0; y < 15; y++) {
       grid[y][0].type = CellType.WALL;
-      grid[y][10].type = CellType.WALL;
+      grid[y][14].type = CellType.WALL;
     }
 
     for (const [x, y] of [
+      [2, 2],
+      [3, 2],
+      [2, 3],
       [3, 3],
-      [4, 3],
-      [3, 4],
-      [4, 4],
-      [8, 1],
-      [9, 1],
-      [8, 2],
-      [9, 2],
+      [12, 1],
+      [13, 1],
+      [12, 2],
+      [13, 2],
     ] as Array<[number, number]>) {
       grid[y][x].type = CellType.WALL;
     }
@@ -585,6 +594,18 @@ describe("MazeGenerator", () => {
       }
       expect(hasWall).toBe(true);
       expect(hasPassage).toBe(true);
+    });
+
+    it("keeps all power pellet positions passable", () => {
+      const gen = new MazeGenerator(1);
+      const grid = gen.create();
+
+      for (const position of getPowerPelletPositions(
+        gen.getWidth(),
+        gen.getHeight(),
+      )) {
+        expect(grid[position.y][position.x].type).toBe(CellType.PASSAGE);
+      }
     });
   });
 
@@ -748,6 +769,12 @@ describe("MazeGenerator", () => {
         expect(countForbiddenSolidWallBlocks(grid)).toBe(0);
         assertBorderWalls(grid);
         assertEnclosureAndSpawnContract(grid);
+        for (const position of getPowerPelletPositions(
+          gen.getWidth(),
+          gen.getHeight(),
+        )) {
+          expect(grid[position.y][position.x].type).toBe(CellType.PASSAGE);
+        }
       },
     );
   });
