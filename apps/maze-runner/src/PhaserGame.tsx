@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
-import { AUTO, Game, Scale } from "phaser";
+import { AUTO, Game as PhaserGameInstance, Scale } from "phaser";
 import type { Renderer, Scene, Types } from "phaser";
+import type { GameStateSnapshot } from "@neon-cabinet/phaser-debug-bridge";
 import { EventBus } from "./game/EventBus";
 import { Boot } from "./game/scenes/Boot";
 import { Title } from "./game/scenes/Title";
@@ -8,7 +9,6 @@ import { Game as MainGame } from "./game/scenes/Game";
 import { Pause } from "./game/scenes/Pause";
 import { GameOver } from "./game/scenes/GameOver";
 import { VectorShader } from "@neon-cabinet/shaders";
-import { CollectibleType } from "./game/objects/Collectible";
 import { getMazeRunnerStateSnapshot } from "./game/utils/harnessSnapshot";
 import { registerStartCommand } from "../support/helpers/start";
 import { registerPositionPlayerCommand } from "../support/helpers/position-player";
@@ -18,12 +18,11 @@ import { registerEatPowerPelletCommand } from "../support/helpers/eat-power-pell
 import { registerSetEnemyStateCommand } from "../support/helpers/set-enemy-state";
 import { registerSetEnemyAtGridCommand } from "../support/helpers/set-enemy-at-grid";
 import { registerFreezeGhostsCommand } from "../support/helpers/freeze-ghosts";
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const getGameScene = (gameInstance: any): any => {
-  const scenes = gameInstance.scene.getScenes(true);
-  return scenes.find((scene: any) => scene.scene.key === "Game");
-};
+import {
+  getMazeRunnerGameScene,
+  isNumber,
+  type HarnessCommands,
+} from "../support/helpers/types";
 
 const isTestMode = () => {
   return new URLSearchParams(window.location.search).get("test") === "1";
@@ -37,8 +36,8 @@ const formatDebugValue = (value: unknown): string => {
 };
 
 const createPassiveDebugOverlay = (
-  gameInstance: Game,
-  getGame: () => Game | undefined,
+  gameInstance: PhaserGameInstance,
+  getGame: () => PhaserGameInstance | undefined,
 ) => {
   (window as unknown as Record<string, unknown>).__NEON_DEBUG_GAME__ =
     gameInstance;
@@ -101,36 +100,24 @@ const createPassiveDebugOverlay = (
 };
 
 const registerHarnessCommands = (
-  gameInstance: any,
-  commands: Record<string, (...args: any[]) => void>,
+  gameInstance: PhaserGameInstance,
+  commands: HarnessCommands,
 ) => {
-  commands.move = (direction: number) => {
-    const gameScene = getGameScene(gameInstance);
-    gameScene?.player?.setDirection?.(direction);
+  commands.move = (direction: unknown) => {
+    if (!isNumber(direction)) return;
+    getMazeRunnerGameScene(gameInstance)?.playerInputForDebug(direction);
   };
 
   commands.killPlayer = () => {
-    const gameScene = getGameScene(gameInstance);
-    gameScene?.loseLife?.();
+    getMazeRunnerGameScene(gameInstance)?.killPlayerForDebug();
   };
 
   commands.eatDot = () => {
-    const gameScene = getGameScene(gameInstance);
-    if (!gameScene?.collectibleManager) return;
-
-    const collectibles = gameScene.collectibleManager.getCollectibles?.() ?? [];
-    const dot = collectibles.find(
-      (collectible: any) =>
-        collectible.active && collectible.getType?.() === CollectibleType.DOT,
-    );
-
-    if (!dot) return;
-    gameScene.onCollectibleHit(null, dot);
+    getMazeRunnerGameScene(gameInstance)?.eatFirstDotForDebug();
   };
 
   commands.triggerLevelTransition = () => {
-    const gameScene = getGameScene(gameInstance);
-    gameScene?.nextLevel?.();
+    getMazeRunnerGameScene(gameInstance)?.advanceLevelForDebug();
   };
 
   registerStartCommand(gameInstance, commands);
@@ -144,8 +131,8 @@ const registerHarnessCommands = (
 };
 
 const initDebugBridge = (
-  gameInstance: Game,
-  getGame: () => Game | undefined,
+  gameInstance: PhaserGameInstance,
+  getGame: () => PhaserGameInstance | undefined,
 ) => {
   if (!isTestMode()) {
     createPassiveDebugOverlay(gameInstance, getGame);
@@ -158,11 +145,8 @@ const initDebugBridge = (
         if (getGame() !== gameInstance) return;
         (window as unknown as Record<string, unknown>).__NEON_DEBUG_GAME__ =
           gameInstance;
-        const commands: Record<string, (...args: unknown[]) => void> = {};
-        registerHarnessCommands(
-          gameInstance,
-          commands as Record<string, (...args: any[]) => void>,
-        );
+        const commands: HarnessCommands = {};
+        registerHarnessCommands(gameInstance, commands);
         const harness = createTestHarness(gameInstance, {
           state: () => getMazeRunnerStateSnapshot(gameInstance),
           commands,
@@ -171,7 +155,10 @@ const initDebugBridge = (
           createDebugBridge(
             gameInstance,
             harness,
-            () => getMazeRunnerStateSnapshot(gameInstance) as any,
+            (): GameStateSnapshot => ({
+              ...getMazeRunnerStateSnapshot(gameInstance),
+              scene: "",
+            }),
           );
         }
       },
@@ -179,7 +166,7 @@ const initDebugBridge = (
   });
 };
 
-const cleanupDebugBridge = (gameInstance?: Game) => {
+const cleanupDebugBridge = (gameInstance?: PhaserGameInstance) => {
   const w = window as unknown as Record<string, unknown>;
   if (gameInstance && w.__NEON_DEBUG_GAME__ !== gameInstance) return;
   delete w.__PHASER_BRIDGE__;
@@ -191,7 +178,7 @@ const cleanupDebugBridge = (gameInstance?: Game) => {
 const FONT_FAMILY = "Orbitron, sans-serif";
 
 export interface IRefPhaserGame {
-  game: Game | undefined;
+  game: PhaserGameInstance | undefined;
   scene: Scene | undefined;
 }
 
@@ -201,7 +188,7 @@ interface IProps {
 
 export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
   function PhaserGame({ currentActiveScene }, ref) {
-    const game = useRef<Game | undefined>(undefined);
+    const game = useRef<PhaserGameInstance | undefined>(undefined);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
@@ -266,7 +253,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           },
         };
 
-        game.current = new Game(config);
+        game.current = new PhaserGameInstance(config);
 
         if (typeof ref === "function") {
           ref({ game: game.current, scene: undefined });

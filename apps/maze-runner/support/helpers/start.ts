@@ -1,9 +1,9 @@
 import type { Game as PhaserGame } from "phaser";
+import type { HarnessCommands } from "./types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function registerStartCommand(
   game: PhaserGame,
-  commands: Record<string, (...args: any[]) => void>,
+  commands: HarnessCommands,
 ): void {
   commands.start = () => {
     const titleScene = game.scene.getScene("Title");
@@ -12,4 +12,3 @@ export function registerStartCommand(
     }
   };
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */

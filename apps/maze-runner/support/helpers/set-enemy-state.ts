@@ -1,7 +1,11 @@
 import type { Game as PhaserGame } from "phaser";
 import { EnemyState } from "../../src/game/objects/Enemy";
+import {
+  getMazeRunnerGameScene,
+  isString,
+  type HarnessCommands,
+} from "./types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 function toEnemyState(state: string): EnemyState | null {
   const normalized = state.trim().toLowerCase();
   switch (normalized) {
@@ -20,21 +24,17 @@ function toEnemyState(state: string): EnemyState | null {
 
 export function registerSetEnemyStateCommand(
   game: PhaserGame,
-  commands: Record<string, (...args: any[]) => void>,
+  commands: HarnessCommands,
 ): void {
-  commands.setEnemyState = (textureOrId: string, state: string) => {
-    const scenes = game.scene.getScenes(true);
-    const gameScene = scenes.find((s) => s.scene.key === "Game") as any;
-    if (!gameScene?.enemies) return;
-
-    const enemy = gameScene.enemies.find((candidate: any) => {
-      const texture = candidate.texture?.key ?? candidate.textureName;
-      return texture === textureOrId || candidate.textureName === textureOrId;
-    });
+  commands.setEnemyState = (textureOrId: unknown, state: unknown) => {
+    if (!isString(textureOrId) || !isString(state)) return;
 
     const enemyState = toEnemyState(state);
-    if (!enemy || !enemyState) return;
-    enemy.setEnemyState(enemyState);
+    if (!enemyState) return;
+
+    getMazeRunnerGameScene(game)?.setEnemyStateForDebug(
+      textureOrId,
+      enemyState,
+    );
   };
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */

@@ -1,10 +1,10 @@
 import { Scene } from "phaser";
-import {
-  VectorPuppet,
-  SVGParser,
+import { VectorPuppet, SVGParser } from "@neon-cabinet/sprite-tools";
+import type {
+  AnimationMetadata,
   Direction as VectorDirection,
+  SVGPuppetMetadata,
 } from "@neon-cabinet/sprite-tools";
-import type { SVGPuppetMetadata } from "@neon-cabinet/sprite-tools";
 import type { MazeCell } from "../utils/MazeGenerator";
 import { CellType } from "../utils/MazeGenerator";
 import {
@@ -33,14 +33,6 @@ const VDIR_TO_DIR: Record<VectorDirection, Direction> = {
   DOWN: Direction.DOWN,
   LEFT: Direction.LEFT,
   RIGHT: Direction.RIGHT,
-};
-
-type BodyLayerMetadata = {
-  animations?: Array<Record<string, unknown>>;
-};
-
-type HasLayersMetadata = {
-  layersMetadata?: Map<string, BodyLayerMetadata>;
 };
 
 function toVDir(d: Direction | VectorDirection): VectorDirection {
@@ -82,17 +74,14 @@ export class Player extends VectorPuppet {
   private invulnerabilityDuration = 0;
   private invulnerabilityFlashPhase = 0;
   private onInvulnerabilityComplete?: () => void;
-  private baseBodyAnimations: Array<Record<string, unknown>> = [];
+  private baseBodyAnimations: AnimationMetadata[] = [];
 
   set movementDirection(dir: Direction) {
-    (this as any).currentDirection = DIR_TO_VDIR[dir];
+    this.setCurrentVectorDirection(dir);
   }
 
   get movementDirection(): Direction {
-    return (
-      VDIR_TO_DIR[(this as any).currentDirection as VectorDirection] ??
-      Direction.NONE
-    );
+    return this.getCurrentDirection();
   }
 
   constructor(
@@ -120,7 +109,7 @@ export class Player extends VectorPuppet {
       oy = offsetYOrX ?? 0;
       sp = speedOrY ?? 200;
 
-      const svgText = (scene.cache.text as any)?.get?.("player_svg") ?? "";
+      const svgText = scene.cache.text.get("player_svg") ?? "";
       let parsed: SVGPuppetMetadata | null = null;
       if (svgText) {
         try {
@@ -159,10 +148,8 @@ export class Player extends VectorPuppet {
     this.gridX = Math.floor((x - ox) / ts);
     this.gridY = Math.floor((y - oy) / ts);
     this.scale = ts / 30;
-    (this as any).currentDirection = "NONE";
-    const bodyMetadata = (
-      this as unknown as HasLayersMetadata
-    ).layersMetadata?.get("body");
+    this.currentDirection = "NONE";
+    const bodyMetadata = this.layersMetadata.get("body");
     this.baseBodyAnimations = [...(bodyMetadata?.animations ?? [])];
     scene.physics.add.existing(this);
   }
@@ -187,9 +174,7 @@ export class Player extends VectorPuppet {
     if (this.isDying) return;
     if (mazeDir === Direction.NONE) return;
 
-    const currentDir =
-      VDIR_TO_DIR[(this as any).currentDirection as VectorDirection] ??
-      Direction.NONE;
+    const currentDir = this.getCurrentDirection();
     if (currentDir === Direction.NONE) {
       if (this.canMove(mazeDir)) {
         this.commitDirection(mazeDir);
@@ -220,7 +205,7 @@ export class Player extends VectorPuppet {
     if (this.isDying) return;
     this.isDying = true;
     this.nextDirection = Direction.NONE;
-    (this as any).currentDirection = "NONE";
+    this.currentDirection = "NONE";
     this.animationState = PlayerAnimationState.DEATH;
     this.deathDuration = 1100;
     this.deathTimer = this.deathDuration;
@@ -256,8 +241,7 @@ export class Player extends VectorPuppet {
 
     const dt = delta / 1000;
     const moveAmount = this.speed * dt;
-    const currentVDir = (this as any).currentDirection as VectorDirection;
-    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
+    const currentDir = this.getCurrentDirection();
 
     if (currentDir === Direction.NONE) {
       this.updateAnimationState();
@@ -270,8 +254,7 @@ export class Player extends VectorPuppet {
   }
 
   private moveAlongCurrentDirection(moveAmount: number): void {
-    const currentVDir = (this as any).currentDirection as VectorDirection;
-    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
+    const currentDir = this.getCurrentDirection();
     const dx = directionToDx(currentDir);
     const dy = directionToDy(currentDir);
 
@@ -320,8 +303,7 @@ export class Player extends VectorPuppet {
 
   private updateAnimationState(): void {
     let newState: PlayerAnimationState;
-    const currentVDir = (this as any).currentDirection as VectorDirection;
-    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
+    const currentDir = this.getCurrentDirection();
 
     if (this.isDying) {
       newState = PlayerAnimationState.DEATH;
@@ -374,7 +356,7 @@ export class Player extends VectorPuppet {
   }
 
   private commitDirection(dir: Direction): void {
-    (this as any).currentDirection = DIR_TO_VDIR[dir];
+    this.setCurrentVectorDirection(dir);
     this.nextDirection = Direction.NONE;
     super.setDirection(DIR_TO_VDIR[dir]);
   }
@@ -398,8 +380,7 @@ export class Player extends VectorPuppet {
       this.offsetX,
       this.offsetY,
     );
-    const currentVDir = (this as any).currentDirection as VectorDirection;
-    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
+    const currentDir = this.getCurrentDirection();
     const currentDx = directionToDx(currentDir);
     const currentDy = directionToDy(currentDir);
     const nextDx = directionToDx(this.nextDirection);
@@ -442,9 +423,7 @@ export class Player extends VectorPuppet {
   }
 
   private setDeathAnimation(progress: number): void {
-    const bodyMetadata = (
-      this as unknown as HasLayersMetadata
-    ).layersMetadata?.get("body");
+    const bodyMetadata = this.layersMetadata.get("body");
     if (!bodyMetadata) return;
 
     const clamped = Math.max(0, Math.min(1, progress));
@@ -461,9 +440,7 @@ export class Player extends VectorPuppet {
   }
 
   private restoreBaseAnimation(): void {
-    const bodyMetadata = (
-      this as unknown as HasLayersMetadata
-    ).layersMetadata?.get("body");
+    const bodyMetadata = this.layersMetadata.get("body");
     if (bodyMetadata) {
       bodyMetadata.animations = [...this.baseBodyAnimations];
     }
@@ -479,9 +456,9 @@ export class Player extends VectorPuppet {
   }
 
   getCurrentDirection(): Direction {
+    if (this.currentDirection === "NONE") return Direction.NONE;
     return (
-      VDIR_TO_DIR[(this as any).currentDirection as VectorDirection] ??
-      Direction.NONE
+      VDIR_TO_DIR[this.currentDirection as VectorDirection] ?? Direction.NONE
     );
   }
 
@@ -551,8 +528,7 @@ export class Player extends VectorPuppet {
       this.offsetX,
       this.offsetY,
     );
-    const currentVDir = (this as any).currentDirection as VectorDirection;
-    const currentDir = VDIR_TO_DIR[currentVDir] ?? Direction.NONE;
+    const currentDir = this.getCurrentDirection();
     const dx = directionToDx(currentDir);
     const dy = directionToDy(currentDir);
     const correction = Math.max(1, maxCorrection);
@@ -585,7 +561,7 @@ export class Player extends VectorPuppet {
   respawn(): void {
     this.gridX = Math.floor((this.x - this.offsetX) / this.tileSize);
     this.gridY = Math.floor((this.y - this.offsetY) / this.tileSize);
-    (this as any).currentDirection = "NONE";
+    this.currentDirection = "NONE";
     this.nextDirection = Direction.NONE;
     this.isDying = false;
     this.deathTimer = 0;
@@ -597,5 +573,9 @@ export class Player extends VectorPuppet {
     this.restoreBaseAnimation();
     this.setAlpha(1);
     this.playAnimationForState();
+  }
+
+  private setCurrentVectorDirection(dir: Direction): void {
+    this.currentDirection = dir === Direction.NONE ? "NONE" : DIR_TO_VDIR[dir];
   }
 }

@@ -1,20 +1,16 @@
 import type { Game as PhaserGame } from "phaser";
+import {
+  getMazeRunnerGameScene,
+  isNumber,
+  type HarnessCommands,
+} from "./types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function registerPositionPlayerCommand(
   game: PhaserGame,
-  commands: Record<string, (...args: any[]) => void>,
+  commands: HarnessCommands,
 ): void {
-  commands.teleportPlayer = (gridX: number, gridY: number) => {
-    const scenes = game.scene.getScenes(true);
-    const gameScene = scenes.find((s) => s.scene.key === "Game") as any;
-    if (!gameScene) return;
-
-    const tileSize = gameScene.tileSize;
-    const offsetX = gameScene.offsetX;
-    const offsetY = gameScene.offsetY;
-    gameScene.player.x = offsetX + gridX * tileSize + tileSize / 2;
-    gameScene.player.y = offsetY + gridY * tileSize + tileSize / 2;
+  commands.teleportPlayer = (gridX: unknown, gridY: unknown) => {
+    if (!isNumber(gridX) || !isNumber(gridY)) return;
+    getMazeRunnerGameScene(game)?.teleportPlayerToGrid(gridX, gridY);
   };
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */

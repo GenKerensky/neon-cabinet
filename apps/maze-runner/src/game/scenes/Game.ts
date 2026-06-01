@@ -815,6 +815,173 @@ export class Game extends Scene {
     }
   }
 
+  teleportPlayerToGrid(gridX: number, gridY: number): void {
+    const center = getCellCenter(
+      gridX,
+      gridY,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+    );
+    this.player.x = center.x;
+    this.player.y = center.y;
+  }
+
+  playerInputForDebug(direction: Direction): void {
+    this.player.setDirection(direction);
+  }
+
+  setEnemyAtGrid(textureOrId: string, gridX: number, gridY: number): void {
+    this.enemies
+      .find((enemy) => enemy.matchesTextureOrId(textureOrId))
+      ?.setGridPosition(gridX, gridY);
+  }
+
+  setEnemyStateForDebug(textureOrId: string, state: EnemyState): void {
+    this.enemies
+      .find((enemy) => enemy.matchesTextureOrId(textureOrId))
+      ?.setEnemyState(state);
+  }
+
+  eatFirstDotForDebug(): void {
+    const dot = this.collectibleManager
+      .getCollectibles()
+      .find(
+        (collectible) =>
+          collectible.active && collectible.getType() === CollectibleType.DOT,
+      );
+
+    if (dot) {
+      this.onCollectibleHit(this.player, dot);
+    }
+  }
+
+  eatFirstPowerPelletForDebug(): void {
+    const powerPellet = this.collectibleManager
+      .getCollectibles()
+      .find(
+        (collectible) =>
+          collectible.active &&
+          collectible.getType() === CollectibleType.POWER_PELLET,
+      );
+
+    if (powerPellet) {
+      this.onCollectibleHit(this.player, powerPellet);
+    }
+  }
+
+  clearCollectiblesForDebug(type?: string): void {
+    const toRemove = this.collectibleManager
+      .getCollectibles()
+      .filter((collectible) => {
+        if (!collectible.active) return false;
+        if (type && collectible.getType() !== type) return false;
+        return true;
+      });
+
+    toRemove.forEach((collectible) => {
+      this.collectibleManager.removeCollectible(collectible);
+    });
+  }
+
+  spawnEnemyAtForDebug(gridX: number, gridY: number, aiType: string): void {
+    const center = getCellCenter(
+      gridX,
+      gridY,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+    );
+    const scatterTarget = { x: 1, y: 1 };
+
+    let enemy: Enemy;
+    switch (aiType) {
+      case "chaser":
+        enemy = new Chaser(
+          this,
+          center.x,
+          center.y,
+          "chaser",
+          this.grid,
+          this.gridWidth,
+          this.gridHeight,
+          this.tileSize,
+          this.offsetX,
+          this.offsetY,
+          scatterTarget,
+          undefined,
+          this.gateOpenTime,
+          this.gameStartTime,
+        );
+        break;
+      case "ambusher":
+        enemy = new Ambusher(
+          this,
+          center.x,
+          center.y,
+          "ambusher",
+          this.grid,
+          this.gridWidth,
+          this.gridHeight,
+          this.tileSize,
+          this.offsetX,
+          this.offsetY,
+          scatterTarget,
+          undefined,
+          this.gateOpenTime,
+          this.gameStartTime,
+        );
+        break;
+      case "wanderer":
+        enemy = new Wanderer(
+          this,
+          center.x,
+          center.y,
+          "wanderer",
+          this.grid,
+          this.gridWidth,
+          this.gridHeight,
+          this.tileSize,
+          this.offsetX,
+          this.offsetY,
+          scatterTarget,
+          undefined,
+          this.gateOpenTime,
+          this.gameStartTime,
+        );
+        break;
+      default:
+        enemy = new Timid(
+          this,
+          center.x,
+          center.y,
+          "timid",
+          this.grid,
+          this.gridWidth,
+          this.gridHeight,
+          this.tileSize,
+          this.offsetX,
+          this.offsetY,
+          scatterTarget,
+          undefined,
+          this.gateOpenTime,
+          this.gameStartTime,
+        );
+        break;
+    }
+
+    this.enemies.push(enemy);
+    this.registerEnemyOverlap();
+  }
+
+  killPlayerForDebug(): void {
+    this.loseLife();
+  }
+
+  advanceLevelForDebug(): void {
+    this.nextLevel();
+  }
+
   private loseLife(killer?: GhostDefinition): void {
     if (this.deathSequenceActive) return;
 

@@ -1,26 +1,16 @@
 import type { Game as PhaserGame } from "phaser";
+import {
+  getMazeRunnerGameScene,
+  isString,
+  type HarnessCommands,
+} from "./types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function registerClearCollectiblesCommand(
   game: PhaserGame,
-  commands: Record<string, (...args: any[]) => void>,
+  commands: HarnessCommands,
 ): void {
-  commands.clearCollectibles = (type?: string) => {
-    const scenes = game.scene.getScenes(true);
-    const gameScene = scenes.find((s) => s.scene.key === "Game") as any;
-    if (!gameScene?.collectibleManager) return;
-
-    const collectibles = gameScene.collectibleManager.getCollectibles?.();
-    if (!collectibles) return;
-
-    const toRemove = collectibles.filter((child: any) => {
-      if (!child.active) return false;
-      if (type && child.getType() !== type) return false;
-      return true;
-    });
-    toRemove.forEach((child: any) => {
-      gameScene.collectibleManager.removeCollectible(child);
-    });
+  commands.clearCollectibles = (type?: unknown) => {
+    if (type !== undefined && !isString(type)) return;
+    getMazeRunnerGameScene(game)?.clearCollectiblesForDebug(type);
   };
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */

@@ -24,16 +24,6 @@ import {
   isPenExitCell,
 } from "../utils/gridGeometry";
 
-type BodyLayerMetadata = {
-  fill?: string;
-  stroke?: string;
-  animations?: unknown[];
-};
-
-type HasLayersMetadata = {
-  layersMetadata?: Map<string, BodyLayerMetadata>;
-};
-
 export type EnemyCrowdBehavior = "trail" | "reroute" | "yield";
 
 export enum EnemyState {
@@ -121,9 +111,7 @@ export abstract class Enemy extends VectorPuppet {
     this.textureName = texture;
     this.svgCacheKey = svgCacheKey;
 
-    const bodyMetadata = (
-      this as unknown as HasLayersMetadata
-    ).layersMetadata?.get("body");
+    const bodyMetadata = this.layersMetadata.get("body");
     this.baseBodyFill = bodyMetadata?.fill;
     this.baseBodyStroke = bodyMetadata?.stroke;
     const arcadeBody = this.body as
@@ -206,9 +194,7 @@ export abstract class Enemy extends VectorPuppet {
 
   setEnemyState(newState: EnemyState): void {
     this._state = newState;
-    const bodyMetadata = (
-      this as unknown as HasLayersMetadata
-    ).layersMetadata?.get("body");
+    const bodyMetadata = this.layersMetadata.get("body");
 
     switch (newState) {
       case EnemyState.FRIGHTENED:
@@ -220,6 +206,7 @@ export abstract class Enemy extends VectorPuppet {
             {
               type: "flash",
               frequency: 10,
+              amplitude: 0,
               color1: "#0000ff",
               color2: "#ffffff",
             },
@@ -810,6 +797,28 @@ export abstract class Enemy extends VectorPuppet {
 
   getGridY(): number {
     return this.gridY;
+  }
+
+  getTextureName(): string {
+    return this.textureName;
+  }
+
+  matchesTextureOrId(textureOrId: string): boolean {
+    return this.textureName === textureOrId;
+  }
+
+  setGridPosition(gridX: number, gridY: number): void {
+    const center = getCellCenter(
+      gridX,
+      gridY,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+    );
+    this.x = center.x;
+    this.y = center.y;
+    this.gridX = gridX;
+    this.gridY = gridY;
   }
 
   getState(): EnemyState {
