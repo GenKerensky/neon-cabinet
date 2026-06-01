@@ -1115,6 +1115,7 @@ export class Game extends Scene {
     this.rebuildActiveGhosts();
     this.registerEnemyOverlap();
     this.resetPositions();
+    fadeInScene(this);
     this.runCountdown();
   }
 

@@ -520,6 +520,24 @@ describe("Game", () => {
     });
   });
 
+  it("fades the camera back in after loading the next level", () => {
+    const { game } = createGameHarness();
+    (game as any).levelValue = 1;
+    (game as any).levelText = { setText: vi.fn() };
+    (game as any).physics = { add: { overlap: vi.fn() } };
+    (game as any).collectibleManager.getCollectibles = vi.fn(() => []);
+    (game as any).rebuildActiveGhosts = vi.fn();
+    (game as any).registerEnemyOverlap = vi.fn();
+    (game as any).resetPositions = vi.fn();
+    (game as any).runCountdown = vi.fn();
+
+    (game as any).nextLevel();
+
+    expect((game as any).levelValue).toBe(2);
+    expect(mockSceneTransitions.fadeInScene).toHaveBeenCalledWith(game);
+    expect((game as any).runCountdown).toHaveBeenCalled();
+  });
+
   it("does not set FRIGHTENED directly on power pellet", () => {
     const { game } = createGameHarness();
     const enemy = createMockEnemy(EnemyState.CHASE);
