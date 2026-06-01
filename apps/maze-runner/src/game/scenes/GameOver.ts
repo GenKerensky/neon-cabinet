@@ -62,6 +62,7 @@ export class GameOver extends Scene {
   create(): void {
     this.cameras.main.setPostPipeline("VectorShader");
     fadeInScene(this);
+    this.sound?.play?.("maze_runner_game_over", { volume: 0.7 });
     const { width, height } = this.cameras.main;
     const fontFamily =
       (this.registry.get("fontFamily") as string) ?? "Orbitron";
@@ -129,8 +130,11 @@ export class GameOver extends Scene {
         height * 0.66,
         metadata,
       );
-      killerPuppet.setScale(1.25);
+      killerPuppet.setScale(2.1);
       killerPuppet.setDirection?.("RIGHT");
+      this.events?.on?.("update", (time: number, delta: number) => {
+        killerPuppet.update(time, delta);
+      });
       this.tweens.add({
         targets: killerPuppet,
         y: height * 0.66 - 12,

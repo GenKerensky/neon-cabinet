@@ -23,6 +23,10 @@ import { fadeInScene, launchSceneWithFade } from "../utils/sceneTransitions";
 import { formatScore, readHighScore } from "../utils/highScore";
 import { getCellCenter, getPenGeometry } from "../utils/gridGeometry";
 
+const PLAYER_CHOMP_FREQUENCY = 15;
+const MOVEMENT_SFX_INTERVAL_MS = (Math.PI / PLAYER_CHOMP_FREQUENCY) * 1000;
+const MOVEMENT_SFX_VOLUME = 0.12;
+
 export class Game extends Scene {
   private generator!: MazeGenerator;
   private player!: Player;
@@ -81,6 +85,7 @@ export class Game extends Scene {
     this.deathSequenceActive = false;
     this.levelTransitionActive = false;
     this.respawnDelayMs = 0;
+    this.lastMoveSfxAt = -Infinity;
   }
 
   create(): void {
@@ -162,10 +167,7 @@ export class Game extends Scene {
 
     this.rebuildActiveGhosts();
 
-    const setDir = (dir: Direction) => {
-      this.player.setDirection(dir);
-      this.playMovementSfx();
-    };
+    const setDir = (dir: Direction) => this.player.setDirection(dir);
     this.input.keyboard?.on("keydown-UP", () => setDir(Direction.UP));
     this.input.keyboard?.on("keydown-W", () => setDir(Direction.UP));
     this.input.keyboard?.on("keydown-DOWN", () => setDir(Direction.DOWN));
@@ -306,6 +308,7 @@ export class Game extends Scene {
       }
 
       const { label, color, size } = steps[index];
+      this.playSfx("maze_runner_countdown", { volume: 0.45 });
       const text = this.add.text(cx, cy, label, {
         fontFamily,
         fontSize: size,
@@ -397,7 +400,10 @@ export class Game extends Scene {
         enemy.setEnemyState(EnemyState.SCATTER);
       }
     }
+    const previousPlayerX = this.player.x;
+    const previousPlayerY = this.player.y;
     this.player.update(time, delta);
+    this.playMovementSfxIfPlayerMoved(previousPlayerX, previousPlayerY);
 
     for (const enemy of this.enemies) {
       const enemyIndex = this.enemies.indexOf(enemy);
@@ -430,8 +436,7 @@ export class Game extends Scene {
       !this.levelTransitionActive &&
       this.collectibleManager.isLevelComplete()
     ) {
-      this.levelTransitionActive = true;
-      this.time.delayedCall(1000, () => this.nextLevel());
+      this.beginLevelCompleteSequence();
     }
   }
 
@@ -458,6 +463,10 @@ export class Game extends Scene {
 
     if (this.collectibleManager.shouldSpawnBonus()) {
       this.collectibleManager.createBonusItem();
+    }
+
+    if (this.collectibleManager.isLevelComplete()) {
+      this.beginLevelCompleteSequence();
     }
   }
 
@@ -591,12 +600,50 @@ export class Game extends Scene {
     });
   }
 
-  private playMovementSfx(): void {
+  private playMovementSfxIfPlayerMoved(
+    previousX: number,
+    previousY: number,
+  ): void {
+    if (
+      Math.abs(this.player.x - previousX) < 0.01 &&
+      Math.abs(this.player.y - previousY) < 0.01
+    ) {
+      return;
+    }
+
     const now = this.time?.now ?? 0;
-    if (now - this.lastMoveSfxAt < 90) return;
+    if (now - this.lastMoveSfxAt < MOVEMENT_SFX_INTERVAL_MS) return;
 
     this.lastMoveSfxAt = now;
-    this.playSfx("maze_runner_move", { volume: 0.25 });
+    this.playSfx("maze_runner_move", { volume: MOVEMENT_SFX_VOLUME });
+  }
+
+  private beginLevelCompleteSequence(): void {
+    if (this.levelTransitionActive) return;
+
+    this.levelTransitionActive = true;
+    this.countdownActive = true;
+    this.ghostsFrozen = true;
+    this.ghostFreezeTimer = Infinity;
+    this.playSfx("maze_runner_victory", { volume: 0.65 });
+
+    const finish = (() => {
+      let completed = false;
+      return () => {
+        if (completed) return;
+        completed = true;
+        this.nextLevel();
+      };
+    })();
+
+    const camera = this.cameras?.main;
+    if (camera?.fadeOut && camera?.once) {
+      camera.fadeOut(500, 0, 0, 0);
+      camera.once("camerafadeoutcomplete", finish);
+      this.time.delayedCall(800, finish);
+    } else {
+      this.time.delayedCall(800, finish);
+    }
   }
 
   private playSfx(key: string, config?: Phaser.Types.Sound.SoundConfig): void {
@@ -1085,6 +1132,9 @@ export class Game extends Scene {
   private nextLevel(): void {
     this.levelValue++;
     this.levelTransitionActive = false;
+    this.countdownActive = false;
+    this.ghostsFrozen = false;
+    this.ghostFreezeTimer = 0;
     this.levelText.setText(`LEVEL: ${this.levelValue}`);
 
     // Destroy old collectibles before creating new ones

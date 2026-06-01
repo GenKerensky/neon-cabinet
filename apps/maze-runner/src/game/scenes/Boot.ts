@@ -25,6 +25,15 @@ export class Boot extends Scene {
       "assets/audio/ghost-vulnerable.wav",
     );
     this.load.audio("maze_runner_ghost_eaten", "assets/audio/ghost-eaten.wav");
+    this.load.audio("maze_runner_countdown", "assets/audio/countdown.wav");
+    this.load.audio("maze_runner_victory", "assets/audio/victory.wav");
+    this.load.audio(
+      "maze_runner_title_theme",
+      "assets/audio/title-music/Patreon Challenge 12.ogg",
+    );
+    this.load.audio("maze_runner_game_start", "assets/audio/game-start.wav");
+    this.load.audio("maze_runner_pause", "assets/audio/pause-menu.wav");
+    this.load.audio("maze_runner_game_over", "assets/audio/game-over.wav");
     this.generateCollectibleTextures();
   }
 

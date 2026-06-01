@@ -188,6 +188,8 @@ function createGameHarness() {
   const floatingText = {
     setOrigin: vi.fn(),
     setDepth: vi.fn(),
+    setScale: vi.fn(),
+    setAlpha: vi.fn(),
     destroy: vi.fn(),
   };
 
@@ -227,6 +229,12 @@ function createGameHarness() {
   (game as any).screenFlashRect = { setAlpha: vi.fn() };
   (game as any).tweens = { add: tweensAdd };
   (game as any).time = { delayedCall };
+  (game as any).cameras = {
+    main: {
+      fadeOut: vi.fn(),
+      once: vi.fn(),
+    },
+  };
   (game as any).playSfx = vi.fn();
   (game as any).collectibleManager = {
     isLevelComplete: vi.fn(() => false),
@@ -328,10 +336,6 @@ describe("Game", () => {
     game.create();
 
     expect(mockSceneTransitions.fadeInScene).toHaveBeenCalledWith(game);
-    handlers["keydown-UP"]();
-    expect((game as any).playSfx).toHaveBeenCalledWith("maze_runner_move", {
-      volume: 0.25,
-    });
     handlers["keydown-ESC"]();
     expect(mockSceneTransitions.launchSceneWithFade).toHaveBeenCalledWith(
       game,
@@ -520,6 +524,70 @@ describe("Game", () => {
     });
   });
 
+  it("plays movement sound from player motion during update", () => {
+    const { game } = createGameHarness();
+    const playSfx = (game as any).playSfx;
+    (game as any).player.update = vi.fn(function (this: any) {
+      (game as any).player.x += 4;
+    });
+
+    game.update(1000, 16);
+
+    expect(playSfx).toHaveBeenCalledWith("maze_runner_move", { volume: 0.12 });
+  });
+
+  it("paces movement sound with the player's chomp cycle", () => {
+    const { game } = createGameHarness();
+    const playSfx = (game as any).playSfx;
+    (game as any).player.update = vi.fn(function (this: any) {
+      (game as any).player.x += 4;
+    });
+
+    (game as any).time.now = 1000;
+    game.update(1000, 16);
+    (game as any).time.now = 1100;
+    game.update(1100, 16);
+    (game as any).time.now = 1210;
+    game.update(1210, 16);
+
+    expect(playSfx).toHaveBeenCalledTimes(2);
+    expect(playSfx).toHaveBeenNthCalledWith(1, "maze_runner_move", {
+      volume: 0.12,
+    });
+    expect(playSfx).toHaveBeenNthCalledWith(2, "maze_runner_move", {
+      volume: 0.12,
+    });
+  });
+
+  it("freezes actors and starts victory fade when the last pellet is eaten", () => {
+    const { game, delayedCall } = createGameHarness();
+    const playSfx = (game as any).playSfx;
+    (game as any).collectibleManager.isLevelComplete = vi.fn(() => true);
+
+    game.onCollectibleHit(
+      {},
+      {
+        getPoints: vi.fn(() => 10),
+        getType: vi.fn(() => CollectibleType.DOT),
+      },
+    );
+
+    expect((game as any).levelTransitionActive).toBe(true);
+    expect((game as any).countdownActive).toBe(true);
+    expect((game as any).ghostsFrozen).toBe(true);
+    expect((game as any).ghostFreezeTimer).toBe(Infinity);
+    expect(playSfx).toHaveBeenCalledWith("maze_runner_victory", {
+      volume: 0.65,
+    });
+    expect((game as any).cameras.main.fadeOut).toHaveBeenCalledWith(
+      500,
+      0,
+      0,
+      0,
+    );
+    expect(delayedCall).toHaveBeenCalledWith(800, expect.any(Function));
+  });
+
   it("fades the camera back in after loading the next level", () => {
     const { game } = createGameHarness();
     (game as any).levelValue = 1;
@@ -536,6 +604,17 @@ describe("Game", () => {
     expect((game as any).levelValue).toBe(2);
     expect(mockSceneTransitions.fadeInScene).toHaveBeenCalledWith(game);
     expect((game as any).runCountdown).toHaveBeenCalled();
+  });
+
+  it("plays a countdown sound for each countdown step", () => {
+    const { game } = createGameHarness();
+    const playSfx = (game as any).playSfx;
+
+    (game as any).runCountdown();
+
+    expect(playSfx).toHaveBeenCalledWith("maze_runner_countdown", {
+      volume: 0.45,
+    });
   });
 
   it("does not set FRIGHTENED directly on power pellet", () => {

@@ -161,5 +161,29 @@ describe("Boot", () => {
       "maze_runner_ghost_eaten",
       "assets/audio/ghost-eaten.wav",
     );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_countdown",
+      "assets/audio/countdown.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_victory",
+      "assets/audio/victory.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_title_theme",
+      "assets/audio/title-theme.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_game_start",
+      "assets/audio/game-start.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_pause",
+      "assets/audio/pause-menu.wav",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_game_over",
+      "assets/audio/game-over.wav",
+    );
   });
 });

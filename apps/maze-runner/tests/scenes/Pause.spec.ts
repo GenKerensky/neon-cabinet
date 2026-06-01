@@ -113,6 +113,9 @@ function createScene() {
     tweens: {
       add: vi.fn(),
     },
+    sound: {
+      play: vi.fn(),
+    },
   });
   return { handlers, scene };
 }
@@ -133,6 +136,10 @@ describe("Pause", () => {
     expect(mockEventBus.emit).toHaveBeenCalledWith(
       "current-scene-ready",
       scene,
+    );
+    expect((scene as any).sound.play).toHaveBeenCalledWith(
+      "maze_runner_pause",
+      { volume: 0.55 },
     );
   });
 

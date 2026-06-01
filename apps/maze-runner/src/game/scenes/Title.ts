@@ -11,6 +11,10 @@ export class Title extends Scene {
   create(): void {
     this.cameras.main.setBackgroundColor("#000000");
     fadeInScene(this);
+    this.sound?.play?.("maze_runner_title_theme", {
+      loop: true,
+      volume: 0.3,
+    });
 
     this.cameras.main.setPostPipeline("VectorShader");
     const { width, height } = this.cameras.main;
@@ -69,31 +73,6 @@ export class Title extends Scene {
       width: frameWidth - 40,
       height: Math.min(120, frameHeight * 0.2),
     };
-
-    // Decorative maze block geometry behind title text
-    const mazeBlocks = this.add.graphics();
-    mazeBlocks.setDepth(8);
-    mazeBlocks.fillStyle(0x000044, 0.5);
-    mazeBlocks.lineStyle(2, 0x0000ff, 0.8);
-
-    const blockScale = frameWidth / 1024;
-    const blocks = [
-      { x: 80, y: 10, w: 100, h: 20 },
-      { x: 220, y: 10, w: 20, h: 80 },
-      { x: 280, y: 50, w: 150, h: 20 },
-      { x: 470, y: 10, w: 20, h: 80 },
-      { x: 530, y: 10, w: 100, h: 20 },
-      { x: 670, y: 50, w: 150, h: 20 },
-    ];
-
-    blocks.forEach((b) => {
-      const bx = attractBounds.x + b.x * blockScale;
-      const by = attractBounds.y + b.y * (attractBounds.height / 100);
-      const bw = b.w * blockScale;
-      const bh = b.h * (attractBounds.height / 100);
-      mazeBlocks.fillRect(bx, by, bw, bh);
-      mazeBlocks.strokeRect(bx, by, bw, bh);
-    });
 
     // Container for attract group
     const attractContainer = this.add.container(0, 0);
@@ -306,6 +285,8 @@ export class Title extends Scene {
     const startGame = () => {
       if (starting) return;
       starting = true;
+      this.sound?.stopByKey?.("maze_runner_title_theme");
+      this.sound?.play?.("maze_runner_game_start", { volume: 0.65 });
       startSceneWithFade(this, "Game");
       EventBus.emit("current-scene-ready", this);
     };

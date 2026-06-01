@@ -14,6 +14,7 @@ export class Pause extends Scene {
 
   create(): void {
     this.cameras.main.setPostPipeline("VectorShader");
+    this.sound?.play?.("maze_runner_pause", { volume: 0.55 });
     const { width, height } = this.cameras.main;
     const fontFamily =
       (this.registry.get("fontFamily") as string) ?? "Orbitron";

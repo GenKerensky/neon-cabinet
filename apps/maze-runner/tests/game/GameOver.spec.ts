@@ -5,6 +5,9 @@ const mockFadeInScene = vi.hoisted(() => vi.fn());
 const mockEventBus = vi.hoisted(() => ({
   emit: vi.fn(),
 }));
+const mockVectorPuppets = vi.hoisted(() => ({
+  instances: [] as any[],
+}));
 
 vi.mock("phaser", () => ({
   GameObjects: {
@@ -49,7 +52,15 @@ vi.mock("phaser", () => ({
 }));
 
 vi.mock("@neon-cabinet/sprite-tools", () => ({
-  VectorPuppet: class {},
+  VectorPuppet: class {
+    setScale = vi.fn();
+    setDirection = vi.fn();
+    update = vi.fn();
+
+    constructor(..._args: any[]) {
+      mockVectorPuppets.instances.push(this);
+    }
+  },
   SVGParser: class {
     parse() {
       return {};
@@ -117,6 +128,8 @@ function createSceneHarness(options?: {
   const scene = new GameOver();
   const textCalls: any[][] = [];
   const keyboardHandlers: Record<string, () => void> = {};
+  const eventHandlers: Record<string, (time: number, delta: number) => void> =
+    {};
   const storage = stubLocalStorage(
     options?.localStorageValues ?? {},
     options?.localStorageOptions,
@@ -139,7 +152,9 @@ function createSceneHarness(options?: {
     },
     cache: {
       text: {
-        get: vi.fn(),
+        get: vi.fn((key: string) =>
+          key === "ghost_chaser_svg" ? "<svg viewBox='0 0 32 32'></svg>" : "",
+        ),
       },
     },
     input: {
@@ -170,15 +185,26 @@ function createSceneHarness(options?: {
     tweens: {
       add: vi.fn(),
     },
+    sound: {
+      play: vi.fn(),
+    },
+    events: {
+      on: vi.fn(
+        (eventName: string, handler: (time: number, delta: number) => void) => {
+          eventHandlers[eventName] = handler;
+        },
+      ),
+    },
   });
 
   scene.init({ score: options?.score ?? 0 });
 
-  return { scene, keyboardHandlers, storage, textCalls };
+  return { scene, eventHandlers, keyboardHandlers, storage, textCalls };
 }
 
 afterEach(() => {
   vi.clearAllMocks();
+  mockVectorPuppets.instances.length = 0;
   vi.unstubAllGlobals();
 });
 
@@ -318,5 +344,31 @@ describe("GameOver", () => {
       "highScore",
       expect.anything(),
     );
+  });
+
+  it("plays game over tune and animates a larger killer ghost", () => {
+    const { scene, eventHandlers } = createSceneHarness({
+      score: 1200,
+      localStorageValues: {
+        [MAZE_RUNNER_HIGH_SCORE_KEY]: "300",
+      },
+    });
+    scene.init({ score: 1200, killerGhostId: "chaser" });
+
+    scene.create();
+
+    expect((scene as any).sound.play).toHaveBeenCalledWith(
+      "maze_runner_game_over",
+      { volume: 0.7 },
+    );
+    expect(mockVectorPuppets.instances).toHaveLength(1);
+    expect(mockVectorPuppets.instances[0].setScale).toHaveBeenCalledWith(2.1);
+    expect(mockVectorPuppets.instances[0].setDirection).toHaveBeenCalledWith(
+      "RIGHT",
+    );
+
+    eventHandlers.update(100, 16);
+
+    expect(mockVectorPuppets.instances[0].update).toHaveBeenCalledWith(100, 16);
   });
 });

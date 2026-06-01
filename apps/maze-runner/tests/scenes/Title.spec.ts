@@ -162,6 +162,10 @@ function createScene() {
       add: vi.fn(),
       chain: vi.fn(),
     },
+    sound: {
+      play: vi.fn(),
+      stopByKey: vi.fn(),
+    },
   });
   return { handlers, scene };
 }
@@ -216,6 +220,30 @@ describe("Title", () => {
       expect.objectContaining({
         color: "#ffffcc",
       }),
+    );
+  });
+
+  it("plays title music and start sound", () => {
+    const { handlers, scene } = createScene();
+
+    scene.create();
+
+    expect((scene as any).sound.play).toHaveBeenCalledWith(
+      "maze_runner_title_theme",
+      {
+        loop: true,
+        volume: 0.3,
+      },
+    );
+
+    handlers["keydown-SPACE"]();
+
+    expect((scene as any).sound.stopByKey).toHaveBeenCalledWith(
+      "maze_runner_title_theme",
+    );
+    expect((scene as any).sound.play).toHaveBeenCalledWith(
+      "maze_runner_game_start",
+      { volume: 0.65 },
     );
   });
 
