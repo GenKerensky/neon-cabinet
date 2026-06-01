@@ -24,6 +24,7 @@ import { ObstacleInfo } from "../objects/EnemyTank";
 import { PickupManager } from "../objects/PickupManager";
 import { LaserBeam } from "../objects/LaserBeam";
 import { LaserWeapon } from "../objects/weapons/LaserWeapon";
+import { BattleAudio } from "../audio/BattleAudio";
 
 type GameState = "playing" | "wave_transition" | "player_death" | "game_over";
 
@@ -39,6 +40,7 @@ export class Game extends Scene {
 
   private particles!: VectorParticleSystem;
   private screenShake!: ScreenShake;
+  private audio?: BattleAudio;
 
   private hud!: HUD;
 
@@ -87,6 +89,7 @@ export class Game extends Scene {
     this.particles = new VectorParticleSystem(this);
     this.particles.setCamera(this.camera3d);
     this.screenShake = new ScreenShake(this);
+    this.audio = new BattleAudio(this);
 
     this.hud = new HUD(this);
     this.hud.draw();
@@ -159,6 +162,10 @@ export class Game extends Scene {
     const fireResult = this.tank.fire();
     if (!fireResult) return;
 
+    this.audio?.playWeaponFire(
+      fireResult.type === "laser" ? "laser" : "autocannon",
+    );
+
     if (fireResult.type === "projectile") {
       // Autocannon - spawn projectile
       const projectile = new Projectile(
@@ -223,10 +230,15 @@ export class Game extends Scene {
     // Apply damage if hit enemy
     if (hitEnemy) {
       hitEnemy.takeDamage();
+      this.audio?.playEnemyDamaged(hitEnemy.position, this.tank.getPosition());
       this.particles.emit(endPos.clone(), 5, PARTICLE_PRESETS.sparks);
 
       if (hitEnemy.isDead()) {
         this.tank.addScore(hitEnemy.points);
+        this.audio?.playEnemyDestroyed(
+          hitEnemy.position,
+          this.tank.getPosition(),
+        );
         this.particles.emitRing(
           hitEnemy.position.clone(),
           15,
@@ -363,12 +375,14 @@ export class Game extends Scene {
 
       const { enemy, point } = nearestHit;
       enemy.takeDamage();
+      this.audio?.playEnemyDamaged(enemy.position, this.tank.getPosition());
       projectile.destroy();
 
       this.particles.emit(point, 5, PARTICLE_PRESETS.sparks);
 
       if (enemy.isDead()) {
         this.tank.addScore(enemy.points);
+        this.audio?.playEnemyDestroyed(enemy.position, this.tank.getPosition());
         this.particles.emitRing(
           enemy.position.clone(),
           15,
@@ -407,6 +421,7 @@ export class Game extends Scene {
       if (hit) {
         // Player hit!
         this.tank.takeDamageFromPosition(hit.point);
+        this.audio?.playPlayerDamaged();
         projectile.destroy();
         this.screenShake.hit();
         this.particles.emit(hit.point, 8, PARTICLE_PRESETS.sparks);
@@ -432,6 +447,7 @@ export class Game extends Scene {
     const { width, height } = this.cameras.main;
     this.hud.drawCrackedWindshield(width / 2, height / 2);
     this.screenShake.death();
+    this.audio?.playPlayerDestroyed();
 
     // Delay before game over screen
     this.time.delayedCall(this.deathDelay, () => {
@@ -481,6 +497,7 @@ export class Game extends Scene {
 
     // Normal gameplay
     this.tank.update(delta);
+    this.audio?.updatePlayerRumble(this.tank.getVelocity());
 
     // Resolve player collisions
     this.tank.resolveCollisions(this.enemyManager.getEnemies());
@@ -507,10 +524,18 @@ export class Game extends Scene {
     this.checkPickupCollection();
 
     // Update enemies with player position and obstacle info for AI
-    this.enemyManager.update(
+    const enemyFireEvents = this.enemyManager.update(
       delta,
       this.tank.getPosition(),
       this.getObstacleInfo(),
+    );
+    for (const event of enemyFireEvents) {
+      this.audio?.playEnemyFire(event.position, this.tank.getPosition());
+    }
+    this.audio?.updateEnemyTanks(
+      this.enemyManager.getEnemies(),
+      this.tank.getPosition(),
+      this.tank.getRotation(),
     );
 
     // Check collisions
@@ -622,5 +647,6 @@ export class Game extends Scene {
     this.waveTransition?.destroy();
     this.laserGraphics?.destroy();
     this.pickupManager?.clear();
+    this.audio?.destroy();
   }
 }

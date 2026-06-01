@@ -6,6 +6,12 @@ import { EnemyProjectile } from "./EnemyProjectile";
 
 export type Enemy = Turret | EnemyTank;
 
+export interface EnemyFireEvent {
+  enemy: Enemy;
+  position: Vector3D;
+  direction: Vector3D;
+}
+
 export interface DifficultyConfig {
   fireRate: number;
   tankPatrolSpeed: number;
@@ -73,7 +79,9 @@ export class EnemyManager {
     delta: number,
     playerPos?: Vector3D,
     obstacleInfo?: ObstacleInfo,
-  ): void {
+  ): EnemyFireEvent[] {
+    const fireEvents: EnemyFireEvent[] = [];
+
     // Update enemies and collect fire data
     for (const enemy of this.enemies) {
       let fireData: {
@@ -101,6 +109,11 @@ export class EnemyManager {
           fireData.speed,
         );
         this.projectiles.push(projectile);
+        fireEvents.push({
+          enemy,
+          position: fireData.position.clone(),
+          direction: fireData.direction.clone(),
+        });
       }
     }
 
@@ -114,6 +127,8 @@ export class EnemyManager {
 
     // Remove dead projectiles
     this.projectiles = this.projectiles.filter((p) => p.isAlive());
+
+    return fireEvents;
   }
 
   /**
