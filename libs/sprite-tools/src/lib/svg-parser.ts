@@ -73,7 +73,11 @@ export class SVGParser {
     const tagName = el.tagName.toLowerCase();
 
     // Ignore non-graphical elements or specific ignores
-    if (!["path", "circle", "rect", "g"].includes(tagName)) {
+    if (
+      !["path", "circle", "rect", "line", "polyline", "polygon", "g"].includes(
+        tagName,
+      )
+    ) {
       return null;
     }
 
@@ -110,6 +114,13 @@ export class SVGParser {
       metadata.height = parseFloat(el.getAttribute("height") || "0");
       metadata.rx = parseFloat(el.getAttribute("rx") || "0");
       metadata.ry = parseFloat(el.getAttribute("ry") || "0");
+    } else if (tagName === "line") {
+      metadata.x1 = parseFloat(el.getAttribute("x1") || "0");
+      metadata.y1 = parseFloat(el.getAttribute("y1") || "0");
+      metadata.x2 = parseFloat(el.getAttribute("x2") || "0");
+      metadata.y2 = parseFloat(el.getAttribute("y2") || "0");
+    } else if (tagName === "polyline" || tagName === "polygon") {
+      metadata.points = this.parsePoints(el.getAttribute("points") || "");
     } else if (tagName === "g") {
       metadata.children = Array.from(el.children)
         .map((child) => this.parseElement(child as SVGElement))
@@ -151,6 +162,14 @@ export class SVGParser {
       animations.push({
         type: "flash",
         ...this.parseDataParams(flash),
+      } as AnimationMetadata);
+    }
+
+    const pulse = el.getAttribute("data-anim-pulse");
+    if (pulse) {
+      animations.push({
+        type: "pulse",
+        ...this.parseDataParams(pulse),
       } as AnimationMetadata);
     }
 
@@ -293,6 +312,21 @@ export class SVGParser {
         translateMatch && translateMatch[2] ? parseFloat(translateMatch[2]) : 0,
       type: el.getAttribute("data-socket-type") || "spawn",
     };
+  }
+
+  private parsePoints(pointsAttr: string): { x: number; y: number }[] {
+    const numbers = pointsAttr
+      .trim()
+      .split(/[\s,]+/)
+      .map((value) => parseFloat(value))
+      .filter((value) => Number.isFinite(value));
+    const points: { x: number; y: number }[] = [];
+
+    for (let index = 0; index < numbers.length - 1; index += 2) {
+      points.push({ x: numbers[index], y: numbers[index + 1] });
+    }
+
+    return points;
   }
 
   private parseDataParams(

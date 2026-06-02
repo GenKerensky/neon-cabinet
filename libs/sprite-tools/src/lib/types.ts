@@ -1,5 +1,5 @@
 export interface AnimationMetadata {
-  type: "wave" | "wobble" | "chomp" | "flash";
+  type: "wave" | "wobble" | "chomp" | "flash" | "pulse";
   frequency: number;
   amplitude: number;
   speed?: number;
@@ -53,11 +53,16 @@ export interface AudioMetadata {
 
 export interface LayerMetadata {
   id: string;
-  type: "path" | "circle" | "rect" | "group";
+  type: "path" | "circle" | "rect" | "line" | "polyline" | "polygon" | "group";
   d?: string; // For paths
   cx?: number; // For circles
   cy?: number;
   r?: number;
+  x1?: number; // For lines
+  y1?: number;
+  x2?: number;
+  y2?: number;
+  points?: { x: number; y: number }[]; // For polylines/polygons
   x?: number; // For rects
   y?: number;
   width?: number;

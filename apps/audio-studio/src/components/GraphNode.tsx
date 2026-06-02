@@ -7,8 +7,9 @@ export function GraphNode({
   isSelected,
   node,
   onDragNode,
+  onEndDrag,
   onSelectNode,
-  onSetDraggingId,
+  onStartDrag,
 }: {
   isSelected: boolean;
   node: AudioNodeConfig;
@@ -16,19 +17,32 @@ export function GraphNode({
     event: PointerEvent<HTMLButtonElement>,
     node: AudioNodeConfig,
   ): void;
+  onEndDrag(
+    event: PointerEvent<HTMLButtonElement>,
+    node: AudioNodeConfig,
+  ): void;
   onSelectNode(id: string): void;
-  onSetDraggingId(id: string | null): void;
+  onStartDrag(
+    event: PointerEvent<HTMLButtonElement>,
+    node: AudioNodeConfig,
+  ): void;
 }) {
   return (
     <Button
       className={isSelected ? "graph-node active" : "graph-node"}
       onClick={() => onSelectNode(node.id)}
       onPointerDown={(event) => {
-        event.currentTarget.setPointerCapture(event.pointerId);
-        onSetDraggingId(node.id);
+        if (event.button !== 0) return;
+        try {
+          event.currentTarget.setPointerCapture?.(event.pointerId);
+        } catch {
+          // Synthetic pointer events in tests can lack a real active pointer.
+        }
+        onStartDrag(event, node);
       }}
       onPointerMove={(event) => onDragNode(event, node)}
-      onPointerUp={() => onSetDraggingId(null)}
+      onPointerCancel={(event) => onEndDrag(event, node)}
+      onPointerUp={(event) => onEndDrag(event, node)}
       style={{
         transform: `translate(${node.position.x}px, ${node.position.y}px)`,
       }}

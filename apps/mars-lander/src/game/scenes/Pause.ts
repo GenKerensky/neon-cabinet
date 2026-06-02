@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
+import { MarsLanderAudio } from "../audio/MarsLanderAudio";
 
 export class Pause extends Scene {
   constructor() {
@@ -10,6 +11,8 @@ export class Pause extends Scene {
   create(): void {
     const { width, height } = this.cameras.main;
     const font = getFontFamily(this);
+    const audio = new MarsLanderAudio(this);
+    this.events.once("shutdown", () => audio.destroy());
 
     // Semi-transparent overlay
     const overlay = this.add.graphics();
@@ -58,11 +61,13 @@ export class Pause extends Scene {
 
     // Input
     this.input.keyboard?.once("keydown-ESC", () => {
+      audio.playResume();
       this.scene.resume("Game");
       this.scene.stop();
     });
 
     this.input.keyboard?.once("keydown-Q", () => {
+      audio.playStart();
       this.scene.stop("Game");
       this.scene.start("Title");
     });

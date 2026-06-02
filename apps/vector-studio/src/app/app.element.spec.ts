@@ -11,11 +11,15 @@ describe("AppElement", () => {
     expect(app).toBeTruthy();
   });
 
-  it("should have a greeting", () => {
+  it("renders the vector studio workbench", () => {
     app.connectedCallback();
 
-    expect(app.querySelector("h1").innerHTML).toContain(
-      "Welcome @neon-cabinet/vector-studio",
+    expect(app.querySelector("h1")?.textContent).toContain("Vector Studio");
+    expect(app.querySelector("#asset-select")?.textContent).toContain(
+      "Space Defender Ship",
+    );
+    expect(app.querySelector(".warnings")?.textContent).toContain(
+      "Unsupported Elements",
     );
   });
 });

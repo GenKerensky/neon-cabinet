@@ -40,6 +40,62 @@ describe("SVGParser", () => {
     });
   });
 
+  it("should parse custom data-anim-pulse metadata", () => {
+    const svg = `
+      <svg width="100" height="100">
+        <circle id="engine_glow" cx="50" cy="50" r="12" data-anim-pulse='{"frequency": 8, "amplitude": 0.35, "speed": 1.5}' />
+      </svg>
+    `;
+    const metadata = parser.parse(svg);
+    const layer = metadata.layers[0];
+    expect(layer.animations[0]).toEqual({
+      type: "pulse",
+      frequency: 8,
+      amplitude: 0.35,
+      speed: 1.5,
+    });
+  });
+
+  it("should parse line, polyline, and polygon layers", () => {
+    const svg = `
+      <svg width="100" height="100">
+        <line id="muzzle_line" x1="4" y1="8" x2="28" y2="8" stroke="#ffffff" />
+        <polyline id="speed_marks" points="4,12 10,14 18,12" stroke="#00ffff" fill="none" />
+        <polygon id="ship_plate" points="50,4 70,42 30,42" fill="#000000" stroke="#ffffff" />
+      </svg>
+    `;
+    const metadata = parser.parse(svg);
+
+    expect(metadata.layers.map((layer) => layer.type)).toEqual([
+      "line",
+      "polyline",
+      "polygon",
+    ]);
+    expect(metadata.layers[0]).toMatchObject({
+      id: "muzzle_line",
+      x1: 4,
+      y1: 8,
+      x2: 28,
+      y2: 8,
+    });
+    expect(metadata.layers[1]).toMatchObject({
+      id: "speed_marks",
+      points: [
+        { x: 4, y: 12 },
+        { x: 10, y: 14 },
+        { x: 18, y: 12 },
+      ],
+    });
+    expect(metadata.layers[2]).toMatchObject({
+      id: "ship_plate",
+      points: [
+        { x: 50, y: 4 },
+        { x: 70, y: 42 },
+        { x: 30, y: 42 },
+      ],
+    });
+  });
+
   it("should parse physics colliders", () => {
     const svg = `
       <svg width="100" height="100">

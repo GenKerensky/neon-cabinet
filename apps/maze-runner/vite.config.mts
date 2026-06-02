@@ -61,7 +61,7 @@ export default defineConfig(() => ({
     name: "maze-runner",
     watch: false,
     globals: true,
-    environment: "jsdom",
+    environment: "happy-dom",
     include: ["{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     setupFiles: ["./tests/setup.ts"],
     reporters: ["default"],

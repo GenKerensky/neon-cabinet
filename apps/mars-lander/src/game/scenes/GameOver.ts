@@ -2,6 +2,7 @@ import { Display, Scene } from "phaser";
 import type { Types } from "phaser";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
+import { MarsLanderAudio } from "../audio/MarsLanderAudio";
 
 export class GameOver extends Scene {
   private score = 0;
@@ -21,6 +22,9 @@ export class GameOver extends Scene {
   create(): void {
     const { width, height } = this.cameras.main;
     const font = getFontFamily(this);
+    const audio = new MarsLanderAudio(this);
+    audio.playGameOver();
+    this.events.once("shutdown", () => audio.destroy());
 
     // Apply vector shader
     this.cameras.main.setPostPipeline("VectorShader");
@@ -136,6 +140,7 @@ export class GameOver extends Scene {
 
     // Input
     this.input.keyboard?.once("keydown-SPACE", () => {
+      audio.playStart();
       this.scene.start("Game");
     });
 
@@ -144,6 +149,7 @@ export class GameOver extends Scene {
     });
 
     this.input.once("pointerdown", () => {
+      audio.playStart();
       this.scene.start("Game");
     });
 

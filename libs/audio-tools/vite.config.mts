@@ -29,7 +29,7 @@ export default defineConfig(() => ({
     name: "audio-tools",
     watch: false,
     globals: true,
-    environment: "jsdom",
+    environment: "happy-dom",
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
     reporters: ["default"],
   },

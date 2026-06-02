@@ -1,6 +1,12 @@
 import {
+  AudioClip,
   AudioNodeConfig,
+  ChipConstraintProfile,
+  ClipInstrument,
+  ClipNotePitch,
+  ConstraintWarning,
   GainEnvelopeConfig,
+  LEGACY_SOUND_PATCH_SCHEMA_VERSION,
   LfoConfig,
   NoiseBurstConfig,
   PatchInstance,
@@ -26,6 +32,7 @@ const DEFAULT_CONTEXT: Required<PatchPreviewContext> = {
 };
 
 const VALID_NODE_TYPES = new Set<AudioNodeConfig["type"]>([
+  "clipSource",
   "oscillator",
   "lfo",
   "gainEnvelope",
@@ -36,6 +43,67 @@ const VALID_NODE_TYPES = new Set<AudioNodeConfig["type"]>([
   "output",
 ]);
 
+export const CHIP_CONSTRAINT_PROFILES: ChipConstraintProfile[] = [
+  {
+    id: "arcade-psg",
+    name: "Arcade PSG",
+    channels: [
+      { id: "tone", name: "Tone", engine: "pulse", count: 3 },
+      { id: "noise", name: "Noise", engine: "noise", count: 1 },
+    ],
+  },
+  {
+    id: "nes",
+    name: "NES",
+    channels: [
+      { id: "pulse", name: "Pulse", engine: "pulse", count: 2 },
+      { id: "triangle", name: "Triangle", engine: "triangle", count: 1 },
+      { id: "noise", name: "Noise", engine: "noise", count: 1 },
+      { id: "sample", name: "DMC", engine: "sample", count: 1 },
+    ],
+  },
+  {
+    id: "game-boy",
+    name: "Game Boy",
+    channels: [
+      { id: "pulse", name: "Pulse", engine: "pulse", count: 2 },
+      { id: "wavetable", name: "Wave", engine: "wavetable", count: 1 },
+      { id: "noise", name: "Noise", engine: "noise", count: 1 },
+    ],
+  },
+  {
+    id: "c64-sid",
+    name: "C64 SID",
+    channels: [{ id: "voice", name: "Voice", engine: "pulse", count: 3 }],
+  },
+  {
+    id: "genesis",
+    name: "Genesis FM+PSG",
+    channels: [
+      { id: "fm", name: "FM", engine: "fm4op", count: 6 },
+      { id: "psg", name: "PSG", engine: "pulse", count: 3 },
+      { id: "noise", name: "Noise", engine: "noise", count: 1 },
+    ],
+  },
+  {
+    id: "snes",
+    name: "SNES Sample Voices",
+    channels: [{ id: "sample", name: "Sample", engine: "sample", count: 8 }],
+  },
+  {
+    id: "fantasy",
+    name: "Fantasy Chip",
+    channels: [
+      { id: "pulse", name: "Pulse", engine: "pulse", count: 16 },
+      { id: "triangle", name: "Triangle", engine: "triangle", count: 16 },
+      { id: "noise", name: "Noise", engine: "noise", count: 16 },
+      { id: "fm", name: "FM", engine: "fm4op", count: 16 },
+      { id: "wavetable", name: "Wavetable", engine: "wavetable", count: 16 },
+      { id: "sample", name: "Sample", engine: "sample", count: 16 },
+    ],
+  },
+];
+
 export function validatePatch(patch: unknown): ValidationResult {
   const errors: string[] = [];
 
@@ -43,8 +111,13 @@ export function validatePatch(patch: unknown): ValidationResult {
     return { valid: false, errors: ["Patch must be an object."] };
   }
 
-  if (patch.schemaVersion !== SOUND_PATCH_SCHEMA_VERSION) {
-    errors.push(`schemaVersion must be ${SOUND_PATCH_SCHEMA_VERSION}.`);
+  if (
+    patch.schemaVersion !== SOUND_PATCH_SCHEMA_VERSION &&
+    patch.schemaVersion !== LEGACY_SOUND_PATCH_SCHEMA_VERSION
+  ) {
+    errors.push(
+      `schemaVersion must be ${LEGACY_SOUND_PATCH_SCHEMA_VERSION} or ${SOUND_PATCH_SCHEMA_VERSION}.`,
+    );
   }
 
   if (typeof patch.id !== "string" || patch.id.length === 0) {
@@ -100,13 +173,25 @@ export function validatePatch(patch: unknown): ValidationResult {
         `LFO "${node.id}" references missing target "${node.target}".`,
       );
     }
+    if (
+      node.type === "clipSource" &&
+      !((patch.clips as AudioClip[] | undefined) ?? []).some(
+        (clip) => clip.id === node.clipId,
+      )
+    ) {
+      errors.push(
+        `Clip source "${node.id}" references missing clip "${node.clipId}".`,
+      );
+    }
   }
+
+  validateClipReferences(patch as Partial<SoundPatch>, errors);
 
   return { valid: errors.length === 0, errors };
 }
 
 export function parsePatch(json: string): SoundPatch {
-  const patch = JSON.parse(json) as unknown;
+  const patch = migratePatchToCurrentSchema(JSON.parse(json) as unknown);
   const result = validatePatch(patch);
   if (!result.valid) {
     throw new Error(result.errors.join("\n"));
@@ -120,6 +205,171 @@ export function serializePatch(patch: SoundPatch): string {
     throw new Error(result.errors.join("\n"));
   }
   return JSON.stringify(patch, null, 2);
+}
+
+export function migratePatchToCurrentSchema(patch: unknown): SoundPatch {
+  if (!isRecord(patch)) {
+    throw new Error("Patch must be an object.");
+  }
+
+  if (patch.schemaVersion === SOUND_PATCH_SCHEMA_VERSION) {
+    return patch as unknown as SoundPatch;
+  }
+
+  if (patch.schemaVersion !== LEGACY_SOUND_PATCH_SCHEMA_VERSION) {
+    return patch as unknown as SoundPatch;
+  }
+
+  const legacyPatch = patch as unknown as SoundPatch;
+  const authoringData = createAuthoringDataFromTimedOscillators(legacyPatch);
+
+  return {
+    ...legacyPatch,
+    schemaVersion: SOUND_PATCH_SCHEMA_VERSION,
+    clips: authoringData?.clips ?? [],
+    constraintProfileId: "fantasy",
+    instruments: authoringData?.instruments ?? [],
+  };
+}
+
+export function noteToFrequency(pitch: ClipNotePitch): number {
+  const semitoneByNote: Record<ClipNotePitch["note"], number> = {
+    C: 0,
+    D: 2,
+    E: 4,
+    F: 5,
+    G: 7,
+    A: 9,
+    B: 11,
+  };
+  const accidental =
+    pitch.accidental === "#" ? 1 : pitch.accidental === "b" ? -1 : 0;
+  const midi =
+    (pitch.octave + 1) * 12 + semitoneByNote[pitch.note] + accidental;
+  return 440 * 2 ** ((midi - 69) / 12);
+}
+
+export function frequencyToPitch(frequency: number): ClipNotePitch {
+  const midi = Math.round(69 + 12 * Math.log2(frequency / 440));
+  const octave = Math.floor(midi / 12) - 1;
+  const semitone = ((midi % 12) + 12) % 12;
+  const notes: ClipNotePitch[] = [
+    { note: "C", accidental: "natural", octave },
+    { note: "C", accidental: "#", octave },
+    { note: "D", accidental: "natural", octave },
+    { note: "D", accidental: "#", octave },
+    { note: "E", accidental: "natural", octave },
+    { note: "F", accidental: "natural", octave },
+    { note: "F", accidental: "#", octave },
+    { note: "G", accidental: "natural", octave },
+    { note: "G", accidental: "#", octave },
+    { note: "A", accidental: "natural", octave },
+    { note: "A", accidental: "#", octave },
+    { note: "B", accidental: "natural", octave },
+  ];
+  return notes[semitone];
+}
+
+export function getConstraintWarnings(patch: SoundPatch): ConstraintWarning[] {
+  const profile =
+    CHIP_CONSTRAINT_PROFILES.find(
+      (candidate) => candidate.id === patch.constraintProfileId,
+    ) ??
+    CHIP_CONSTRAINT_PROFILES.find((candidate) => candidate.id === "fantasy");
+  if (!profile) return [];
+
+  const warnings: ConstraintWarning[] = [];
+  for (const clip of patch.clips ?? []) {
+    for (const channel of clip.channels) {
+      const allowed = profile.channels
+        .filter((definition) => definition.engine === channel.engine)
+        .reduce((total, definition) => total + definition.count, 0);
+      const used = clip.channels.filter(
+        (candidate) => candidate.engine === channel.engine,
+      ).length;
+      if (used > allowed) {
+        warnings.push({
+          code: "channel-budget",
+          clipId: clip.id,
+          message: `${clip.name} uses ${used} ${channel.engine} channels, but ${profile.name} allows ${allowed}.`,
+          profileId: profile.id,
+        });
+        break;
+      }
+    }
+  }
+
+  return warnings;
+}
+
+function createAuthoringDataFromTimedOscillators(
+  patch: SoundPatch,
+): { clips: AudioClip[]; instruments: ClipInstrument[] } | null {
+  const timedOscillators = patch.nodes
+    .filter(
+      (node): node is Extract<AudioNodeConfig, { type: "oscillator" }> =>
+        node.type === "oscillator" &&
+        Number.isFinite(node.startTime) &&
+        Number.isFinite(node.duration),
+    )
+    .sort((a, b) => (a.startTime ?? 0) - (b.startTime ?? 0));
+  if (timedOscillators.length === 0) return null;
+
+  const firstEnvelope = findEnvelopeForOscillator(
+    patch,
+    timedOscillators[0].id,
+  );
+  const instrument: ClipInstrument = {
+    id: `${patch.id}-instrument`,
+    engine: "pulse",
+    envelope: {
+      attack: firstEnvelope?.attack ?? 0.005,
+      decay: firstEnvelope?.decay ?? 0.04,
+      release: firstEnvelope?.release ?? 0.06,
+      sustain: firstEnvelope?.sustain ?? 0.7,
+    },
+    gain: firstEnvelope?.gain ?? 0.75,
+    name: `${patch.name} Instrument`,
+    waveform: timedOscillators[0].waveform,
+  };
+  const beatSeconds = 0.5;
+  const clip: AudioClip = {
+    id: `${patch.id}-clip`,
+    bpm: 120,
+    channels: [{ id: "pulse-1", engine: "pulse", name: "Pulse 1" }],
+    name: `${patch.name} Clip`,
+    notes: timedOscillators.map((node, index) => ({
+      id: node.id || `note-${index}`,
+      channelId: "pulse-1",
+      durationBeats: roundToBeats((node.duration ?? beatSeconds) / beatSeconds),
+      instrumentId: instrument.id,
+      pitch: frequencyToPitch(node.frequency),
+      startBeat: roundToBeats((node.startTime ?? 0) / beatSeconds),
+      velocity: Math.max(0.01, Math.min(1, node.gain ?? 1)),
+    })),
+    timeSignature: [4, 4],
+    type: patch.category === "Music Cue" ? "music" : "sfx",
+  };
+
+  return { clips: [clip], instruments: [instrument] };
+}
+
+function findEnvelopeForOscillator(
+  patch: SoundPatch,
+  oscillatorId: string,
+): GainEnvelopeConfig | undefined {
+  const envelopeId = patch.connections.find(
+    (connection) => connection.from === oscillatorId,
+  )?.to;
+  const envelope = patch.nodes.find(
+    (node): node is GainEnvelopeConfig =>
+      node.type === "gainEnvelope" && node.id === envelopeId,
+  );
+  return envelope;
+}
+
+function roundToBeats(value: number): number {
+  return Number(value.toFixed(2));
 }
 
 export function createPatchInstance(
@@ -136,7 +386,10 @@ export function createPatchInstance(
   const runtimeNodes = new Map<string, RuntimeNode>();
 
   for (const node of patch.nodes) {
-    runtimeNodes.set(node.id, createRuntimeNode(audioContext, node, context));
+    runtimeNodes.set(
+      node.id,
+      createRuntimeNode(audioContext, patch, node, context),
+    );
   }
 
   for (const connection of patch.connections) {
@@ -205,10 +458,13 @@ export function playPatchOnce(
 
 function createRuntimeNode(
   audioContext: AudioContext,
+  patch: SoundPatch,
   node: AudioNodeConfig,
   context: Required<PatchPreviewContext>,
 ): RuntimeNode {
   switch (node.type) {
+    case "clipSource":
+      return createClipSourceNode(audioContext, patch, node, context);
     case "oscillator":
       return createOscillatorNode(audioContext, node);
     case "lfo":
@@ -226,6 +482,58 @@ function createRuntimeNode(
     case "output":
       return { output: audioContext.destination };
   }
+}
+
+function createClipSourceNode(
+  audioContext: AudioContext,
+  patch: SoundPatch,
+  node: Extract<AudioNodeConfig, { type: "clipSource" }>,
+  context: Required<PatchPreviewContext>,
+): RuntimeNode {
+  const mix = audioContext.createGain();
+  const sources: Array<{ stop: () => void }> = [];
+
+  return {
+    output: mix,
+    start() {
+      const clip = patch.clips?.find(
+        (candidate) => candidate.id === node.clipId,
+      );
+      if (!clip) return;
+
+      for (const note of clip.notes) {
+        const instrument = patch.instruments?.find(
+          (candidate) => candidate.id === note.instrumentId,
+        );
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const start =
+          audioContext.currentTime + beatsToSeconds(note.startBeat, clip.bpm);
+        const duration = beatsToSeconds(note.durationBeats, clip.bpm);
+
+        oscillator.type = waveformForInstrument(instrument);
+        oscillator.frequency.value = noteToFrequency(note.pitch);
+        scheduleClipGain(
+          gain.gain,
+          instrument,
+          note.velocity,
+          context,
+          start,
+          duration,
+        );
+        oscillator.connect(gain);
+        gain.connect(mix);
+        oscillator.start(start);
+        oscillator.stop(start + duration);
+        sources.push(oscillator);
+      }
+    },
+    stop() {
+      for (const source of sources) {
+        stopSource(source);
+      }
+    },
+  };
 }
 
 function createOscillatorNode(
@@ -464,6 +772,127 @@ function scheduleGainEnvelope(
       0.0001,
       Math.max(releaseStart + 0.001, releaseEnd),
     );
+  }
+}
+
+function scheduleClipGain(
+  param: AudioParam,
+  instrument: ClipInstrument | undefined,
+  velocity: number,
+  context: Required<PatchPreviewContext>,
+  start: number,
+  duration: number,
+): void {
+  const envelope = instrument?.envelope ?? {
+    attack: 0.005,
+    decay: 0.04,
+    release: 0.04,
+    sustain: 0.7,
+  };
+  const baseGain = instrument?.gain ?? 0.75;
+  const peak = Math.max(0.0001, baseGain * velocity * context.intensity);
+  const sustain = Math.max(0.0001, peak * envelope.sustain);
+  const attackEnd = start + envelope.attack;
+  const decayEnd = attackEnd + envelope.decay;
+  const releaseStart = start + Math.max(0, duration - envelope.release);
+  const releaseEnd = releaseStart + envelope.release;
+
+  param.setValueAtTime(0.0001, start);
+  param.exponentialRampToValueAtTime(peak, Math.max(start + 0.001, attackEnd));
+  param.exponentialRampToValueAtTime(
+    sustain,
+    Math.max(attackEnd + 0.001, decayEnd),
+  );
+  param.setValueAtTime(sustain, releaseStart);
+  param.exponentialRampToValueAtTime(
+    0.0001,
+    Math.max(releaseStart + 0.001, releaseEnd),
+  );
+}
+
+function waveformForInstrument(
+  instrument: ClipInstrument | undefined,
+): OscillatorType {
+  const waveform = instrument?.waveform ?? "square";
+  if (
+    waveform === "sine" ||
+    waveform === "square" ||
+    waveform === "sawtooth" ||
+    waveform === "triangle"
+  ) {
+    return waveform;
+  }
+  if (instrument?.engine === "triangle") return "triangle";
+  return "square";
+}
+
+function beatsToSeconds(beats: number, bpm: number): number {
+  return beats * (60 / bpm);
+}
+
+function validateClipReferences(
+  patch: Partial<SoundPatch>,
+  errors: string[],
+): void {
+  const clips = patch.clips ?? [];
+  const instruments = patch.instruments ?? [];
+  const instrumentIds = new Set(instruments.map((instrument) => instrument.id));
+
+  for (const instrument of instruments) {
+    if (!instrument.id) errors.push("Instrument is missing an id.");
+    if (!instrument.name)
+      errors.push(`Instrument "${instrument.id}" is missing a name.`);
+    if ((instrument.gain ?? 0.75) < 0 || (instrument.gain ?? 0.75) > 1) {
+      errors.push(`Instrument "${instrument.id}" has invalid gain.`);
+    }
+  }
+
+  for (const clip of clips) {
+    if (!clip.id) errors.push("Clip is missing an id.");
+    if (!Number.isFinite(clip.bpm) || clip.bpm <= 0) {
+      errors.push(`Clip "${clip.id}" has invalid bpm.`);
+    }
+    if (
+      !Array.isArray(clip.timeSignature) ||
+      clip.timeSignature.length !== 2 ||
+      clip.timeSignature.some((value) => value <= 0)
+    ) {
+      errors.push(`Clip "${clip.id}" has invalid time signature.`);
+    }
+
+    const channelIds = new Set(clip.channels.map((channel) => channel.id));
+    for (const channel of clip.channels) {
+      if (!channel.id)
+        errors.push(`Clip "${clip.id}" has a channel missing an id.`);
+    }
+
+    for (const note of clip.notes) {
+      if (!instrumentIds.has(note.instrumentId)) {
+        errors.push(
+          `Clip "${clip.id}" note "${note.id}" references missing instrument "${note.instrumentId}".`,
+        );
+      }
+      if (!channelIds.has(note.channelId)) {
+        errors.push(
+          `Clip "${clip.id}" note "${note.id}" references missing channel "${note.channelId}".`,
+        );
+      }
+      if (!Number.isFinite(note.startBeat) || note.startBeat < 0) {
+        errors.push(
+          `Clip "${clip.id}" note "${note.id}" has invalid start beat.`,
+        );
+      }
+      if (!Number.isFinite(note.durationBeats) || note.durationBeats <= 0) {
+        errors.push(
+          `Clip "${clip.id}" note "${note.id}" has invalid duration.`,
+        );
+      }
+      if (note.velocity < 0 || note.velocity > 1) {
+        errors.push(
+          `Clip "${clip.id}" note "${note.id}" has invalid velocity.`,
+        );
+      }
+    }
   }
 }
 

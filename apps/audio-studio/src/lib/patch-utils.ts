@@ -1,10 +1,15 @@
 import {
   AudioNodeConfig,
-  BATTLE_TANKS_AUDIO_PATCHES,
+  AudioStudioGameRegistration,
+  DEFAULT_AUDIO_STUDIO_GAME_ID,
+  getAudioStudioGameById,
+  migratePatchToCurrentSchema,
+  SOUND_PATCH_SCHEMA_VERSION,
   SoundPatch,
 } from "@neon-cabinet/audio-tools";
 
 export const NODE_TYPES: AudioNodeConfig["type"][] = [
+  "clipSource",
   "oscillator",
   "lfo",
   "gainEnvelope",
@@ -15,10 +20,56 @@ export const NODE_TYPES: AudioNodeConfig["type"][] = [
   "output",
 ];
 
-export const DEFAULT_PATCH = BATTLE_TANKS_AUDIO_PATCHES[2];
-
 export const clonePatch = (patch: SoundPatch): SoundPatch =>
   JSON.parse(JSON.stringify(patch)) as SoundPatch;
+
+export const DEFAULT_GAME =
+  getAudioStudioGameById(DEFAULT_AUDIO_STUDIO_GAME_ID) ??
+  ({
+    effects: [],
+    id: DEFAULT_AUDIO_STUDIO_GAME_ID,
+    title: "Battle Tanks",
+  } as AudioStudioGameRegistration);
+
+export const DEFAULT_PATCH = defaultPatchForGame(DEFAULT_GAME);
+
+export function defaultPatchForGame(
+  game: AudioStudioGameRegistration,
+): SoundPatch {
+  const defaultEffect = game.defaultEffectId
+    ? game.effects.find((effect) => effect.id === game.defaultEffectId)
+    : undefined;
+  return clonePatch(
+    migratePatchToCurrentSchema(
+      defaultEffect ?? game.effects[0] ?? createStarterPatchForGame(game),
+    ),
+  );
+}
+
+export function createStarterPatchForGame(
+  game: Pick<AudioStudioGameRegistration, "id" | "title">,
+): SoundPatch {
+  return {
+    schemaVersion: SOUND_PATCH_SCHEMA_VERSION,
+    id: `${game.id}-starter-effect`,
+    name: `${game.title} Starter Effect`,
+    category: "Rumble",
+    duration: 0.25,
+    preview: { intensity: 1, distance: 0, pan: 0 },
+    nodes: [
+      {
+        id: "output",
+        type: "output",
+        label: "Output",
+        position: { x: 360, y: 180 },
+      },
+    ],
+    connections: [],
+    clips: [],
+    constraintProfileId: "fantasy",
+    instruments: [],
+  };
+}
 
 export function createDefaultNode(
   type: AudioNodeConfig["type"],
@@ -28,6 +79,14 @@ export function createDefaultNode(
   const position = { x: 120 + (index % 3) * 180, y: 120 + index * 24 };
 
   switch (type) {
+    case "clipSource":
+      return {
+        id,
+        type,
+        label: "Clip Source",
+        position,
+        clipId: "default-clip",
+      };
     case "oscillator":
       return {
         id,

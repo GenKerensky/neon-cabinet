@@ -1,5 +1,10 @@
 import {
   AudioNodeConfig,
+  AudioStudioGameRegistration,
+  DEFAULT_AUDIO_STUDIO_GAME_ID,
+  getAudioStudioGameById,
+  getAudioStudioGames,
+  migratePatchToCurrentSchema,
   PatchConnection,
   SoundPatch,
   validatePatch,
@@ -7,15 +12,18 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Subscription } from "rxjs";
 import {
-  DEFAULT_PATCH,
+  DEFAULT_GAME,
   clonePatch,
   createDefaultNode,
+  defaultPatchForGame,
 } from "../lib/patch-utils";
 import {
-  STUDIO_HISTORY_STATE_PATH,
   getAudioStudioRxState,
+  readPersistedSelectedGameId,
   readPersistedStudioHistory,
+  writePersistedSelectedGameId,
   writePersistedStudioHistory,
+  writePersistedStudioHistoryIfMissing,
 } from "../storage/audio-studio-rxdb";
 
 export type StudioSnapshot = {
@@ -34,6 +42,7 @@ export type StudioHistory = {
 };
 
 export type PreviewKey = "distance" | "intensity" | "pan";
+const HISTORY_PERSIST_DEBOUNCE_MS = 180;
 
 type GraphSize = {
   height?: number;
@@ -70,11 +79,75 @@ export const cloneHistory = (history: StudioHistory): StudioHistory => ({
 export const createInitialHistory = (): StudioHistory => ({
   future: [],
   past: [],
-  present: createSnapshot(DEFAULT_PATCH),
+  present: createSnapshot(defaultPatchForGame(DEFAULT_GAME)),
+});
+
+export const createInitialHistoryForGame = (
+  game: AudioStudioGameRegistration,
+): StudioHistory => ({
+  future: [],
+  past: [],
+  present: createSnapshot(defaultPatchForGame(game)),
 });
 
 export const trimPast = (past: StudioSnapshot[]): StudioSnapshot[] =>
   past.slice(-80);
+
+export type DebouncedWriter<TPayload, TKey> = ((
+  payload: TPayload,
+  key: TKey,
+) => void) & {
+  cancel(): void;
+  flush(): void;
+};
+
+export function createDebouncedWriter<TPayload, TKey>(
+  write: (payload: TPayload, key: TKey) => Promise<void>,
+  delayMs: number,
+  reportError: (error: unknown) => void,
+): DebouncedWriter<TPayload, TKey> {
+  const latestByKey = new Map<TKey, TPayload>();
+  const timersByKey = new Map<TKey, ReturnType<typeof setTimeout>>();
+
+  const flushKey = (key: TKey): void => {
+    const timer = timersByKey.get(key);
+    if (timer) {
+      clearTimeout(timer);
+      timersByKey.delete(key);
+    }
+    if (!latestByKey.has(key)) return;
+    const payload = latestByKey.get(key) as TPayload;
+    latestByKey.delete(key);
+    void write(payload, key).catch(reportError);
+  };
+
+  const flush = (): void => {
+    for (const key of [...latestByKey.keys()]) {
+      flushKey(key);
+    }
+  };
+
+  const writer = ((payload: TPayload, key: TKey): void => {
+    latestByKey.set(key, payload);
+    const timer = timersByKey.get(key);
+    if (timer) clearTimeout(timer);
+    timersByKey.set(
+      key,
+      setTimeout(() => flushKey(key), delayMs),
+    );
+  }) as DebouncedWriter<TPayload, TKey>;
+
+  writer.cancel = () => {
+    for (const timer of timersByKey.values()) {
+      clearTimeout(timer);
+    }
+    timersByKey.clear();
+    latestByKey.clear();
+  };
+  writer.flush = flush;
+
+  return writer;
+}
 
 export function normalizeHistory(candidate: unknown): StudioHistory | null {
   if (!isRecord(candidate)) return null;
@@ -100,14 +173,54 @@ export function normalizeHistory(candidate: unknown): StudioHistory | null {
   };
 }
 
+function normalizeHistoryForGame(
+  candidate: unknown,
+  game: AudioStudioGameRegistration,
+): StudioHistory | null {
+  const history = normalizeHistory(candidate);
+  if (!history) return null;
+
+  if (
+    game.effects.length > 0 &&
+    history.present.patch.id === starterPatchIdForGame(game)
+  ) {
+    return null;
+  }
+
+  return history;
+}
+
+function isStaleStarterHistoryForGame(
+  candidate: unknown,
+  game: AudioStudioGameRegistration,
+): boolean {
+  if (game.effects.length === 0) return false;
+  const history = normalizeHistory(candidate);
+  return history?.present.patch.id === starterPatchIdForGame(game);
+}
+
 export function useStudioHistory(setStatus: (status: string) => void) {
   const [history, setHistory] = useState<StudioHistory>(() =>
     createInitialHistory(),
   );
+  const [selectedGameId, setSelectedGameIdState] = useState(
+    DEFAULT_AUDIO_STUDIO_GAME_ID,
+  );
   const historyRef = useRef(history);
   const historySignatureRef = useRef(historySignature(history));
-  const storageReadyRef = useRef(false);
+  const persistWriterRef = useRef<DebouncedWriter<
+    StudioHistory,
+    string
+  > | null>(null);
+  const setStatusRef = useRef(setStatus);
+  const userSelectedGameRef = useRef(false);
+  const selectedGameIdRef = useRef(selectedGameId);
   const { patch, selectedNodeId } = history.present;
+  const games = useMemo(() => getAudioStudioGames(), []);
+  const selectedGame = useMemo(
+    () => getRegisteredGame(selectedGameId) ?? DEFAULT_GAME,
+    [selectedGameId],
+  );
 
   const selectedNode = useMemo(
     () =>
@@ -115,14 +228,34 @@ export function useStudioHistory(setStatus: (status: string) => void) {
     [patch.nodes, selectedNodeId],
   );
 
+  useEffect(() => {
+    setStatusRef.current = setStatus;
+  }, [setStatus]);
+
+  if (!persistWriterRef.current) {
+    persistWriterRef.current = createDebouncedWriter(
+      writePersistedStudioHistory,
+      HISTORY_PERSIST_DEBOUNCE_MS,
+      (error) => {
+        setStatusRef.current(
+          error instanceof Error ? error.message : "PERSIST FAILED",
+        );
+      },
+    );
+  }
+
   const persistHistory = useCallback(
-    (nextHistory: StudioHistory): void => {
-      if (!storageReadyRef.current) return;
-      void writePersistedStudioHistory(nextHistory).catch((error) => {
-        setStatus(error instanceof Error ? error.message : "PERSIST FAILED");
-      });
+    (nextHistory: StudioHistory, gameId = selectedGameIdRef.current): void => {
+      persistWriterRef.current?.(nextHistory, gameId);
     },
-    [setStatus],
+    [],
+  );
+
+  useEffect(
+    () => () => {
+      persistWriterRef.current?.flush();
+    },
+    [],
   );
 
   const applyHistory = useCallback(
@@ -149,28 +282,58 @@ export function useStudioHistory(setStatus: (status: string) => void) {
       .then((state) => {
         if (!active) return;
 
-        const persistedHistory = normalizeHistory(
-          readPersistedStudioHistory(state),
+        const persistedGameId = normalizeGameId(
+          readPersistedSelectedGameId(state),
         );
+        const nextGameId = userSelectedGameRef.current
+          ? selectedGameIdRef.current
+          : (persistedGameId ?? DEFAULT_AUDIO_STUDIO_GAME_ID);
+        selectedGameIdRef.current = nextGameId;
+        setSelectedGameIdState(nextGameId);
+
+        const nextGame = getRegisteredGame(nextGameId) ?? DEFAULT_GAME;
+        const rawHistory = readPersistedStudioHistory(state, nextGameId);
+        const persistedHistory = normalizeHistoryForGame(rawHistory, nextGame);
+        const initialHistory = createInitialHistoryForGame(nextGame);
         if (persistedHistory) {
           applyHistory(() => persistedHistory, "RESTORED", { persist: false });
         } else {
-          void writePersistedStudioHistory(historyRef.current);
+          applyHistory(() => initialHistory, undefined, { persist: false });
+          const writeHistory = isStaleStarterHistoryForGame(
+            rawHistory,
+            nextGame,
+          )
+            ? writePersistedStudioHistory
+            : writePersistedStudioHistoryIfMissing;
+          void writeHistory(initialHistory, nextGameId);
         }
+        subscription = state.get$("studio").subscribe((value) => {
+          if (!active || !isRecord(value)) return;
 
-        storageReadyRef.current = true;
-        subscription = state
-          .get$(STUDIO_HISTORY_STATE_PATH)
-          .subscribe((value) => {
-            if (!active) return;
-            const syncedHistory = normalizeHistory(value);
-            if (!syncedHistory) return;
+          const syncedGameId =
+            normalizeGameId(value.selectedGameId) ?? selectedGameIdRef.current;
+          const rawHistory =
+            isRecord(value.gamesById) && isRecord(value.gamesById[syncedGameId])
+              ? value.gamesById[syncedGameId].history
+              : syncedGameId === DEFAULT_AUDIO_STUDIO_GAME_ID
+                ? value.history
+                : undefined;
+          const syncedGame = getRegisteredGame(syncedGameId) ?? DEFAULT_GAME;
+          const syncedHistory = normalizeHistoryForGame(rawHistory, syncedGame);
 
-            const signature = historySignature(syncedHistory);
-            if (signature === historySignatureRef.current) return;
+          if (syncedGameId !== selectedGameIdRef.current) {
+            selectedGameIdRef.current = syncedGameId;
+            setSelectedGameIdState(syncedGameId);
+          }
 
-            applyHistory(() => syncedHistory, "RESTORED", { persist: false });
-          });
+          const nextHistory =
+            syncedHistory ?? createInitialHistoryForGame(syncedGame);
+
+          const signature = historySignature(nextHistory);
+          if (signature === historySignatureRef.current) return;
+
+          applyHistory(() => nextHistory, "RESTORED", { persist: false });
+        });
       })
       .catch((error) => {
         if (!active) return;
@@ -221,9 +384,53 @@ export function useStudioHistory(setStatus: (status: string) => void) {
 
   const loadPatch = useCallback(
     (nextPatch: SoundPatch): void => {
-      commit(createSnapshot(nextPatch), "PATCH LOADED");
+      commit(
+        createSnapshot(migratePatchToCurrentSchema(nextPatch)),
+        "PATCH LOADED",
+      );
     },
     [commit],
+  );
+
+  const selectGame = useCallback(
+    (gameId: string): void => {
+      const nextGame = getRegisteredGame(gameId);
+      if (!nextGame || gameId === selectedGameIdRef.current) return;
+
+      userSelectedGameRef.current = true;
+      selectedGameIdRef.current = gameId;
+      setSelectedGameIdState(gameId);
+      void writePersistedSelectedGameId(gameId).catch((error) => {
+        setStatus(error instanceof Error ? error.message : "PERSIST FAILED");
+      });
+
+      void getAudioStudioRxState()
+        .then((state) => {
+          const rawHistory = readPersistedStudioHistory(state, gameId);
+          const persistedHistory = normalizeHistoryForGame(
+            rawHistory,
+            nextGame,
+          );
+          const nextHistory =
+            persistedHistory ?? createInitialHistoryForGame(nextGame);
+          applyHistory(() => nextHistory, "GAME LOADED", { persist: false });
+          if (!persistedHistory) {
+            const writeHistory = isStaleStarterHistoryForGame(
+              rawHistory,
+              nextGame,
+            )
+              ? writePersistedStudioHistory
+              : writePersistedStudioHistoryIfMissing;
+            void writeHistory(nextHistory, gameId);
+          }
+        })
+        .catch((error) => {
+          const nextHistory = createInitialHistoryForGame(nextGame);
+          applyHistory(() => nextHistory, "GAME LOADED", { persist: false });
+          setStatus(error instanceof Error ? error.message : "STORAGE FAILED");
+        });
+    },
+    [applyHistory, setStatus],
   );
 
   const setSelectedNodeId = useCallback(
@@ -371,10 +578,27 @@ export function useStudioHistory(setStatus: (status: string) => void) {
     [patchCurrent],
   );
 
+  const updatePatch = useCallback(
+    (
+      updater: (patch: SoundPatch) => SoundPatch,
+      nextStatus = "EDITED",
+    ): void => {
+      patchCurrent(
+        (current) => ({
+          ...current,
+          patch: updater(clonePatch(current.patch)),
+        }),
+        nextStatus,
+      );
+    },
+    [patchCurrent],
+  );
+
   return {
     addNode,
     arrangeNodes,
     connectToOutput,
+    games,
     history,
     loadPatch,
     moveNode,
@@ -382,10 +606,14 @@ export function useStudioHistory(setStatus: (status: string) => void) {
     removeSelectedNode,
     resetPatch,
     restoreHistory,
+    selectedGame,
+    selectedGameId,
     selectedNode,
+    selectGame,
     setSelectedNodeId,
     undo,
     updateNode,
+    updatePatch,
     updatePreviewValue,
   };
 }
@@ -416,13 +644,35 @@ function normalizeSnapshot(candidate: unknown): StudioSnapshot | null {
 }
 
 function validateSoundPatch(candidate: unknown): SoundPatch | null {
-  const result = validatePatch(candidate);
-  if (!result.valid) return null;
-  return clonePatch(candidate as SoundPatch);
+  try {
+    const patch = migratePatchToCurrentSchema(candidate);
+    const result = validatePatch(patch);
+    if (!result.valid) return null;
+    return clonePatch(patch);
+  } catch {
+    return null;
+  }
 }
 
 function numberOrFallback(value: unknown, fallback: number): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function normalizeGameId(candidate: unknown): string | null {
+  if (typeof candidate !== "string") return null;
+  return getRegisteredGame(candidate) ? candidate : null;
+}
+
+function getRegisteredGame(
+  gameId: string,
+): AudioStudioGameRegistration | undefined {
+  return getAudioStudioGameById(gameId);
+}
+
+function starterPatchIdForGame(
+  game: Pick<AudioStudioGameRegistration, "id">,
+): string {
+  return `${game.id}-starter-effect`;
 }
 
 function historySignature(history: StudioHistory): string {
@@ -481,36 +731,48 @@ function autoArrangeNodes(
 
   const nodeWidth = 150;
   const nodeHeight = 68;
+  const minGap = 8;
+  const preferredColumnGap = 72;
+  const preferredRowGap = 32;
   const paddingX = 64;
   const paddingY = 72;
   const width = Math.max(graphSize.width ?? 920, 360);
   const height = Math.max(graphSize.height ?? 620, 320);
-  const xStep =
+  const columnGap =
     maxDepth === 0
       ? 0
-      : Math.min(
-          260,
-          Math.max(120, (width - nodeWidth - paddingX * 2) / maxDepth),
+      : Math.max(
+          minGap,
+          Math.min(
+            preferredColumnGap,
+            (width - paddingX * 2 - (maxDepth + 1) * nodeWidth) / maxDepth,
+          ),
         );
-  const maxRows = Math.max(
-    1,
-    ...Array.from(layers.values()).map((layer) => layer.length),
-  );
-  const yStep =
-    maxRows === 1
+  const xStep = nodeWidth + columnGap;
+  const rowByNodeId = assignCompactRows(layers, incoming);
+  const rowCount = Math.max(0, ...rowByNodeId.values()) + 1;
+  const rowGap =
+    rowCount === 1
       ? 0
-      : Math.min(
-          132,
-          Math.max(92, (height - nodeHeight - paddingY * 2) / (maxRows - 1)),
+      : Math.max(
+          minGap,
+          Math.min(
+            preferredRowGap,
+            (height - paddingY * 2 - rowCount * nodeHeight) / (rowCount - 1),
+          ),
         );
+  const totalHeight = rowCount * nodeHeight + (rowCount - 1) * rowGap;
+  const totalWidth = (maxDepth + 1) * nodeWidth + maxDepth * columnGap;
+  const left = Math.max(paddingX, Math.round((width - totalWidth) / 2));
+  const top = Math.max(paddingY, Math.round((height - totalHeight) / 2));
   const positions = new Map<string, { x: number; y: number }>();
 
   for (const [depth, layer] of layers) {
-    const top = paddingY + ((maxRows - layer.length) * yStep) / 2;
-    layer.forEach((node, index) => {
+    layer.forEach((node) => {
+      const row = rowByNodeId.get(node.id) ?? 0;
       positions.set(node.id, {
-        x: roundToGrid(paddingX + depth * xStep),
-        y: roundToGrid(top + index * yStep),
+        x: Math.round(left + depth * xStep),
+        y: Math.round(top + row * (nodeHeight + rowGap)),
       });
     });
   }
@@ -524,6 +786,60 @@ function autoArrangeNodes(
   );
 }
 
-function roundToGrid(value: number): number {
-  return Math.round(value / 10) * 10;
+function assignCompactRows(
+  layers: Map<number, AudioNodeConfig[]>,
+  incoming: Map<string, string[]>,
+): Map<string, number> {
+  const rows = new Map<string, number>();
+  const orderedLayers = [...layers.entries()].sort(([a], [b]) => a - b);
+
+  for (const [, layer] of orderedLayers) {
+    const usedRows = new Set<number>();
+    let fallbackRow = 0;
+    const rankedLayer = layer
+      .map((node, index) => {
+        const parentRows = (incoming.get(node.id) ?? [])
+          .map((parentId) => rows.get(parentId))
+          .filter((row): row is number => row !== undefined);
+        const desiredRow =
+          parentRows.length === 0 ? fallbackRow + index : average(parentRows);
+
+        return { desiredRow, node };
+      })
+      .sort(
+        (a, b) =>
+          a.desiredRow - b.desiredRow ||
+          a.node.position.y - b.node.position.y ||
+          a.node.position.x - b.node.position.x,
+      );
+
+    for (const { desiredRow, node } of rankedLayer) {
+      const row = nearestAvailableRow(Math.round(desiredRow), usedRows);
+      usedRows.add(row);
+      rows.set(node.id, row);
+      fallbackRow = Math.max(fallbackRow, row + 1);
+    }
+  }
+
+  return rows;
+}
+
+function nearestAvailableRow(
+  desiredRow: number,
+  usedRows: Set<number>,
+): number {
+  const start = Math.max(0, desiredRow);
+  if (!usedRows.has(start)) return start;
+
+  for (let offset = 1; ; offset += 1) {
+    const lower = start - offset;
+    if (lower >= 0 && !usedRows.has(lower)) return lower;
+
+    const upper = start + offset;
+    if (!usedRows.has(upper)) return upper;
+  }
+}
+
+function average(values: number[]): number {
+  return values.reduce((total, value) => total + value, 0) / values.length;
 }

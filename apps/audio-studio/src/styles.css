@@ -38,7 +38,7 @@ button {
 
 .audio-studio {
   display: grid;
-  grid-template-columns: 260px minmax(460px, 1fr) 324px;
+  grid-template-columns: 260px 8px minmax(460px, 1fr) 324px;
   grid-template-rows: minmax(0, 1fr) 68px;
   height: 100vh;
   overflow: hidden;
@@ -64,6 +64,21 @@ button {
   padding: 14px 12px;
 }
 
+.sidebar-resize-handle {
+  min-width: 8px;
+  cursor: col-resize;
+  border-right: 1px solid var(--sidebar-border);
+  border-left: 1px solid color-mix(in srgb, var(--sidebar-border) 40%, transparent);
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 28%, transparent), transparent),
+    var(--audio-panel);
+}
+
+.sidebar-resize-handle:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
 .inspector {
   border-left: 1px solid var(--sidebar-border);
   padding: 12px;
@@ -73,7 +88,12 @@ button {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
+}
+
+.brand-block {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .brand-mark {
@@ -93,6 +113,22 @@ button {
   height: 18px;
 }
 
+.game-select {
+  width: 100%;
+}
+
+.game-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-option img {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
 h1,
 h2 {
   margin: 0;
@@ -104,26 +140,47 @@ h1 {
   font-size: 20px;
 }
 
-.preset-section {
-  margin-top: 14px;
+.preset-tree {
+  display: grid;
+  align-content: start;
+  gap: 3px;
 }
 
-.preset-section:first-child {
-  margin-top: 0;
+.preset-tree-section {
+  display: grid;
+  gap: 3px;
 }
 
-.preset-section h2 {
+.preset-tree-category {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 5px;
+  padding: 4px 2px;
+  border: 0;
+  background: transparent;
   color: var(--muted-foreground);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;
+  text-align: left;
   text-transform: uppercase;
 }
 
-.preset-list {
+.preset-tree-category svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 120ms ease;
+}
+
+.preset-tree-category[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+.preset-tree-children {
   display: grid;
-  gap: 7px;
-  margin-top: 8px;
+  gap: 4px;
+  margin-bottom: 7px;
 }
 
 .preset,
@@ -142,6 +199,10 @@ h1 {
   text-align: left;
 }
 
+.preset.empty {
+  opacity: 0.52;
+}
+
 .preset.active,
 .workbench-actions button:hover,
 .node-palette button:hover,
@@ -154,9 +215,396 @@ h1 {
 .graph-shell {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+  grid-column: 3;
   min-width: 0;
   min-height: 0;
   padding: 12px;
+}
+
+.workbench-tabs {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+
+.workbench-tabs > [data-slot="tabs-content"] {
+  height: 100%;
+  min-height: 0;
+}
+
+.mode-tabs {
+  margin-bottom: 8px;
+}
+
+.mode-panel {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background:
+    linear-gradient(var(--audio-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--audio-grid) 1px, transparent 1px),
+    rgba(5, 9, 10, 0.8);
+  background-size: 28px 28px;
+}
+
+.mode-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--audio-panel) 90%, transparent);
+}
+
+.mode-toolbar strong {
+  color: var(--primary);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mode-toolbar span {
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+
+.piano-roll,
+.tracker-table,
+.instrument-panel {
+  height: calc(100% - 50px);
+  overflow: auto;
+}
+
+.beat-ruler {
+  display: grid;
+  grid-template-columns: 88px repeat(8, 64px);
+  height: 28px;
+  padding-left: 88px;
+  color: var(--accent);
+  font-size: 11px;
+  border-bottom: 1px solid var(--border);
+}
+
+.beat-ruler span {
+  display: grid;
+  align-items: center;
+  border-left: 1px solid var(--audio-grid);
+}
+
+.piano-grid {
+  position: relative;
+  min-width: 1120px;
+  height: 1470px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 87px,
+      var(--border) 87px 88px,
+      transparent 88px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 63px,
+      color-mix(in srgb, var(--audio-grid) 76%, transparent) 63px 64px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 29px,
+      color-mix(in srgb, var(--audio-grid) 76%, transparent) 29px 30px
+    );
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+
+.piano-key-column {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: repeat(49, 30px);
+  width: 88px;
+  background: color-mix(in srgb, var(--audio-panel) 88%, transparent);
+}
+
+.piano-key-column span {
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid color-mix(in srgb, var(--audio-grid) 76%, transparent);
+  color: var(--foreground);
+  font-size: 12px;
+}
+
+.piano-note-lanes {
+  position: absolute;
+  inset: 0 0 0 88px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 15px,
+      color-mix(in srgb, var(--audio-grid) 36%, transparent) 15px 16px,
+      transparent 16px 63px,
+      color-mix(in srgb, var(--audio-grid) 82%, transparent) 63px 64px
+    );
+  pointer-events: none;
+}
+
+.piano-note {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  height: 22px;
+  overflow: hidden;
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--primary) 38%, var(--audio-panel));
+  color: var(--primary-foreground);
+  cursor: grab;
+  font-size: 11px;
+  line-height: 1;
+  text-align: center;
+  touch-action: none;
+}
+
+.piano-note:active {
+  cursor: grabbing;
+}
+
+.piano-note-resize {
+  position: absolute;
+  inset: 2px 0 2px auto;
+  width: 10px;
+  border-left: 1px solid color-mix(in srgb, var(--primary) 68%, white 20%);
+  cursor: ew-resize;
+}
+
+.piano-note-resize:focus-visible {
+  outline: 1px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.tracker-table {
+  display: grid;
+  align-content: start;
+  padding: 10px;
+}
+
+.tracker-row {
+  display: grid;
+  grid-template-columns: 52px 90px minmax(120px, 1fr) 88px 60px 64px;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--audio-grid);
+  color: var(--foreground);
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 12px;
+}
+
+.tracker-head {
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.empty-state {
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.instrument-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 12px;
+  padding: 12px;
+}
+
+.instrument-module {
+  min-height: 190px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+    color-mix(in srgb, var(--audio-panel-strong) 88%, black 12%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.instrument-module h3 {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.waveform-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.waveform-button {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  align-items: center;
+  height: auto;
+  gap: 8px;
+  padding: 7px;
+  text-transform: capitalize;
+}
+
+.waveform-button.active {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.waveform-button svg,
+.waveform-module svg {
+  width: 82px;
+  height: 28px;
+  stroke: currentColor;
+  stroke-width: 2.5;
+}
+
+.knob-module label {
+  align-items: center;
+  justify-items: center;
+}
+
+.audio-knob-control {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+}
+
+.audio-knob-face {
+  display: block;
+  width: 124px;
+  height: 124px;
+  cursor: ns-resize;
+  touch-action: none;
+  user-select: none;
+}
+
+.audio-knob-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.audio-knob-scale {
+  fill: none;
+  stroke: color-mix(in srgb, var(--muted-foreground) 62%, transparent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 4 5;
+}
+
+.audio-knob-tick {
+  stroke: color-mix(in srgb, var(--muted-foreground) 80%, transparent);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.audio-knob-body {
+  fill: color-mix(in srgb, var(--background) 82%, var(--primary) 18%);
+  stroke: color-mix(in srgb, var(--primary) 58%, var(--border));
+  stroke-width: 1.2;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45));
+}
+
+.audio-knob-cap {
+  fill: color-mix(in srgb, var(--foreground) 20%, transparent);
+  opacity: 0.4;
+}
+
+.audio-knob-pointer {
+  stroke: var(--primary);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--primary) 70%, transparent));
+}
+
+.audio-knob-label {
+  fill: color-mix(in srgb, var(--foreground) 76%, transparent);
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-anchor: middle;
+}
+
+.audio-knob-label-end {
+  fill: color-mix(in srgb, var(--accent) 82%, var(--foreground));
+}
+
+.audio-knob-control .audio-knob-slider {
+  width: min(180px, 100%);
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  accent-color: var(--primary);
+  cursor: ew-resize;
+}
+
+.audio-knob-slider::-webkit-slider-runnable-track {
+  height: 7px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 42%, transparent);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--accent) 72%, var(--primary))),
+    color-mix(in srgb, var(--background) 78%, white 8%);
+  background-blend-mode: screen, normal;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.58);
+}
+
+.audio-knob-slider::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  margin-top: -5px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 68%, transparent);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.42), transparent 28%),
+    var(--primary);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--primary) 45%, transparent);
+  appearance: none;
+}
+
+.audio-knob-slider::-moz-range-track {
+  height: 7px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 42%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 58%, var(--background));
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.58);
+}
+
+.audio-knob-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 68%, transparent);
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--primary) 45%, transparent);
+}
+
+.envelope-module {
+  display: grid;
+  align-content: start;
+  gap: 12px;
 }
 
 .graph-header {
@@ -213,6 +661,7 @@ button:disabled {
 
 .graph-canvas {
   position: relative;
+  height: 100%;
   min-height: 0;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -222,6 +671,26 @@ button:disabled {
     linear-gradient(90deg, var(--audio-grid) 1px, transparent 1px),
     rgba(5, 9, 10, 0.74);
   background-size: 28px 28px;
+  cursor: grab;
+}
+
+.workbench-tabs .graph-canvas {
+  min-height: 360px;
+}
+
+.graph-canvas.panning {
+  cursor: grabbing;
+}
+
+.graph-canvas.panning .graph-node {
+  cursor: grabbing;
+}
+
+.graph-content {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  will-change: transform;
 }
 
 .connections {
@@ -229,6 +698,7 @@ button:disabled {
   inset: 0;
   width: 100%;
   height: 100%;
+  overflow: visible;
   pointer-events: none;
 }
 
@@ -242,6 +712,7 @@ button:disabled {
 .graph-node {
   position: absolute;
   display: block;
+  cursor: pointer;
   width: 150px;
   min-height: 68px;
   padding: 12px 14px;

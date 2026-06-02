@@ -15,7 +15,13 @@
       "path": "../../libs/typed-event-emitter/tsconfig.lib.json"
     },
     {
+      "path": "../../libs/audio-tools/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/shaders/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/sprite-tools/tsconfig.lib.json"
     }
   ]
 }

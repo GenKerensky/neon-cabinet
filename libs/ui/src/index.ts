@@ -9,4 +9,7 @@ export * from "./components/ui/select";
 export * from "./components/ui/separator";
 export * from "./components/ui/slider";
 export * from "./components/ui/textarea";
+export * from "./components/ui/tabs";
 export * from "./components/ui/tooltip";
+export * from "./components/audio-knob";
+export * from "./components/waveform-preview";

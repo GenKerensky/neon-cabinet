@@ -1,7 +1,5 @@
-import type { Physics } from "phaser";
-
 export function wrapObject(
-  obj: Physics.Arcade.Sprite,
+  obj: { x: number; y: number },
   width: number,
   height: number,
   padding = 20,

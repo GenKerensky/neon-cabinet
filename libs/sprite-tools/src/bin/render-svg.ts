@@ -1,6 +1,6 @@
 import sharp from "sharp";
 import fs from "fs";
-import { JSDOM } from "jsdom";
+import { Window } from "happy-dom";
 import { SVGParser } from "../lib/svg-parser.js";
 
 declare global {
@@ -9,7 +9,7 @@ declare global {
 }
 
 if (typeof globalThis !== "undefined" && !("DOMParser" in globalThis)) {
-  const { window } = new JSDOM();
+  const window = new Window();
   (
     globalThis as { DOMParser: typeof DOMParser; SVGElement: typeof SVGElement }
   ).DOMParser = window.DOMParser;

@@ -7,6 +7,10 @@ import { Missile } from "../objects/Missile";
 import { WeaponManager } from "../objects/WeaponManager";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
+import { SpaceDefenderAudio } from "../audio/SpaceDefenderAudio";
+import { createVectorPuppet } from "../objects/VectorEffects";
+import type { SpaceDefenderVectorAssetId } from "../config/vectorAssets";
+import type { VectorPuppet } from "@neon-cabinet/sprite-tools";
 
 export class Game extends Scene {
   private ship!: Ship;
@@ -15,6 +19,7 @@ export class Game extends Scene {
   private particles!: GameObjects.Particles.ParticleEmitter;
   private missileExplosionParticles!: GameObjects.Particles.ParticleEmitter;
   private weaponManager!: WeaponManager;
+  private audio!: SpaceDefenderAudio;
 
   private score = 0;
   private lives = 3;
@@ -22,11 +27,11 @@ export class Game extends Scene {
 
   private scoreText!: GameObjects.Text;
   private livesContainer!: GameObjects.Container;
-  private livesSprites: GameObjects.Image[] = [];
+  private livesSprites: VectorPuppet[] = [];
   private infinityText!: GameObjects.Text;
   private waveText!: GameObjects.Text;
   private weaponNameText!: GameObjects.Text;
-  private weaponIcon!: GameObjects.Image;
+  private weaponIcon!: VectorPuppet;
   private cooldownCircle!: GameObjects.Graphics;
   private reloadText!: GameObjects.Text;
 
@@ -46,6 +51,10 @@ export class Game extends Scene {
     this.wave = 1;
     this.canShoot = true;
     this.cheatMode = false;
+    this.audio = new SpaceDefenderAudio();
+    this.events.once("destroy", () => {
+      this.audio.destroy();
+    });
 
     // Set background
     this.cameras.main.setBackgroundColor(0x000000);
@@ -122,9 +131,11 @@ export class Game extends Scene {
     // Setup weapon manager
     this.weaponManager = new WeaponManager(this, this.bullets, this.asteroids);
     this.weaponManager.setOnWeaponUnlock((weapon) => {
+      this.audio.playWeaponUnlock();
       this.showWeaponUnlock(weapon.name);
     });
     this.weaponManager.setOnWeaponChange(() => {
+      this.audio.playWeaponSwitch();
       this.updateWeaponHUD();
     });
     this.weaponManager.setOnMissileAutoDetonate((missile) => {
@@ -160,6 +171,9 @@ export class Game extends Scene {
       if (!this.scene.isPaused("Game")) {
         // Remove shader before pausing to prevent double-shader effect
         // this.cameras.main.removePostPipeline("VectorShader");
+        this.audio.playPause();
+        this.audio.updateThrust(0, this.ship.getThrustAudioState().pan);
+        this.ship.stopThrust();
         this.scene.pause("Game");
         this.scene.launch("Pause");
       }
@@ -175,6 +189,7 @@ export class Game extends Scene {
 
     // Spawn initial wave
     this.spawnWave();
+    this.audio.playGameStart();
 
     // Emit event for React bridge
     EventBus.emit("current-scene-ready", this);
@@ -244,19 +259,17 @@ export class Game extends Scene {
     const weapon = this.weaponManager.getCurrentWeapon();
     const weaponY = this.cameras.main.height - margin;
 
-    // Weapon icon sprite
-    this.weaponIcon = this.add.image(
+    this.weaponIcon = this.createHudIcon(
+      weapon.textureKey as SpaceDefenderVectorAssetId,
       this.cameras.main.width - margin,
       weaponY,
-      weapon.textureKey,
     );
     this.weaponIcon.setScrollFactor(0);
     this.weaponIcon.setScale(1);
-    this.weaponIcon.setOrigin(1, 0.5); // Right-aligned, vertically centered
 
     // Weapon name text
     this.weaponNameText = this.add.text(
-      this.cameras.main.width - margin - 40, // Position to the left of icon
+      this.cameras.main.width - margin - 48,
       weaponY,
       weapon.name,
       {
@@ -307,7 +320,12 @@ export class Game extends Scene {
       // Create ship sprites for each life
       const shipSpacing = 35;
       for (let i = 0; i < this.lives; i++) {
-        const shipSprite = this.add.image(i * shipSpacing, 0, "ship");
+        const shipSprite = createVectorPuppet(
+          this,
+          "lifeIcon",
+          i * shipSpacing,
+          0,
+        );
         shipSprite.setScrollFactor(0);
         shipSprite.setScale(0.8);
         this.livesContainer.add(shipSprite);
@@ -319,7 +337,26 @@ export class Game extends Scene {
   private updateWeaponHUD(): void {
     const weapon = this.weaponManager.getCurrentWeapon();
     this.weaponNameText.setText(weapon.name);
-    this.weaponIcon.setTexture(weapon.textureKey);
+    const x = this.weaponIcon.x;
+    const y = this.weaponIcon.y;
+    this.weaponIcon.destroy();
+    this.weaponIcon = this.createHudIcon(
+      weapon.textureKey as SpaceDefenderVectorAssetId,
+      x,
+      y,
+    );
+  }
+
+  private createHudIcon(
+    assetId: SpaceDefenderVectorAssetId,
+    x: number,
+    y: number,
+  ): VectorPuppet {
+    const icon = createVectorPuppet(this, assetId, x, y);
+    icon.setScrollFactor(0);
+    icon.setScale(1);
+    icon.setDepth(100);
+    return icon;
   }
 
   private showWeaponUnlock(weaponName: string): void {
@@ -431,6 +468,7 @@ export class Game extends Scene {
     if (!this.canShoot || !this.ship.active) return;
 
     const pointer = this.input.activePointer;
+    const weapon = this.weaponManager.getCurrentWeapon();
     this.weaponManager.fire(
       this.ship,
       pointer.worldX,
@@ -439,6 +477,11 @@ export class Game extends Scene {
         this.handleLaserHit(asteroid, x, y);
       },
     );
+    this.audio.playWeapon(weapon.name, {
+      pan: this.ship.getThrustAudioState().pan,
+      intensity: 1,
+      distance: 0,
+    });
 
     this.canShoot = false;
     this.cooldownStartTime = this.time.now;
@@ -451,6 +494,7 @@ export class Game extends Scene {
 
   private handleLaserHit(asteroid: Asteroid, x: number, y: number): void {
     if (!asteroid.active) return;
+    this.audio.playAsteroidDestruction({ pan: this.getPanForX(x) });
 
     // Explosion particles
     this.particles.explode(10, x, y);
@@ -497,6 +541,7 @@ export class Game extends Scene {
     const explosion = m.explode();
     if (!explosion) return;
 
+    this.audio.playMissileDetonation({ pan: this.getPanForX(explosion.x) });
     this.createMissileExplosion(explosion.x, explosion.y, explosion.radius);
 
     // Damage all asteroids in blast radius
@@ -523,6 +568,9 @@ export class Game extends Scene {
     asteroidsToDestroy.forEach((asteroid) => {
       // Add score
       this.score += asteroid.points;
+      this.audio.playAsteroidDestruction({
+        pan: this.getPanForX(asteroid.x),
+      });
 
       // Explosion particles for each asteroid
       this.particles.explode(10, asteroid.x, asteroid.y);
@@ -553,6 +601,7 @@ export class Game extends Scene {
     const explosion = missile.explode();
     if (!explosion) return;
 
+    this.audio.playMissileDetonation({ pan: this.getPanForX(explosion.x) });
     this.createMissileExplosion(explosion.x, explosion.y, explosion.radius);
 
     const asteroids = this.asteroids.getChildren() as Asteroid[];
@@ -577,6 +626,9 @@ export class Game extends Scene {
     // Process all hit asteroids
     asteroidsToDestroy.forEach((asteroid) => {
       this.score += asteroid.points;
+      this.audio.playAsteroidDestruction({
+        pan: this.getPanForX(asteroid.x),
+      });
       this.particles.explode(10, asteroid.x, asteroid.y);
 
       const randomAngle = PhaserMath.FloatBetween(0, Math.PI * 2);
@@ -650,6 +702,7 @@ export class Game extends Scene {
 
     // Explosion particles
     this.particles.explode(10, a.x, a.y);
+    this.audio.playAsteroidHit({ pan: this.getPanForX(a.x) });
 
     // Add score
     this.score += a.points;
@@ -693,6 +746,7 @@ export class Game extends Scene {
     if (s.getIsInvulnerable() || !s.active) return;
 
     // Immediately deactivate to prevent multiple collision triggers
+    this.audio.playShipCollision();
     s.setActive(false);
     s.setVisible(false);
     s.stopThrust();
@@ -709,6 +763,7 @@ export class Game extends Scene {
     this.updateHUD();
 
     if (this.lives <= 0 && !this.cheatMode) {
+      this.audio.playShipDestruction();
       this.time.delayedCall(1500, () => {
         this.scene.start("GameOver", { score: this.score });
       });
@@ -736,6 +791,7 @@ export class Game extends Scene {
   }
 
   private nextWave(): void {
+    this.audio.playWaveClear();
     this.wave++;
     this.updateHUD();
 
@@ -825,9 +881,17 @@ export class Game extends Scene {
   update(): void {
     if (this.ship.active) {
       this.ship.update();
+      const thrust = this.ship.getThrustAudioState();
+      this.audio.updateThrust(thrust.intensity, thrust.pan);
+    } else {
+      this.audio.updateThrust(0, 0);
     }
 
     this.updateCooldownCircle();
+  }
+
+  private getPanForX(x: number): number {
+    return PhaserMath.Clamp((x / this.cameras.main.width) * 2 - 1, -1, 1);
   }
 
   private updateCooldownCircle(): void {

@@ -17,16 +17,18 @@ export interface IRefPhaserGame {
 }
 
 interface IProps {
+  assetBaseUrl?: string;
   currentActiveScene?: (scene: Scene) => void;
 }
 
 export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
-  function PhaserGame({ currentActiveScene }, ref) {
+  function PhaserGame({ assetBaseUrl, currentActiveScene }, ref) {
     const game = useRef<Game | undefined>(undefined);
 
     useLayoutEffect(() => {
       if (game.current === undefined) {
         const config: Types.Core.GameConfig & {
+          customAssetBaseUrl?: string;
           customFontFamily?: string;
         } = {
           type: AUTO,
@@ -34,6 +36,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           height: 1200,
           parent: "phaser-game",
           backgroundColor: "#000000",
+          customAssetBaseUrl: assetBaseUrl,
           customFontFamily: FONT_FAMILY,
           scale: {
             mode: Scale.FIT,
@@ -57,6 +60,12 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           },
           scene: [Boot, Title, MainGame, GameOver, Pause],
           callbacks: {
+            preBoot: (gameInstance) => {
+              gameInstance.registry.set("fontFamily", FONT_FAMILY);
+              if (assetBaseUrl) {
+                gameInstance.registry.set("assetBaseUrl", assetBaseUrl);
+              }
+            },
             postBoot: (gameInstance) => {
               const renderer =
                 gameInstance.renderer as Renderer.WebGL.WebGLRenderer;
@@ -98,7 +107,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           game.current = undefined;
         }
       };
-    }, [ref]);
+    }, [assetBaseUrl, ref]);
 
     useEffect(() => {
       const handleSceneReady = (scene_instance: Scene) => {

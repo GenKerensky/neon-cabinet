@@ -26,7 +26,11 @@ export default function MarsLanderPage() {
 
   return (
     <GameView>
-      <PhaserGame ref={phaserRef} currentActiveScene={onCurrentActiveScene} />
+      <PhaserGame
+        ref={phaserRef}
+        assetBaseUrl="/mars-lander-assets"
+        currentActiveScene={onCurrentActiveScene}
+      />
     </GameView>
   );
 }

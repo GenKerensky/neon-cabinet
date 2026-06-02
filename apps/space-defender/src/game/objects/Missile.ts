@@ -1,7 +1,12 @@
-import { Math as PhaserMath, Physics } from "phaser";
+import { Math as PhaserMath } from "phaser";
 import type { GameObjects, Scene } from "phaser";
+import {
+  getSpaceDefenderVectorMetadata,
+  createEmptyVectorMetadata,
+} from "../config/vectorAssets";
+import { VectorPhysicsPuppet } from "./VectorPhysicsPuppet";
 
-export class Missile extends Physics.Arcade.Sprite {
+export class Missile extends VectorPhysicsPuppet {
   private lifespan = 3000;
   private spawnTime = 0;
   private speed = 250;
@@ -12,17 +17,24 @@ export class Missile extends Physics.Arcade.Sprite {
   private exhaustAngleDeg = 0;
 
   constructor(scene: Scene, x: number, y: number, aimAngle: number) {
-    super(scene, x, y, "missile");
+    super(
+      scene,
+      x,
+      y,
+      getSpaceDefenderVectorMetadata(
+        scene,
+        "missile",
+        createEmptyVectorMetadata(28, 18),
+      ),
+      24,
+      12,
+    );
 
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
-
-    // Sprite points right by default, so rotation = aimAngle
+    this.setBodySize(24, 12);
     this.setRotation(aimAngle);
     this.exhaustAngleDeg = PhaserMath.RadToDeg(aimAngle + Math.PI);
 
-    // Create flame trail
-    this.trailEmitter = scene.add.particles(x, y, "missile_trail", {
+    this.trailEmitter = scene.add.particles(x, y, "particle", {
       color: [0xffffff, 0xffee66, 0xffaa22, 0xff6622, 0xff3311],
       colorEase: "quad.out",
       lifespan: 100,
@@ -44,7 +56,6 @@ export class Missile extends Physics.Arcade.Sprite {
 
   fire(): void {
     this.spawnTime = this.scene.time.now;
-    // Rotation directly equals the travel angle
     this.setVelocity(
       Math.cos(this.rotation) * this.speed,
       Math.sin(this.rotation) * this.speed,
@@ -56,10 +67,11 @@ export class Missile extends Physics.Arcade.Sprite {
     this.onAutoDetonate = callback;
   }
 
-  update(): void {
+  override update(): void {
+    super.update(this.scene.time.now, this.scene.game.loop.delta);
+
     if (this.hasExploded) return;
 
-    // Check lifespan - auto-detonate after 3 seconds
     if (this.scene.time.now - this.spawnTime > this.lifespan) {
       if (this.onAutoDetonate) {
         this.onAutoDetonate(this);
@@ -69,7 +81,6 @@ export class Missile extends Physics.Arcade.Sprite {
       return;
     }
 
-    // Track mouse cursor
     const pointer = this.scene.input.activePointer;
     const targetAngle = PhaserMath.Angle.Between(
       this.x,
@@ -77,20 +88,11 @@ export class Missile extends Physics.Arcade.Sprite {
       pointer.worldX,
       pointer.worldY,
     );
-
-    // Current velocity angle
     const currentAngle = Math.atan2(
-      this.body?.velocity.y ?? 0,
-      this.body?.velocity.x ?? 0,
+      this.arcadeBody.velocity.y,
+      this.arcadeBody.velocity.x,
     );
-
-    // Smoothly rotate toward target
-    let angleDiff = targetAngle - currentAngle;
-
-    // Normalize angle difference to -PI to PI
-    while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
-    while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
-
+    const angleDiff = PhaserMath.Angle.Wrap(targetAngle - currentAngle);
     const newAngle = currentAngle + angleDiff * this.turnRate;
 
     this.setVelocity(
@@ -99,15 +101,11 @@ export class Missile extends Physics.Arcade.Sprite {
     );
     this.setRotation(newAngle);
 
-    // Update trail position and angle
     const exhaustAngle = newAngle + Math.PI;
     this.exhaustAngleDeg = PhaserMath.RadToDeg(exhaustAngle);
-    this.trailEmitter.setPosition(
-      this.x - Math.cos(newAngle) * 10,
-      this.y - Math.sin(newAngle) * 10,
-    );
+    const exhaust = this.getSocketWorldPosition("socket_exhaust");
+    this.trailEmitter.setPosition(exhaust.x, exhaust.y);
 
-    // Screen wrap
     const width = this.scene.cameras.main.width;
     const height = this.scene.cameras.main.height;
 
@@ -131,7 +129,7 @@ export class Missile extends Physics.Arcade.Sprite {
     return explosionData;
   }
 
-  destroy(fromScene?: boolean): void {
+  override destroy(fromScene?: boolean): void {
     if (this.trailEmitter && !this.hasExploded) {
       this.trailEmitter.destroy();
     }

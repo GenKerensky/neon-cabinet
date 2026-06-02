@@ -226,6 +226,25 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
             layer.height || 0,
           );
       }
+    } else if (layer.type === "line") {
+      graphics.beginPath();
+      graphics.moveTo(layer.x1 || 0, layer.y1 || 0);
+      graphics.lineTo(layer.x2 || 0, layer.y2 || 0);
+      if (stroke && stroke !== "none") graphics.strokePath();
+    } else if (layer.type === "polyline" || layer.type === "polygon") {
+      const points = layer.points || [];
+      if (points.length > 0) {
+        graphics.beginPath();
+        graphics.moveTo(points[0].x, points[0].y);
+        points.slice(1).forEach((point) => {
+          graphics.lineTo(point.x, point.y);
+        });
+        if (layer.type === "polygon") {
+          graphics.closePath();
+        }
+        if (fill && fill !== "none") graphics.fillPath();
+        if (stroke && stroke !== "none") graphics.strokePath();
+      }
     }
   }
 
@@ -518,6 +537,28 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
     }
   }
 
+  public setLayerAlpha(layerId: string, alpha: number) {
+    const gameObject = this.layers.get(layerId);
+    if (gameObject) {
+      gameObject.alpha = alpha;
+    }
+  }
+
+  public setLayerScale(layerId: string, scale: number) {
+    const gameObject = this.layers.get(layerId);
+    if (gameObject) {
+      gameObject.setScale(scale);
+    }
+  }
+
+  public setLayerRotation(layerId: string, rotation: number) {
+    const gameObject =
+      this.directionRotationTargets.get(layerId) ?? this.layers.get(layerId);
+    if (gameObject) {
+      gameObject.rotation = rotation;
+    }
+  }
+
   public setDirection(dir: Direction) {
     this.currentDirection = dir;
 
@@ -598,6 +639,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
       const wobbleAnim = layer.animations.find((a) => a.type === "wobble");
       const chompAnim = layer.animations.find((a) => a.type === "chomp");
       const flashAnim = layer.animations.find((a) => a.type === "flash");
+      const pulseAnim = layer.animations.find((a) => a.type === "pulse");
 
       const isGraphics = gameObject instanceof Phaser.GameObjects.Graphics;
 
@@ -612,6 +654,9 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
       }
       if (flashAnim && isGraphics) {
         this.applyFlashAnimation(gameObject, layer, flashAnim, time);
+      }
+      if (pulseAnim) {
+        this.applyPulseAnimation(gameObject, layer, pulseAnim, time);
       }
     });
   }
@@ -845,6 +890,20 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
     const strokeColor =
       layer.stroke && layer.stroke !== "none" ? colorStr : layer.stroke;
     this.drawLayer(layer, graphics, colorStr, strokeColor);
+  }
+
+  private applyPulseAnimation(
+    gameObject: LayerGameObject,
+    layer: LayerMetadata,
+    anim: AnimationMetadata,
+    time: number,
+  ) {
+    const phase = Math.sin(
+      time * 0.001 * (anim.speed || 1) * anim.frequency * Math.PI * 2,
+    );
+    const pulse = phase * anim.amplitude;
+    gameObject.alpha = (layer.opacity ?? 1) * Math.max(0, 1 + pulse);
+    gameObject.setScale(Math.max(0.01, 1 + pulse));
   }
 
   private getDirectionRotationDegrees(

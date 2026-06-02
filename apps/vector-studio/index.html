@@ -370,6 +370,69 @@
         font-size: 10px;
         line-height: 1.5;
       }
+
+      select,
+      input[type="number"] {
+        width: 100%;
+        min-height: 34px;
+        padding: 0 10px;
+        color: var(--text);
+        font: inherit;
+        font-size: 11px;
+        background: rgba(0, 0, 0, 0.28);
+        border: 1px solid rgba(0, 255, 213, 0.24);
+        border-radius: 8px;
+      }
+
+      .control-line {
+        display: grid;
+        grid-template-columns: 1fr 64px;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .control-value {
+        color: var(--accent);
+        font-size: 11px;
+        text-align: right;
+      }
+
+      .toggle-line {
+        display: flex;
+        align-items: center;
+        min-height: 28px;
+        color: #c9fff4;
+        font-size: 12px;
+      }
+
+      #unsupported-warnings {
+        margin-top: 8px;
+        color: #ffd4ee;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .layer-control-row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 6px 8px;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .layer-control-row > label:first-of-type {
+        min-width: 0;
+      }
+
+      .layer-range {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        gap: 8px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 10px;
+      }
     </style>
   </head>
   <body>
@@ -381,14 +444,28 @@
         <div class="asset-chip">
           <span>Asset</span> <span id="asset-path">None</span>
         </div>
+        <div id="unsupported-warnings"></div>
       </div>
 
       <section class="panel-section">
         <div class="section-title">Preview</div>
+        <select id="asset-select" aria-label="Preview asset"></select>
         <div class="button-row">
           <button id="reload-btn">Reload</button>
           <button id="toggle-shader-btn">Shader</button>
         </div>
+        <div class="button-row" style="margin-top: 10px">
+          <button id="shader-color-btn" class="is-active">Color</button>
+          <button id="shader-mono-btn">Mono</button>
+        </div>
+        <label class="toggle-line">
+          <input id="socket-overlay-control" type="checkbox" checked />
+          Sockets
+        </label>
+        <label class="toggle-line">
+          <input id="collider-overlay-control" type="checkbox" checked />
+          Colliders
+        </label>
       </section>
 
       <section class="panel-section">
@@ -400,6 +477,22 @@
           <button class="dir-btn dir-right" data-dir="RIGHT">→</button>
           <button class="dir-btn dir-down" data-dir="DOWN">↓</button>
         </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-title">Rotation</div>
+        <div class="control-line">
+          <input
+            id="rotation-control"
+            type="range"
+            min="-180"
+            max="180"
+            step="1"
+            value="0"
+          />
+          <input id="rotation-input" type="number" min="-360" max="360" value="0" />
+        </div>
+        <div class="control-value" id="rotation-value">0deg</div>
       </section>
 
       <section class="panel-section">

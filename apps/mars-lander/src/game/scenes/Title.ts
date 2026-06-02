@@ -2,12 +2,16 @@ import { Display, Math as PhaserMath, Scene } from "phaser";
 import type { GameObjects } from "phaser";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
+import { VectorPuppet } from "@neon-cabinet/sprite-tools";
+import { createLanderPuppetMetadata } from "../objects/Lander";
+import { MarsLanderAudio } from "../audio/MarsLanderAudio";
 
 export class Title extends Scene {
   private titleText!: GameObjects.Text;
   private subtitleText!: GameObjects.Text;
   private startText!: GameObjects.Text;
-  private landerPreview!: GameObjects.Image;
+  private landerPreview!: VectorPuppet;
+  private audio!: MarsLanderAudio;
 
   constructor() {
     super("Title");
@@ -16,6 +20,9 @@ export class Title extends Scene {
   create(): void {
     const { width, height } = this.cameras.main;
     const font = getFontFamily(this);
+    this.audio = new MarsLanderAudio(this);
+    this.audio.playTitlePlaceholder();
+    this.events.once("shutdown", () => this.audio.destroy());
 
     // Apply vector shader
     this.cameras.main.setPostPipeline("VectorShader");
@@ -100,7 +107,12 @@ export class Title extends Scene {
     }
 
     // Lander preview with floating animation
-    this.landerPreview = this.add.image(width / 2, height * 0.55, "lander");
+    this.landerPreview = new VectorPuppet(
+      this,
+      width / 2,
+      height * 0.55,
+      createLanderPuppetMetadata(this),
+    );
     this.landerPreview.setScale(1.5);
     this.landerPreview.setDepth(5);
 
@@ -169,11 +181,11 @@ export class Title extends Scene {
 
     // Input handling
     this.input.keyboard?.once("keydown-SPACE", () => {
-      this.scene.start("Game");
+      this.startGame();
     });
 
     this.input.once("pointerdown", () => {
-      this.scene.start("Game");
+      this.startGame();
     });
 
     EventBus.emit("current-scene-ready", this);
@@ -248,5 +260,11 @@ export class Title extends Scene {
 
   update(): void {
     // Stars could animate here if needed
+  }
+
+  private startGame(): void {
+    this.audio.playStart();
+    this.audio.stopTitlePlaceholder();
+    this.scene.start("Game");
   }
 }

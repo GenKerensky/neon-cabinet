@@ -8,10 +8,12 @@
     ".": "./dist/index.js"
   },
   "dependencies": {
+    "@neon-cabinet/audio-tools": "workspace:*",
     "@neon-cabinet/shaders": "workspace:*",
+    "@neon-cabinet/sprite-tools": "workspace:*",
+    "@neon-cabinet/typed-event-emitter": "workspace:*",
     "phaser": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:",
-    "@neon-cabinet/typed-event-emitter": "workspace:*"
+    "react-dom": "catalog:"
   }
 }

@@ -48,7 +48,7 @@ export default defineConfig(() => ({
     name: "@neon-cabinet/sprite-tools",
     watch: false,
     globals: true,
-    environment: "jsdom",
+    environment: "happy-dom",
     setupFiles: ["./vitest.setup.ts"],
     include: ["{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     reporters: ["default"],

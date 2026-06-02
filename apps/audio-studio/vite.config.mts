@@ -25,7 +25,7 @@ export default defineConfig(() => ({
     name: "audio-studio",
     watch: false,
     globals: true,
-    environment: "jsdom",
+    environment: "happy-dom",
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
     setupFiles: ["./src/test-setup.ts"],
     reporters: ["default"],

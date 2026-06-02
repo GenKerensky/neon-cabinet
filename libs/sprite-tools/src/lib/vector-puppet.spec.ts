@@ -467,4 +467,65 @@ describe("VectorPuppet", () => {
     const mouthRad = (20 * Math.PI) / 180;
     expect(capturedStart).toBeCloseTo(Math.PI + mouthRad / 2, 5);
   });
+
+  it("allows callers to directly control layer alpha, scale, and rotation", () => {
+    const scene = new MockScene();
+    const puppet = createPuppet(scene, 0, 0, {
+      viewBox: { x: 0, y: 0, width: 100, height: 100 },
+      layers: [
+        {
+          id: "engine-glow",
+          type: "circle",
+          cx: 50,
+          cy: 50,
+          r: 8,
+          animations: [],
+          material: {},
+        },
+      ],
+      sockets: [],
+    });
+
+    puppet.setLayerAlpha("engine-glow", 0.42);
+    puppet.setLayerScale("engine-glow", 1.35);
+    puppet.setLayerRotation("engine-glow", Math.PI / 4);
+
+    const layer = puppet.getLayer("engine-glow");
+    expect(layer?.alpha).toBe(0.42);
+    expect(layer?.scale).toBe(1.35);
+    expect(layer?.rotation).toBeCloseTo(Math.PI / 4, 5);
+  });
+
+  it("applies pulse animation as alpha and scale oscillation", () => {
+    const scene = new MockScene();
+    const puppet = createPuppet(scene, 0, 0, {
+      viewBox: { x: 0, y: 0, width: 100, height: 100 },
+      layers: [
+        {
+          id: "pulse",
+          type: "circle",
+          cx: 50,
+          cy: 50,
+          r: 8,
+          opacity: 0.7,
+          animations: [
+            {
+              type: "pulse",
+              frequency: 1,
+              amplitude: 0.25,
+              speed: 1,
+            },
+          ],
+          material: {},
+        },
+      ],
+      sockets: [],
+    });
+
+    puppet.update(250, 16);
+
+    const layer = puppet.getLayer("pulse");
+    expect(layer?.alpha).toBeCloseTo(0.875, 5);
+    expect(layer?.scale).toBeCloseTo(1.25, 5);
+  });
 });
