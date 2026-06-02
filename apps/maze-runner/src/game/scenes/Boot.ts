@@ -1,7 +1,28 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { ghostDefinitions } from "../config/ghostDefinitions";
+import { hackPickupDefinitions } from "../config/hackDefinitions";
 import { VectorMode } from "../utils/settings";
+
+interface MazeRunnerGameConfig {
+  customAssetBaseUrl?: string;
+  customFontFamily?: string;
+}
+
+const normalizeAssetBaseUrl = (value: unknown): string | undefined => {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim().replace(/\/+$/, "");
+  return trimmed.length > 0 ? trimmed : undefined;
+};
+
+const stripAssetPrefix = (path: string): string => {
+  return path.replace(/^\/?assets\//, "");
+};
+
+const resolveAssetPath = (path: string, assetBaseUrl?: string): string => {
+  if (!assetBaseUrl) return path;
+  return `${assetBaseUrl}/${stripAssetPrefix(path)}`;
+};
 
 export class Boot extends Scene {
   constructor() {
@@ -9,31 +30,64 @@ export class Boot extends Scene {
   }
 
   preload(): void {
-    this.load.text("player_svg", "assets/vector/player.svg");
+    const assetBaseUrl = normalizeAssetBaseUrl(
+      this.registry.get("assetBaseUrl") ??
+        (this.game.config as MazeRunnerGameConfig).customAssetBaseUrl,
+    );
+    const assetPath = (path: string) => resolveAssetPath(path, assetBaseUrl);
+
+    this.load.text("player_svg", assetPath("assets/vector/player.svg"));
     for (const definition of ghostDefinitions) {
-      this.load.text(definition.svgCacheKey, definition.assetPath);
+      this.load.text(definition.svgCacheKey, assetPath(definition.assetPath));
     }
-    this.load.audio("maze_runner_move", "assets/audio/player-move.wav");
-    this.load.audio("maze_runner_pellet", "assets/audio/pellet.wav");
+    for (const definition of hackPickupDefinitions) {
+      this.load.text(definition.svgCacheKey, assetPath(definition.assetPath));
+    }
+    this.load.audio(
+      "maze_runner_move",
+      assetPath("assets/audio/player-move.wav"),
+    );
+    this.load.audio("maze_runner_pellet", assetPath("assets/audio/pellet.wav"));
     this.load.audio(
       "maze_runner_power_pellet",
-      "assets/audio/power-pellet.wav",
+      assetPath("assets/audio/power-pellet.wav"),
     );
-    this.load.audio("maze_runner_death", "assets/audio/player-death.wav");
+    this.load.audio(
+      "maze_runner_death",
+      assetPath("assets/audio/player-death.wav"),
+    );
     this.load.audio(
       "maze_runner_ghost_vulnerable",
-      "assets/audio/ghost-vulnerable.wav",
+      assetPath("assets/audio/ghost-vulnerable.wav"),
     );
-    this.load.audio("maze_runner_ghost_eaten", "assets/audio/ghost-eaten.wav");
-    this.load.audio("maze_runner_countdown", "assets/audio/countdown.wav");
-    this.load.audio("maze_runner_victory", "assets/audio/victory.wav");
+    this.load.audio(
+      "maze_runner_ghost_eaten",
+      assetPath("assets/audio/ghost-eaten.wav"),
+    );
+    this.load.audio(
+      "maze_runner_countdown",
+      assetPath("assets/audio/countdown.wav"),
+    );
+    this.load.audio(
+      "maze_runner_victory",
+      assetPath("assets/audio/victory.wav"),
+    );
     this.load.audio(
       "maze_runner_title_theme",
-      "assets/audio/title-music/Patreon Challenge 12.ogg",
+      assetPath("assets/audio/title-music/Patreon Challenge 12.ogg"),
     );
-    this.load.audio("maze_runner_game_start", "assets/audio/game-start.wav");
-    this.load.audio("maze_runner_pause", "assets/audio/pause-menu.wav");
-    this.load.audio("maze_runner_game_over", "assets/audio/game-over.wav");
+    this.load.audio(
+      "maze_runner_game_start",
+      assetPath("assets/audio/game-start.wav"),
+    );
+    this.load.audio(
+      "maze_runner_pause",
+      assetPath("assets/audio/pause-menu.wav"),
+    );
+    this.load.audio(
+      "maze_runner_game_over",
+      assetPath("assets/audio/game-over.wav"),
+    );
     this.generateCollectibleTextures();
   }
 
@@ -96,8 +150,9 @@ export class Boot extends Scene {
 
   create(): void {
     this.cameras.main.setPostPipeline("VectorShader");
-    const fontFamily = (this.game.config as { customFontFamily?: string })
-      .customFontFamily;
+    const fontFamily =
+      this.registry.get("fontFamily") ??
+      (this.game.config as MazeRunnerGameConfig).customFontFamily;
     if (fontFamily) this.registry.set("fontFamily", fontFamily);
 
     if (this.registry.get("vectorMode") === undefined) {

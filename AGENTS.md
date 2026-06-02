@@ -22,6 +22,10 @@
 
 <!-- nx configuration end-->
 
+## Art Assets
+
+- For creating, editing, rendering, critiquing, or integrating game art assets, always invoke the `vector-sprite-pipeline` skill first. It is the definitive workflow for SVG sprites, Vector Studio previews, renderer handoffs, Art Critic approval, and user approval before moving to the next sprite.
+
 <!-- OCR:START -->
 
 ## Open Code Review Instructions
@@ -45,3 +49,11 @@ Use `.ocr/skills/SKILL.md` to learn:
 Keep this managed block so `ocr init` can refresh the instructions.
 
 <!-- OCR:END -->
+
+## Debugging
+
+### Chrome Dev Tools
+
+- Always try Chrome Dev Tools before Playwright
+- Always check for a running Chrome instance in dev mode by trying to connect to the browser at 127.0.0.1:9222
+- If you find a browser instance, check the open tabs to see if the app in question is already running

@@ -55,9 +55,7 @@ export function createTestHarness<TState, TCommands>(
     timeController.onAfterFrame(() => overlay.update());
   } else {
     const updateOverlay = () => {
-      if (
-        (window as unknown as Record<string, unknown>).__TEST__ === harness
-      ) {
+      if ((window as unknown as Record<string, unknown>).__TEST__ === harness) {
         overlay.update();
         requestAnimationFrame(updateOverlay);
       }

@@ -108,8 +108,11 @@ export class Game extends Scene {
     // Start first wave with transition
     this.gameState = "wave_transition";
     this.waveTransition.startFirstWave(() => {
-      this.waveSystem.startWave(this.tank.getPosition());
-      this.generateTerrain();
+      this.generateTerrain(this.waveSystem.getNextWaveNumber());
+      this.waveSystem.startWave(
+        this.tank.getPosition(),
+        this.terrainManager.getObstacles(),
+      );
       this.generatePickups();
       this.gameState = "playing";
     });
@@ -263,8 +266,7 @@ export class Game extends Scene {
   /**
    * Generate terrain obstacles for current wave
    */
-  private generateTerrain(): void {
-    const waveNum = this.waveSystem.getWaveNumber();
+  private generateTerrain(waveNum = this.waveSystem.getWaveNumber()): void {
     // More obstacles in later waves, base 8 + 2 per wave, max 20
     const count = Math.min(8 + waveNum * 2, 20);
     const enemyPositions = this.enemyManager.getEnemyPositions();
@@ -556,8 +558,11 @@ export class Game extends Scene {
         this.waveSystem.getWaveNumber(),
         () => {
           this.tank.resetArmor(); // Reset armor between waves
-          this.waveSystem.startWave(this.tank.getPosition());
-          this.generateTerrain(); // Regenerate terrain each wave
+          this.generateTerrain(this.waveSystem.getNextWaveNumber()); // Regenerate terrain each wave
+          this.waveSystem.startWave(
+            this.tank.getPosition(),
+            this.terrainManager.getObstacles(),
+          );
           this.generatePickups(); // Generate new pickups
           this.gameState = "playing";
         },

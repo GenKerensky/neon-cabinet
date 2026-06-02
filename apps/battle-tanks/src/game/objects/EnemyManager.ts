@@ -81,6 +81,8 @@ export class EnemyManager {
     obstacleInfo?: ObstacleInfo,
   ): EnemyFireEvent[] {
     const fireEvents: EnemyFireEvent[] = [];
+    const spawnedProjectiles: EnemyProjectile[] = [];
+    const existingProjectileCount = this.projectiles.length;
 
     // Update enemies and collect fire data
     for (const enemy of this.enemies) {
@@ -108,7 +110,7 @@ export class EnemyManager {
           fireData.direction,
           fireData.speed,
         );
-        this.projectiles.push(projectile);
+        spawnedProjectiles.push(projectile);
         fireEvents.push({
           enemy,
           position: fireData.position.clone(),
@@ -121,9 +123,12 @@ export class EnemyManager {
     this.enemies = this.enemies.filter((e) => e.isAlive());
 
     // Update projectiles
-    for (const projectile of this.projectiles) {
+    for (let i = 0; i < existingProjectileCount; i++) {
+      const projectile = this.projectiles[i];
       projectile.update(delta);
     }
+
+    this.projectiles.push(...spawnedProjectiles);
 
     // Remove dead projectiles
     this.projectiles = this.projectiles.filter((p) => p.isAlive());
@@ -147,15 +152,15 @@ export class EnemyManager {
   /**
    * Get all enemies
    */
-  getEnemies(): Enemy[] {
-    return this.enemies;
+  getEnemies(): readonly Enemy[] {
+    return this.enemies.slice();
   }
 
   /**
    * Get all enemy projectiles
    */
-  getProjectiles(): EnemyProjectile[] {
-    return this.projectiles;
+  getProjectiles(): readonly EnemyProjectile[] {
+    return this.projectiles.slice();
   }
 
   /**

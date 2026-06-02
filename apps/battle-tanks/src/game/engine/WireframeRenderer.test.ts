@@ -6,19 +6,28 @@ import { WireframeRenderer } from "./WireframeRenderer";
 
 function createSceneStub() {
   const calls: string[] = [];
+  const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
+  let lastMove = { x: 0, y: 0 };
   const graphics = {
     setDepth: () => graphics,
     clear: () => calls.push("clear"),
     lineStyle: () => calls.push("lineStyle"),
     beginPath: () => calls.push("beginPath"),
-    moveTo: () => calls.push("moveTo"),
-    lineTo: () => calls.push("lineTo"),
+    moveTo: (x: number, y: number) => {
+      calls.push("moveTo");
+      lastMove = { x, y };
+    },
+    lineTo: (x: number, y: number) => {
+      calls.push("lineTo");
+      lines.push({ x1: lastMove.x, y1: lastMove.y, x2: x, y2: y });
+    },
     strokePath: () => calls.push("strokePath"),
     destroy: () => calls.push("destroy"),
   };
 
   return {
     calls,
+    lines,
     scene: { add: { graphics: () => graphics } },
   };
 }
@@ -53,5 +62,23 @@ describe("WireframeRenderer", () => {
     renderer.render(model, Vector3D.zero(), 0, 800, 600);
 
     expect(calls).toContain("strokePath");
+  });
+
+  it("clips far-plane crossing edges before projection", () => {
+    const camera = new Camera3D(400);
+    camera.position = new Vector3D(0, 0, 0);
+    camera.farClip = 100;
+    const { calls, lines, scene } = createSceneStub();
+    const renderer = new WireframeRenderer(scene as never, camera);
+    const model = createModel(
+      [new Vector3D(0, 0, 50), new Vector3D(100, 0, 200)],
+      [[0, 1]],
+    );
+
+    renderer.render(model, Vector3D.zero(), 0, 800, 600);
+
+    expect(calls).toContain("strokePath");
+    expect(lines[0].x1).toBeCloseTo(400);
+    expect(lines[0].x2).toBeCloseTo(533.33, 1);
   });
 });

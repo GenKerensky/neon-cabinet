@@ -59,6 +59,7 @@ vi.mock("../../src/game/utils/settings", () => ({
 }));
 
 import { Boot } from "../../src/game/scenes/Boot";
+import { hackPickupDefinitions } from "../../src/game/config/hackDefinitions";
 
 function createScene() {
   const registryStore = new Map<string, unknown>();
@@ -185,5 +186,56 @@ describe("Boot", () => {
       "maze_runner_game_over",
       "assets/audio/game-over.wav",
     );
+  });
+
+  it("resolves preload paths from a custom asset base url", () => {
+    const scene = createScene();
+    const loadAudio = vi.fn();
+    const loadText = vi.fn();
+    scene.registry.set("assetBaseUrl", "/maze-runner-assets/");
+    Object.assign(scene, {
+      load: {
+        audio: loadAudio,
+        text: loadText,
+      },
+    });
+    (scene as any).generateCollectibleTextures = vi.fn();
+
+    scene.preload();
+
+    expect(loadText).toHaveBeenCalledWith(
+      "player_svg",
+      "/maze-runner-assets/vector/player.svg",
+    );
+    expect(loadText).toHaveBeenCalledWith(
+      "ghost_chaser_svg",
+      "/maze-runner-assets/vector/ghosts/chaser.svg",
+    );
+    expect(loadAudio).toHaveBeenCalledWith(
+      "maze_runner_move",
+      "/maze-runner-assets/audio/player-move.wav",
+    );
+  });
+
+  it("preloads signal hack SVG puppet assets", () => {
+    const scene = createScene();
+    const loadAudio = vi.fn();
+    const loadText = vi.fn();
+    Object.assign(scene, {
+      load: {
+        audio: loadAudio,
+        text: loadText,
+      },
+    });
+    (scene as any).generateCollectibleTextures = vi.fn();
+
+    scene.preload();
+
+    for (const definition of hackPickupDefinitions) {
+      expect(loadText).toHaveBeenCalledWith(
+        definition.svgCacheKey,
+        definition.assetPath,
+      );
+    }
   });
 });

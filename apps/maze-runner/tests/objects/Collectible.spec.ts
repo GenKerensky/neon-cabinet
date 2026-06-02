@@ -21,12 +21,41 @@ vi.mock("phaser", () => {
   return { GameObjects: { Sprite: MockGameObject }, Scene: class {} };
 });
 
+vi.mock("@neon-cabinet/sprite-tools", () => ({
+  SVGParser: class {
+    parse() {
+      return { viewBox: { x: 0, y: 0, width: 32, height: 32 }, layers: [] };
+    }
+  },
+  VectorPuppet: class {
+    active = true;
+    depth = 0;
+    constructor(
+      public scene: unknown,
+      public x: number,
+      public y: number,
+      public metadata: unknown,
+    ) {}
+    setScale() {
+      return this;
+    }
+    setDepth(value: number) {
+      this.depth = value;
+      return this;
+    }
+    destroy() {
+      this.active = false;
+    }
+  },
+}));
+
 import { CellType } from "../../src/game/utils/MazeGenerator";
 import type { MazeCell } from "../../src/game/utils/MazeGenerator";
 import {
   CollectibleManager,
   CollectibleType,
 } from "../../src/game/objects/Collectible";
+import { HackPickupId } from "../../src/game/config/hackDefinitions";
 
 function gridFromPattern(pattern: string[]): MazeCell[][] {
   return pattern.map((row) =>
@@ -162,6 +191,44 @@ describe("CollectibleManager", () => {
           expect(found).toBe(false);
         }
       }
+    });
+
+    it("can create hack pickups without counting them toward level completion", () => {
+      const grid = gridFromPattern([
+        "WWWWWWWWW",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "WWWWWWWWW",
+      ]);
+      const scene = createMockScene();
+      const mgr = new CollectibleManager(scene, grid, 9, 9, 16, 0, 0, 1, {
+        hackSpawnChance: 1,
+        hackPickupIds: [HackPickupId.PHASE_CHIP],
+        rng: () => 0,
+      });
+
+      const collectibles = mgr.createAll();
+      const hackPickups = collectibles.filter(
+        (collectible) => collectible.getType() === CollectibleType.HACK_PICKUP,
+      );
+
+      expect(hackPickups.length).toBeGreaterThan(0);
+      expect(
+        hackPickups.every((pickup) => pickup.getHackId() === "phase-chip"),
+      ).toBe(true);
+
+      for (const collectible of [...mgr.getCollectibles()]) {
+        if (collectible.getType() !== CollectibleType.HACK_PICKUP) {
+          mgr.removeCollectible(collectible);
+        }
+      }
+
+      expect(mgr.isLevelComplete()).toBe(true);
     });
   });
 

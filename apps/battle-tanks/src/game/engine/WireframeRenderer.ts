@@ -12,6 +12,16 @@ export class WireframeRenderer {
   private lineWidth: number;
   private worldPoints: Vector3D[] = [];
   private cameraPoints: Vector3D[] = [];
+  private readonly clippedCameraP1 = Vector3D.zero();
+  private readonly clippedCameraP2 = Vector3D.zero();
+  private readonly projectedP1: ScreenPoint = { x: 0, y: 0, z: 0 };
+  private readonly projectedP2: ScreenPoint = { x: 0, y: 0, z: 0 };
+  private readonly clippedScreenP1: ScreenPoint = { x: 0, y: 0, z: 0 };
+  private readonly clippedScreenP2: ScreenPoint = { x: 0, y: 0, z: 0 };
+  private readonly clippedScreenLine: [ScreenPoint, ScreenPoint] = [
+    this.clippedScreenP1,
+    this.clippedScreenP2,
+  ];
 
   constructor(scene: Scene, camera: Camera3D, lineWidth = 2) {
     this.graphics = scene.add.graphics();
@@ -124,12 +134,11 @@ export class WireframeRenderer {
     if (camP1.z > this.camera.farClip && camP2.z > this.camera.farClip) {
       return null;
     }
-    if (this.isOutsideSameFrustumSide(camP1, camP2, screenW, screenH)) {
-      return null;
-    }
 
-    const p1 = camP1.clone();
-    const p2 = camP2.clone();
+    const p1 = this.clippedCameraP1;
+    const p2 = this.clippedCameraP2;
+    this.copyVector(p1, camP1);
+    this.copyVector(p2, camP2);
 
     if (p1.z <= this.camera.nearClip || p2.z <= this.camera.nearClip) {
       const nearZ = this.camera.nearClip + 0.1;
@@ -151,9 +160,28 @@ export class WireframeRenderer {
       }
     }
 
-    const sp1 = this.camera.projectCameraPoint(p1, screenW, screenH);
-    const sp2 = this.camera.projectCameraPoint(p2, screenW, screenH);
-    return this.clipScreenLine(sp1, sp2, screenW, screenH);
+    if (p1.z > this.camera.farClip || p2.z > this.camera.farClip) {
+      const farZ = this.camera.farClip;
+      if (p1.z > this.camera.farClip) {
+        this.lerpInto(p1, p1, p2, (farZ - p1.z) / (p2.z - p1.z));
+      }
+      if (p2.z > this.camera.farClip) {
+        this.lerpInto(p2, p2, p1, (farZ - p2.z) / (p1.z - p2.z));
+      }
+    }
+
+    if (this.isOutsideSameFrustumSide(p1, p2, screenW, screenH)) {
+      return null;
+    }
+
+    this.projectCameraPointInto(this.projectedP1, p1, screenW, screenH);
+    this.projectCameraPointInto(this.projectedP2, p2, screenW, screenH);
+    return this.clipScreenLine(
+      this.projectedP1,
+      this.projectedP2,
+      screenW,
+      screenH,
+    );
   }
 
   getGraphics(): GameObjects.Graphics {
@@ -198,6 +226,23 @@ export class WireframeRenderer {
     target.z = from.z + (to.z - from.z) * t;
   }
 
+  private copyVector(target: Vector3D, source: Vector3D): void {
+    target.x = source.x;
+    target.y = source.y;
+    target.z = source.z;
+  }
+
+  private projectCameraPointInto(
+    target: ScreenPoint,
+    point: Vector3D,
+    screenW: number,
+    screenH: number,
+  ): void {
+    target.x = (point.x / point.z) * this.camera.focalLength + screenW / 2;
+    target.y = screenH / 2 - (point.y / point.z) * this.camera.focalLength;
+    target.z = point.z;
+  }
+
   private clipScreenLine(
     p1: ScreenPoint,
     p2: ScreenPoint,
@@ -215,10 +260,13 @@ export class WireframeRenderer {
 
     while (true) {
       if ((code1 | code2) === 0) {
-        return [
-          { x: x1, y: y1, z: z1 },
-          { x: x2, y: y2, z: z2 },
-        ];
+        this.clippedScreenP1.x = x1;
+        this.clippedScreenP1.y = y1;
+        this.clippedScreenP1.z = z1;
+        this.clippedScreenP2.x = x2;
+        this.clippedScreenP2.y = y2;
+        this.clippedScreenP2.z = z2;
+        return this.clippedScreenLine;
       }
       if ((code1 & code2) !== 0) return null;
 

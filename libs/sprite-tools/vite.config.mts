@@ -14,7 +14,7 @@ export default defineConfig(() => ({
   ],
   resolve: {
     alias: {
-      phaser: path.resolve(import.meta.dirname, 'src/lib/phaser-mocks.ts'),
+      phaser: path.resolve(import.meta.dirname, "src/lib/phaser-mocks.ts"),
     },
   },
   // Uncomment this if you are using workers.

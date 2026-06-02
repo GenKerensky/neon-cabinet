@@ -82,6 +82,7 @@ import {
   resolveGameOverKillerPresentation,
 } from "../../src/game/scenes/GameOver";
 import { MAZE_RUNNER_HIGH_SCORE_KEY } from "../../src/game/utils/highScore";
+import { MAZE_RUNNER_BYTES_KEY } from "../../src/game/utils/hackProgression";
 
 function createTextMock() {
   const text = {
@@ -258,6 +259,7 @@ describe("GameOver", () => {
       MAZE_RUNNER_HIGH_SCORE_KEY,
       "1200",
     );
+    expect(storage.setItem).toHaveBeenCalledWith(MAZE_RUNNER_BYTES_KEY, "12");
     expect(textCalls).toEqual(
       expect.arrayContaining([
         [400, 444, "NEW HIGH SCORE!", expect.any(Object)],
@@ -280,7 +282,11 @@ describe("GameOver", () => {
 
     expect(mockFadeInScene).toHaveBeenCalledWith(scene);
 
-    expect(storage.setItem).not.toHaveBeenCalled();
+    expect(storage.setItem).toHaveBeenCalledWith(MAZE_RUNNER_BYTES_KEY, "12");
+    expect(storage.setItem).not.toHaveBeenCalledWith(
+      MAZE_RUNNER_HIGH_SCORE_KEY,
+      expect.any(String),
+    );
     expect(textCalls).toEqual(
       expect.arrayContaining([
         [400, 444, "HIGH SCORE: 002000", expect.any(Object)],

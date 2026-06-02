@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   distDir: ".next",
-  transpilePackages: ["battle-tanks", "space-defender", "mars-lander", "maze-runner"],
+  transpilePackages: [
+    "battle-tanks",
+    "space-defender",
+    "mars-lander",
+    "maze-runner",
+  ],
   turbopack: {
     rules: {
       "*.{frag,vert,glsl}": {

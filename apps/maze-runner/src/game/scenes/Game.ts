@@ -15,13 +15,23 @@ import {
 } from "../config/ghostDefinitions";
 import type { GhostDefinition } from "../config/ghostDefinitions";
 import {
+  getHackPickupDefinition,
+  HackPickupId,
+  hackPickupIds,
+} from "../config/hackDefinitions";
+import {
   Collectible,
   CollectibleManager,
   CollectibleType,
 } from "../objects/Collectible";
+import { HackSystem } from "../systems/HackSystem";
 import { fadeInScene, launchSceneWithFade } from "../utils/sceneTransitions";
 import { formatScore, readHighScore } from "../utils/highScore";
 import { getCellCenter, getPenGeometry } from "../utils/gridGeometry";
+import {
+  completeAchievement,
+  readHackProgression,
+} from "../utils/hackProgression";
 
 const PLAYER_CHOMP_FREQUENCY = 15;
 const MOVEMENT_SFX_INTERVAL_MS = (Math.PI / PLAYER_CHOMP_FREQUENCY) * 1000;
@@ -37,9 +47,11 @@ export class Game extends Scene {
   private enemyOverlapCollider?: Phaser.Physics.Arcade.Collider;
   private collectibleOverlapCollider?: Phaser.Physics.Arcade.Collider;
   private collectibleManager!: CollectibleManager;
+  private hackSystem?: HackSystem;
   private scoreText!: Phaser.GameObjects.Text;
   private highScoreText!: Phaser.GameObjects.Text;
   private levelText!: Phaser.GameObjects.Text;
+  private hackHudText!: Phaser.GameObjects.Text;
   private lifeIcons: Phaser.GameObjects.Graphics[] = [];
   private scoreValue = 0;
   private livesValue = 3;
@@ -67,6 +79,8 @@ export class Game extends Scene {
   private respawnDelayMs = 0;
   private readonly contactTileOverlapThreshold = 0.5;
   private lastMoveSfxAt = -Infinity;
+  private lostLifeThisLevel = false;
+  private ghostsEatenInPowerWindow = 0;
 
   constructor() {
     super("Game");
@@ -86,6 +100,8 @@ export class Game extends Scene {
     this.levelTransitionActive = false;
     this.respawnDelayMs = 0;
     this.lastMoveSfxAt = -Infinity;
+    this.lostLifeThisLevel = false;
+    this.ghostsEatenInPowerWindow = 0;
   }
 
   create(): void {
@@ -129,16 +145,7 @@ export class Game extends Scene {
     );
     this.screenFlashRect.setDepth(1000);
 
-    this.collectibleManager = new CollectibleManager(
-      this,
-      this.grid,
-      this.gridWidth,
-      this.gridHeight,
-      this.tileSize,
-      this.offsetX,
-      this.offsetY,
-      this.levelValue,
-    );
+    this.collectibleManager = this.createCollectibleManager();
     this.collectibleManager.createAll();
 
     const spawnGridX = Math.floor(this.gridWidth / 2);
@@ -166,6 +173,17 @@ export class Game extends Scene {
     this.physics.add.existing(this.player);
 
     this.rebuildActiveGhosts();
+    this.hackSystem = new HackSystem(
+      {
+        player: this.player,
+        enemies: this.enemies,
+        addScore: (points) => this.addScore(points),
+        setGateHackActive: (active) => this.setGateHackActive(active),
+        showEffect: (name, x, y) => this.showHackEffect(name, x, y),
+        completeAchievement: (id) => completeAchievement(id),
+      },
+      { unlockedUpgrades: readHackProgression().unlocks },
+    );
 
     const setDir = (dir: Direction) => this.player.setDirection(dir);
     this.input.keyboard?.on("keydown-UP", () => setDir(Direction.UP));
@@ -176,6 +194,7 @@ export class Game extends Scene {
     this.input.keyboard?.on("keydown-A", () => setDir(Direction.LEFT));
     this.input.keyboard?.on("keydown-RIGHT", () => setDir(Direction.RIGHT));
     this.input.keyboard?.on("keydown-D", () => setDir(Direction.RIGHT));
+    this.input.keyboard?.on("keydown-E", () => this.activateHeldHack());
     this.input.keyboard?.on("keydown-ESC", () => {
       launchSceneWithFade(this, "Pause");
     });
@@ -214,8 +233,17 @@ export class Game extends Scene {
       })
       .setOrigin(0.5, 1);
 
+    this.hackHudText = this.add
+      .text(20, camH - 24, "HACK: EMPTY", {
+        fontFamily,
+        fontSize: "14px",
+        color: "#00ff66",
+      })
+      .setOrigin(0, 1);
+
     this.renderLivesHud();
     this.refreshScoreHud();
+    this.refreshHackHud();
 
     EventBus.emit("current-scene-ready", this);
     this.runCountdown();
@@ -254,6 +282,117 @@ export class Game extends Scene {
       icon.fillPath();
 
       this.lifeIcons.push(icon);
+    }
+  }
+
+  private createCollectibleManager(): CollectibleManager {
+    const progression = readHackProgression();
+    const hackSpawnChance = progression.unlocks.includes("spawn-chance")
+      ? 0.075
+      : 0.045;
+    return new CollectibleManager(
+      this,
+      this.grid,
+      this.gridWidth,
+      this.gridHeight,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+      this.levelValue,
+      {
+        hackSpawnChance,
+        hackPickupIds,
+      },
+    );
+  }
+
+  private addScore(points: number): void {
+    this.scoreValue += points;
+    if (this.scoreValue >= 5000) {
+      completeAchievement("earn-5000-score");
+    }
+    this.refreshScoreHud();
+  }
+
+  private activateHeldHack(): void {
+    const blocked =
+      this.countdownActive ||
+      this.deathSequenceActive ||
+      this.levelTransitionActive ||
+      this.player.isDyingState() ||
+      this.scene.isActive("Pause");
+    if (this.hackSystem?.activateHeldHack({ blocked })) {
+      this.refreshHackHud();
+    }
+  }
+
+  private refreshHackHud(): void {
+    if (!this.hackHudText || !this.hackSystem) return;
+
+    const heldHack = this.hackSystem.getHeldHack();
+    const effects = this.hackSystem.getActiveEffects();
+    if (!heldHack && effects.length === 0) {
+      this.hackHudText.setText("HACK: EMPTY");
+      this.hackHudText.setColor?.("#00ff66");
+      return;
+    }
+
+    const heldLabel = heldHack
+      ? getHackPickupDefinition(heldHack).shortName
+      : "EMPTY";
+    const activeLabel = effects
+      .map((effect) => {
+        if (effect.id === "overclock-rebound") {
+          return `SURGE ${Math.ceil(effect.remainingMs / 1000)}s`;
+        }
+        const definition = getHackPickupDefinition(effect.id);
+        return `${definition.shortName} ${Math.ceil(effect.remainingMs / 1000)}s`;
+      })
+      .join(" | ");
+    const color = heldHack
+      ? getHackPickupDefinition(heldHack).color
+      : "#00ff66";
+    this.hackHudText.setColor?.(color);
+    this.hackHudText.setText(
+      activeLabel ? `HACK: ${heldLabel}  ${activeLabel}` : `HACK: ${heldLabel}`,
+    );
+  }
+
+  private updateScoreMagnet(delta: number): void {
+    if (!this.hackSystem?.isEffectActive(HackPickupId.SCORE_MAGNET)) return;
+
+    const progression = readHackProgression();
+    const pullSpeed = progression.unlocks.includes("magnet-pull") ? 420 : 300;
+    const radius = this.tileSize * 5;
+
+    for (const collectible of this.collectibleManager.getCollectibles()) {
+      if (!collectible.active) continue;
+      if (
+        collectible.getType() !== CollectibleType.DOT &&
+        collectible.getType() !== CollectibleType.POWER_PELLET
+      ) {
+        continue;
+      }
+
+      const distance = Math.hypot(
+        this.player.x - collectible.x,
+        this.player.y - collectible.y,
+      );
+      if (distance > radius) continue;
+      if (distance <= this.tileSize * 0.45) {
+        this.onCollectibleHit(this.player, collectible);
+        continue;
+      }
+
+      const step = Math.min(distance, (pullSpeed * delta) / 1000);
+      collectible.x += ((this.player.x - collectible.x) / distance) * step;
+      collectible.y += ((this.player.y - collectible.y) / distance) * step;
+    }
+  }
+
+  private setGateHackActive(active: boolean): void {
+    for (const enemy of this.enemies ?? []) {
+      enemy.setGateHackActive(active);
     }
   }
 
@@ -404,6 +543,9 @@ export class Game extends Scene {
     const previousPlayerY = this.player.y;
     this.player.update(time, delta);
     this.playMovementSfxIfPlayerMoved(previousPlayerX, previousPlayerY);
+    this.hackSystem?.update(delta);
+    this.updateScoreMagnet(delta);
+    this.refreshHackHud();
 
     for (const enemy of this.enemies) {
       const enemyIndex = this.enemies.indexOf(enemy);
@@ -445,12 +587,30 @@ export class Game extends Scene {
 
     const collectible = collectibleObj as Collectible;
     const collectibleType = collectible.getType();
+    if (collectibleType === CollectibleType.HACK_PICKUP) {
+      const hackId = collectible.getHackId();
+      if (hackId) {
+        const result = this.hackSystem?.collectHack(hackId);
+        if (result?.replaced) {
+          this.showFloatingScore(
+            collectible.x,
+            collectible.y,
+            result.replacementBonus,
+          );
+        }
+        this.refreshHackHud();
+      }
+      this.collectibleManager.removeCollectible(collectible);
+      this.playSfx("maze_runner_pellet", { volume: 0.45 });
+      return;
+    }
+
     const pts = collectible.getPoints();
-    this.scoreValue += pts;
-    this.refreshScoreHud();
+    this.addScore(pts);
     this.collectibleManager.removeCollectible(collectible);
 
     if (collectibleType === CollectibleType.POWER_PELLET) {
+      this.ghostsEatenInPowerWindow = 0;
       this.playSfx("maze_runner_power_pellet", { volume: 0.65 });
       this.playSfx("maze_runner_ghost_vulnerable", { volume: 0.45 });
       this.triggerScreenFlash();
@@ -498,8 +658,11 @@ export class Game extends Scene {
 
   private resolveEnemyContact(enemy: Enemy): void {
     if (enemy.getState() === EnemyState.FRIGHTENED) {
-      this.scoreValue += 200;
-      this.refreshScoreHud();
+      this.addScore(200);
+      this.ghostsEatenInPowerWindow++;
+      if (this.ghostsEatenInPowerWindow >= 3) {
+        completeAchievement("eat-3-ghosts-power-window");
+      }
       this.showFloatingScore(enemy.x, enemy.y, 200);
       this.playSfx("maze_runner_ghost_eaten", { volume: 0.6 });
       enemy.setEnemyState(EnemyState.DEAD);
@@ -508,6 +671,15 @@ export class Game extends Scene {
       !this.player.isDyingState() &&
       !this.playerInvincible
     ) {
+      const shieldConsumed = this.player.consumeShield?.() ?? false;
+      if (shieldConsumed) {
+        this.hackSystem?.absorbShieldHit(enemy.x, enemy.y);
+        this.playerInvincible = true;
+        this.player.startInvulnerability(1200, () => {
+          this.playerInvincible = false;
+        });
+        return;
+      }
       const killerIndex = this.enemies.indexOf(enemy);
       const killerDefinition =
         killerIndex >= 0 ? this.activeGhostDefinitions[killerIndex] : undefined;
@@ -621,6 +793,13 @@ export class Game extends Scene {
   private beginLevelCompleteSequence(): void {
     if (this.levelTransitionActive) return;
 
+    if (this.hackSystem?.getHeldHack()) {
+      completeAchievement("clear-level-holding-hack");
+    }
+    if (!this.lostLifeThisLevel) {
+      completeAchievement("clear-level-no-lives-lost");
+    }
+
     this.levelTransitionActive = true;
     this.countdownActive = true;
     this.ghostsFrozen = true;
@@ -679,6 +858,28 @@ export class Game extends Scene {
       scale: 1.2,
       duration: 100,
       ease: "Power1",
+    });
+  }
+
+  private showHackEffect(name: string, x: number, y: number): void {
+    const fontFamily =
+      (this.registry.get("fontFamily") as string) ?? "Orbitron";
+    const text = this.add.text(x, y - this.tileSize, name, {
+      fontFamily,
+      fontSize: "15px",
+      color: "#00ff66",
+      stroke: "#000000",
+      strokeThickness: 3,
+    });
+    text.setOrigin(0.5);
+    text.setDepth(999);
+    this.tweens.add({
+      targets: text,
+      y: text.y - 26,
+      alpha: 0,
+      duration: 700,
+      ease: "Power2",
+      onComplete: () => text.destroy(),
     });
   }
 
@@ -955,6 +1156,17 @@ export class Game extends Scene {
     });
   }
 
+  collectHackForDebug(id: string): void {
+    if (this.isHackPickupId(id)) {
+      this.hackSystem?.collectHack(id);
+      this.refreshHackHud();
+    }
+  }
+
+  activateHeldHackForDebug(): void {
+    this.activateHeldHack();
+  }
+
   spawnEnemyAtForDebug(gridX: number, gridY: number, aiType: string): void {
     const center = getCellCenter(
       gridX,
@@ -1042,6 +1254,7 @@ export class Game extends Scene {
     }
 
     this.enemies.push(enemy);
+    this.hackSystem?.setEnemies(this.enemies);
     this.registerEnemyOverlap();
   }
 
@@ -1057,6 +1270,9 @@ export class Game extends Scene {
     if (this.deathSequenceActive) return;
 
     this.deathSequenceActive = true;
+    this.lostLifeThisLevel = true;
+    this.hackSystem?.clearForDeath();
+    this.refreshHackHud();
     this.livesValue--;
     this.renderLivesHud();
     this.playSfx("maze_runner_death", { volume: 0.75 });
@@ -1140,16 +1356,7 @@ export class Game extends Scene {
     // Destroy old collectibles before creating new ones
     this.collectibleManager.getCollectibles().forEach((c) => c.destroy());
 
-    this.collectibleManager = new CollectibleManager(
-      this,
-      this.grid,
-      this.gridWidth,
-      this.gridHeight,
-      this.tileSize,
-      this.offsetX,
-      this.offsetY,
-      this.levelValue,
-    );
+    this.collectibleManager = this.createCollectibleManager();
     this.collectibleManager.createAll();
 
     // Re-register collectible overlap collider for new collectibles
@@ -1163,7 +1370,10 @@ export class Game extends Scene {
     );
 
     this.rebuildActiveGhosts();
+    this.hackSystem?.setEnemies(this.enemies);
+    this.setGateHackActive(false);
     this.registerEnemyOverlap();
+    this.lostLifeThisLevel = false;
     this.resetPositions();
     fadeInScene(this);
     this.runCountdown();
@@ -1216,6 +1426,10 @@ export class Game extends Scene {
       default:
         return "reroute";
     }
+  }
+
+  private isHackPickupId(id: string): id is HackPickupId {
+    return (hackPickupIds as readonly string[]).includes(id);
   }
 
   private rebuildActiveGhosts(): void {

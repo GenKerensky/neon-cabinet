@@ -25,6 +25,7 @@ import {
 } from "../utils/gridGeometry";
 
 export type EnemyCrowdBehavior = "trail" | "reroute" | "yield";
+export type EnemyHackRoutingOverride = "scatter" | "jammed" | "orbit" | null;
 
 export enum EnemyState {
   SCATTER = "scatter",
@@ -42,6 +43,8 @@ export abstract class Enemy extends VectorPuppet {
   protected tileSize: number;
   protected speed: number;
   protected baseSpeed: number;
+  protected stateSpeedMultiplier = 1;
+  protected hackSpeedMultiplier = 1;
   protected _state: EnemyState = EnemyState.SCATTER;
   protected gridX: number;
   protected gridY: number;
@@ -64,6 +67,12 @@ export abstract class Enemy extends VectorPuppet {
   private exitingPen = true;
   private blockedCells = new Set<string>();
   private crowdBehavior: EnemyCrowdBehavior = "reroute";
+  private hackRoutingOverride: EnemyHackRoutingOverride = null;
+  private targetOverride: { x: number; y: number } | null = null;
+  private targetOverrideTimer = 0;
+  private routingOverrideTimer = 0;
+  private stunTimer = 0;
+  private gateHackActive = false;
 
   declare public scene: Scene;
   declare public x: number;
@@ -199,7 +208,8 @@ export abstract class Enemy extends VectorPuppet {
     switch (newState) {
       case EnemyState.FRIGHTENED:
         this.setDeadEyesVisible(false);
-        this.speed = this.baseSpeed * 0.5;
+        this.stateSpeedMultiplier = 0.5;
+        this.refreshSpeed();
         this.frightenedTimer = Enemy.FRIGHTENED_DURATION_MS;
         if (bodyMetadata) {
           bodyMetadata.animations = [
@@ -216,7 +226,8 @@ export abstract class Enemy extends VectorPuppet {
       case EnemyState.CHASE:
       case EnemyState.SCATTER:
         this.setDeadEyesVisible(false);
-        this.speed = this.baseSpeed;
+        this.stateSpeedMultiplier = 1;
+        this.refreshSpeed();
         if (bodyMetadata) {
           bodyMetadata.animations = [
             {
@@ -233,7 +244,8 @@ export abstract class Enemy extends VectorPuppet {
         break;
       case EnemyState.DEAD:
         this.setDeadEyesVisible(true);
-        this.speed = this.baseSpeed * 4;
+        this.stateSpeedMultiplier = 4;
+        this.refreshSpeed();
         if (bodyMetadata) {
           bodyMetadata.animations = [];
           bodyMetadata.fill = "transparent";
@@ -275,6 +287,40 @@ export abstract class Enemy extends VectorPuppet {
     this.deadReturnTargetY = center.y;
   }
 
+  setHackSpeedMultiplier(multiplier: number): void {
+    this.hackSpeedMultiplier = Math.max(0.1, multiplier);
+    this.refreshSpeed();
+  }
+
+  forceReverse(): void {
+    const reverseDir = oppositeDirection(this.movementDirection);
+    if (reverseDir !== Direction.NONE) {
+      this.movementDirection = reverseDir;
+      this.updatePuppetDirection();
+    }
+  }
+
+  setRoutingOverride(override: EnemyHackRoutingOverride, durationMs = 0): void {
+    this.hackRoutingOverride = override;
+    this.routingOverrideTimer = Math.max(0, durationMs);
+  }
+
+  setTargetOverride(
+    target: { x: number; y: number } | null,
+    durationMs = 0,
+  ): void {
+    this.targetOverride = target;
+    this.targetOverrideTimer = Math.max(0, durationMs);
+  }
+
+  stunFor(durationMs: number): void {
+    this.stunTimer = Math.max(this.stunTimer, durationMs);
+  }
+
+  setGateHackActive(active: boolean): void {
+    this.gateHackActive = active;
+  }
+
   update(
     time: number,
     delta: number,
@@ -286,6 +332,7 @@ export abstract class Enemy extends VectorPuppet {
     const targetX = playerX ?? this.x;
     const targetY = playerY ?? this.y;
     const targetDir = playerDir ?? Direction.NONE;
+    this.updateHackOverrideTimers(delta);
 
     if (this._state === EnemyState.FRIGHTENED) {
       if (this.frightenedTimer > 0) {
@@ -300,6 +347,12 @@ export abstract class Enemy extends VectorPuppet {
       if (!freezeMovement) {
         this.moveDeadReturnStep(delta / 1000);
       }
+      super.update(time, delta);
+      return;
+    }
+
+    if (this.stunTimer > 0) {
+      this.stunTimer = Math.max(0, this.stunTimer - delta);
       super.update(time, delta);
       return;
     }
@@ -493,11 +546,18 @@ export abstract class Enemy extends VectorPuppet {
       return this.randomValidDirection(false);
     }
 
+    if (!penTarget && this.hackRoutingOverride === "jammed") {
+      return this.randomValidDirection(false);
+    }
+
     const target =
       penTarget ??
       (this._state === EnemyState.DEAD
         ? this.mazeCenter
-        : this.getTargetPosition(playerX, playerY, playerDir));
+        : this.hackRoutingOverride === "scatter"
+          ? this.scatterTarget
+          : (this.toGridTarget(this.targetOverride) ??
+            this.getTargetPosition(playerX, playerY, playerDir)));
 
     if (!target) {
       return this.randomValidDirection(false);
@@ -692,6 +752,13 @@ export abstract class Enemy extends VectorPuppet {
     }
 
     if (
+      this.gateHackActive &&
+      isPenGateCell(nx, ny, this.gridWidth, this.gridHeight)
+    ) {
+      return false;
+    }
+
+    if (
       isEnteringPenFromOutside(
         { gridX: this.gridX, gridY: this.gridY },
         { gridX: nx, gridY: ny },
@@ -720,6 +787,39 @@ export abstract class Enemy extends VectorPuppet {
 
   private isCrowdedCell(nx: number, ny: number): boolean {
     return this.blockedCells.has(`${nx},${ny}`);
+  }
+
+  private refreshSpeed(): void {
+    this.speed =
+      this.baseSpeed * this.stateSpeedMultiplier * this.hackSpeedMultiplier;
+  }
+
+  private updateHackOverrideTimers(delta: number): void {
+    if (this.targetOverrideTimer > 0) {
+      this.targetOverrideTimer = Math.max(0, this.targetOverrideTimer - delta);
+      if (this.targetOverrideTimer === 0) this.targetOverride = null;
+    }
+    if (this.routingOverrideTimer > 0) {
+      this.routingOverrideTimer = Math.max(
+        0,
+        this.routingOverrideTimer - delta,
+      );
+      if (this.routingOverrideTimer === 0) this.hackRoutingOverride = null;
+    }
+  }
+
+  private toGridTarget(
+    target: { x: number; y: number } | null,
+  ): { x: number; y: number } | null {
+    if (!target) return null;
+    const grid = worldToGrid(
+      target.x,
+      target.y,
+      this.tileSize,
+      this.offsetX,
+      this.offsetY,
+    );
+    return { x: grid.gridX, y: grid.gridY };
   }
 
   private alignToMovementCenterline(): void {

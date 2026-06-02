@@ -12,6 +12,7 @@
     "model-convert": "bun run @neon-cabinet/model-tools/src/bin/model-convert.ts"
   },
   "dependencies": {
+    "@neon-cabinet/audio-tools": "workspace:*",
     "@neon-cabinet/model-tools": "workspace:*",
     "@neon-cabinet/shaders": "workspace:*",
     "phaser": "catalog:",

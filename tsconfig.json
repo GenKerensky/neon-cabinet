@@ -40,6 +40,15 @@
     },
     {
       "path": "./apps/vector-studio"
+    },
+    {
+      "path": "./libs/audio-tools"
+    },
+    {
+      "path": "./apps/audio-studio"
+    },
+    {
+      "path": "./libs/ui"
     }
   ]
 }

@@ -40,7 +40,7 @@ export class PickupManager {
 
     const allOccupied = [...occupiedPositions];
 
-    // Spawn armor pickups (2-4 per wave)
+    // Spawn armor pickups (2 to armorPickupsPerWave per wave)
     const armorCount =
       2 + Math.floor(Math.random() * (this.config.armorPickupsPerWave - 1));
     for (let i = 0; i < armorCount; i++) {

@@ -38,3 +38,8 @@ bun.lockb
 .nx/workspace-data
 vitest.config.*.timestamp*
 vite.config.*.timestamp*
+.nx/polygraph
+.claude/worktrees
+.claude/settings.local.json
+
+storybook-static

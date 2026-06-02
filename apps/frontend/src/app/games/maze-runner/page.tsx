@@ -26,7 +26,11 @@ export default function MazeRunnerPage() {
 
   return (
     <GameView>
-      <PhaserGame ref={phaserRef} currentActiveScene={onCurrentActiveScene} />
+      <PhaserGame
+        ref={phaserRef}
+        assetBaseUrl="/maze-runner-assets"
+        currentActiveScene={onCurrentActiveScene}
+      />
     </GameView>
   );
 }

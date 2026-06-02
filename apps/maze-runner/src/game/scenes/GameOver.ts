@@ -7,6 +7,12 @@ import {
 } from "../config/ghostDefinitions";
 import { formatScore, readHighScore, writeHighScore } from "../utils/highScore";
 import { fadeInScene, startSceneWithFade } from "../utils/sceneTransitions";
+import {
+  awardBytesForRun,
+  hackUpgradeDefinitions,
+  purchaseHackUpgrade,
+  readHackProgression,
+} from "../utils/hackProgression";
 
 interface GameOverPayload {
   score?: number;
@@ -47,6 +53,8 @@ export function resolveGameOverKillerPresentation(
 
 export class GameOver extends Scene {
   private finalScore = 0;
+  private bytesAwarded = 0;
+  private shopText?: Phaser.GameObjects.Text;
   private killerPresentation: KillerPresentation =
     resolveGameOverKillerPresentation();
 
@@ -56,6 +64,7 @@ export class GameOver extends Scene {
 
   init(args: GameOverPayload): void {
     this.finalScore = args?.score ?? 0;
+    this.bytesAwarded = awardBytesForRun(this.finalScore);
     this.killerPresentation = resolveGameOverKillerPresentation(args);
   }
 
@@ -97,7 +106,15 @@ export class GameOver extends Scene {
       })
       .setOrigin(0.5);
 
-    const killerHeaderY = height * 0.55;
+    this.add
+      .text(width / 2, height * 0.45, `BYTES EARNED: ${this.bytesAwarded}`, {
+        fontFamily,
+        fontSize: "16px",
+        color: "#00ff66",
+      })
+      .setOrigin(0.5);
+
+    const killerHeaderY = height * 0.57;
     this.add
       .text(width / 2, killerHeaderY, this.killerPresentation.killerHeadline, {
         fontFamily,
@@ -127,7 +144,7 @@ export class GameOver extends Scene {
       const killerPuppet = new VectorPuppet(
         this,
         width / 2,
-        height * 0.66,
+        height * 0.67,
         metadata,
       );
       killerPuppet.setScale(2.1);
@@ -137,7 +154,7 @@ export class GameOver extends Scene {
       });
       this.tweens.add({
         targets: killerPuppet,
-        y: height * 0.66 - 12,
+        y: height * 0.67 - 12,
         duration: 800,
         yoyo: true,
         repeat: -1,
@@ -194,6 +211,15 @@ export class GameOver extends Scene {
         .setOrigin(0.5);
     }
 
+    this.shopText = this.add
+      .text(width / 2, height * 0.83, this.getShopText(), {
+        fontFamily,
+        fontSize: "11px",
+        color: "#00ff66",
+        align: "center",
+      })
+      .setOrigin(0.5);
+
     // Restart prompt
     const restartText = this.add
       .text(width / 2, height * 0.87, "PRESS SPACE TO RESTART", {
@@ -232,7 +258,30 @@ export class GameOver extends Scene {
         stop: ["Game", "GameOver"],
       });
     });
+    this.bindShopKeys();
 
     EventBus.emit("current-scene-ready", this);
+  }
+
+  private bindShopKeys(): void {
+    hackUpgradeDefinitions.forEach((upgrade, index) => {
+      this.input.keyboard?.on(`keydown-${index + 1}`, () => {
+        purchaseHackUpgrade(upgrade.id);
+        this.shopText?.setText(this.getShopText());
+      });
+    });
+  }
+
+  private getShopText(): string {
+    const progression = readHackProgression();
+    const upgrades = hackUpgradeDefinitions
+      .map((upgrade, index) => {
+        const owned = progression.unlocks.includes(upgrade.id)
+          ? "OWNED"
+          : `${upgrade.cost}B`;
+        return `${index + 1}. ${upgrade.name} ${owned}`;
+      })
+      .join("   ");
+    return `BYTES: ${progression.bytes}\n${upgrades}`;
   }
 }

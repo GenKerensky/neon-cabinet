@@ -60,6 +60,9 @@ export class Player extends VectorPuppet {
   private gridHeight: number;
   private tileSize: number;
   private speed: number;
+  private baseSpeed: number;
+  private hackSpeedMultiplier = 1;
+  private turnAssistMultiplier = 1;
   private nextDirection: Direction = Direction.NONE;
   private gridX: number;
   private gridY: number;
@@ -75,6 +78,9 @@ export class Player extends VectorPuppet {
   private invulnerabilityFlashPhase = 0;
   private onInvulnerabilityComplete?: () => void;
   private baseBodyAnimations: AnimationMetadata[] = [];
+  private phaseBreachTimer = 0;
+  private phaseBreachMaxTiles = 3;
+  private shieldTimer = 0;
 
   set movementDirection(dir: Direction) {
     this.setCurrentVectorDirection(dir);
@@ -144,6 +150,7 @@ export class Player extends VectorPuppet {
     this.tileSize = ts;
     this.offsetX = ox;
     this.offsetY = oy;
+    this.baseSpeed = sp;
     this.speed = sp;
     this.gridX = Math.floor((x - ox) / ts);
     this.gridY = Math.floor((y - oy) / ts);
@@ -238,6 +245,7 @@ export class Player extends VectorPuppet {
     }
 
     this.updateInvulnerability(delta);
+    this.updateHackTimers(delta);
 
     const dt = delta / 1000;
     const moveAmount = this.speed * dt;
@@ -265,6 +273,9 @@ export class Player extends VectorPuppet {
     this.easeOntoCenterline(moveAmount);
 
     if (!this.canMove(currentDir)) {
+      if (this.tryPhaseBreach(currentDir)) {
+        return;
+      }
       this.snapToGrid();
       return;
     }
@@ -394,8 +405,100 @@ export class Player extends VectorPuppet {
       currentDx !== 0
         ? Math.abs(this.x - center.x)
         : Math.abs(this.y - center.y);
-    const tolerance = Math.max(1.25, this.tileSize * 0.08);
+    const tolerance =
+      Math.max(1.25, this.tileSize * 0.08) * this.turnAssistMultiplier;
     return turnAxisDelta <= tolerance && travelAxisDelta <= this.tileSize * 0.5;
+  }
+
+  setHackSpeedMultiplier(multiplier: number): void {
+    this.hackSpeedMultiplier = Math.max(0.1, multiplier);
+    this.speed = this.baseSpeed * this.hackSpeedMultiplier;
+  }
+
+  setTurnAssistMultiplier(multiplier: number): void {
+    this.turnAssistMultiplier = Math.max(1, multiplier);
+  }
+
+  enablePhaseBreach(durationMs: number, maxTiles: number): void {
+    this.phaseBreachTimer = Math.max(0, durationMs);
+    this.phaseBreachMaxTiles = Math.max(1, Math.floor(maxTiles));
+  }
+
+  activateShield(durationMs: number): void {
+    this.shieldTimer = Math.max(0, durationMs);
+  }
+
+  hasShield(): boolean {
+    return this.shieldTimer > 0;
+  }
+
+  consumeShield(): boolean {
+    if (!this.hasShield()) return false;
+    this.shieldTimer = 0;
+    return true;
+  }
+
+  clearHackEffects(): void {
+    this.setHackSpeedMultiplier(1);
+    this.setTurnAssistMultiplier(1);
+    this.phaseBreachTimer = 0;
+    this.shieldTimer = 0;
+  }
+
+  private updateHackTimers(delta: number): void {
+    this.phaseBreachTimer = Math.max(0, this.phaseBreachTimer - delta);
+    this.shieldTimer = Math.max(0, this.shieldTimer - delta);
+  }
+
+  private tryPhaseBreach(dir: Direction): boolean {
+    if (this.phaseBreachTimer <= 0) return false;
+
+    const dx = directionToDx(dir);
+    const dy = directionToDy(dir);
+    if (dx === 0 && dy === 0) return false;
+
+    for (let distance = 2; distance <= this.phaseBreachMaxTiles; distance++) {
+      const destinationX = this.gridX + dx * distance;
+      const destinationY = this.gridY + dy * distance;
+      if (
+        destinationX < 0 ||
+        destinationX >= this.gridWidth ||
+        destinationY < 0 ||
+        destinationY >= this.gridHeight
+      ) {
+        break;
+      }
+      if (this.grid[destinationY][destinationX].type !== CellType.PASSAGE) {
+        continue;
+      }
+      if (
+        isEnteringPenFromOutside(
+          { gridX: this.gridX, gridY: this.gridY },
+          { gridX: destinationX, gridY: destinationY },
+          this.gridWidth,
+          this.gridHeight,
+        )
+      ) {
+        continue;
+      }
+
+      const center = getCellCenter(
+        destinationX,
+        destinationY,
+        this.tileSize,
+        this.offsetX,
+        this.offsetY,
+      );
+      this.gridX = destinationX;
+      this.gridY = destinationY;
+      this.x = center.x;
+      this.y = center.y;
+      this.phaseBreachTimer = 0;
+      this.applyQueuedDirectionAtCenter();
+      return true;
+    }
+
+    return false;
   }
 
   private updateInvulnerability(delta: number): void {
@@ -569,6 +672,7 @@ export class Player extends VectorPuppet {
     this.invulnerabilityDuration = 0;
     this.invulnerabilityElapsed = 0;
     this.onInvulnerabilityComplete = undefined;
+    this.clearHackEffects();
     this.animationState = PlayerAnimationState.IDLE;
     this.restoreBaseAnimation();
     this.setAlpha(1);

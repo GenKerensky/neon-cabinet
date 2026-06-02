@@ -275,7 +275,7 @@ export class PlayerTank {
    * Resolve collisions with enemies - push player out if overlapping
    */
   resolveCollisions(
-    enemies: Array<{
+    enemies: ReadonlyArray<{
       position: Vector3D;
       collisionRadius: number;
       isAlive(): boolean;

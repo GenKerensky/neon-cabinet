@@ -5,19 +5,25 @@ import { ghostDefinitions } from "../config/ghostDefinitions";
 import { CellType, MazeGenerator } from "../utils/MazeGenerator";
 import { readHighScore, formatScore } from "../utils/highScore";
 import { fadeInScene, startSceneWithFade } from "../utils/sceneTransitions";
+import {
+  hackUpgradeDefinitions,
+  purchaseHackUpgrade,
+  readHackProgression,
+} from "../utils/hackProgression";
 
 const TITLE_MAZE_TEXTURE_KEY = "maze_runner_title_background_maze";
 const TITLE_MAZE_TILE_SIZE = 32;
 const TITLE_MAZE_SCROLL_X = 25;
 const TITLE_MAZE_SCROLL_Y = 18;
-const TITLE_CHASE_CHARACTER_SCALE = 2;
-const TITLE_CHASE_CHARACTER_SPACING = 100;
+const TITLE_CHASE_CHARACTER_SCALE = 1.15;
+const TITLE_CHASE_CHARACTER_SPACING = 44;
 const TITLE_CHASE_HORIZONTAL_DURATION = 8500;
-const TITLE_CHASE_OFFSCREEN_TRANSFER_DURATION = 300;
+const TITLE_CHASE_OFFSCREEN_TRANSFER_DURATION = 1700;
 
 export class Title extends Scene {
   private mazeBackground?: Phaser.GameObjects.TileSprite;
   private attractPuppets: VectorPuppet[] = [];
+  private shopText?: Phaser.GameObjects.Text;
 
   constructor() {
     super("Title");
@@ -164,6 +170,16 @@ export class Title extends Scene {
       .setOrigin(0.5)
       .setDepth(100);
 
+    this.shopText = this.add
+      .text(width / 2, height * 0.54, this.getShopText(), {
+        fontFamily,
+        fontSize: "13px",
+        color: "#00ff66",
+        align: "center",
+      })
+      .setOrigin(0.5)
+      .setDepth(100);
+
     // Start prompt
     const prompt = this.add
       .text(width / 2, height * 0.65, "PRESS SPACE TO START", {
@@ -185,6 +201,15 @@ export class Title extends Scene {
     // Controls info
     this.add
       .text(width / 2, height * 0.75, "ARROW KEYS / WASD - MOVE", {
+        fontFamily,
+        fontSize: "14px",
+        color: "#666666",
+      })
+      .setOrigin(0.5)
+      .setDepth(100);
+
+    this.add
+      .text(width / 2, height * 0.79, "E - ACTIVATE HELD HACK", {
         fontFamily,
         fontSize: "14px",
         color: "#666666",
@@ -218,6 +243,7 @@ export class Title extends Scene {
 
     this.input.keyboard?.on("keydown-SPACE", startGame);
     this.input.keyboard?.on("keydown-ENTER", startGame);
+    this.bindShopKeys();
     this.input.on("pointerdown", startGame);
 
     // Auto-start for headless testing
@@ -227,6 +253,28 @@ export class Title extends Scene {
     }
 
     EventBus.emit("current-scene-ready", this);
+  }
+
+  private bindShopKeys(): void {
+    hackUpgradeDefinitions.forEach((upgrade, index) => {
+      this.input.keyboard?.on(`keydown-${index + 1}`, () => {
+        purchaseHackUpgrade(upgrade.id);
+        this.shopText?.setText(this.getShopText());
+      });
+    });
+  }
+
+  private getShopText(): string {
+    const progression = readHackProgression();
+    const upgrades = hackUpgradeDefinitions
+      .map((upgrade, index) => {
+        const owned = progression.unlocks.includes(upgrade.id)
+          ? "OWNED"
+          : `${upgrade.cost}B`;
+        return `${index + 1}. ${upgrade.name} ${owned}`;
+      })
+      .join("   ");
+    return `BYTES: ${progression.bytes}\n${upgrades}`;
   }
 
   update(_time: number, delta: number): void {

@@ -76,7 +76,15 @@ export function isAtCellCenter(
   offsetY: number,
   tolerance = getCenterTolerance(tileSize),
 ): boolean {
-  const { distance } = distanceToCellCenter(x, y, gridX, gridY, tileSize, offsetX, offsetY);
+  const { distance } = distanceToCellCenter(
+    x,
+    y,
+    gridX,
+    gridY,
+    tileSize,
+    offsetX,
+    offsetY,
+  );
   return distance <= tolerance;
 }
 
@@ -100,7 +108,15 @@ export function hasLeftCurrentCenter(
   offsetY: number,
   tolerance = getCenterTolerance(tileSize),
 ): boolean {
-  const { distance } = distanceToCellCenter(x, y, gridX, gridY, tileSize, offsetX, offsetY);
+  const { distance } = distanceToCellCenter(
+    x,
+    y,
+    gridX,
+    gridY,
+    tileSize,
+    offsetX,
+    offsetY,
+  );
   return distance > tolerance;
 }
 
@@ -150,17 +166,37 @@ export function getPenGeometry(width: number, height: number): PenGeometry {
   };
 }
 
-export function isPenInteriorCell(gridX: number, gridY: number, width: number, height: number): boolean {
+export function isPenInteriorCell(
+  gridX: number,
+  gridY: number,
+  width: number,
+  height: number,
+): boolean {
   const { centerX, centerY } = getPenGeometry(width, height);
-  return gridX >= centerX - 1 && gridX <= centerX + 1 && gridY >= centerY && gridY <= centerY + 1;
+  return (
+    gridX >= centerX - 1 &&
+    gridX <= centerX + 1 &&
+    gridY >= centerY &&
+    gridY <= centerY + 1
+  );
 }
 
-export function isPenGateCell(gridX: number, gridY: number, width: number, height: number): boolean {
+export function isPenGateCell(
+  gridX: number,
+  gridY: number,
+  width: number,
+  height: number,
+): boolean {
   const { gateCell } = getPenGeometry(width, height);
   return gridX === gateCell.gridX && gridY === gateCell.gridY;
 }
 
-export function isPenExitCell(gridX: number, gridY: number, width: number, height: number): boolean {
+export function isPenExitCell(
+  gridX: number,
+  gridY: number,
+  width: number,
+  height: number,
+): boolean {
   const { exitCell } = getPenGeometry(width, height);
   return gridX === exitCell.gridX && gridY === exitCell.gridY;
 }
@@ -175,7 +211,8 @@ export function isEnteringPenFromOutside(
     isPenInteriorCell(from.gridX, from.gridY, width, height) ||
     isPenGateCell(from.gridX, from.gridY, width, height);
   const toGateOrInterior =
-    isPenGateCell(to.gridX, to.gridY, width, height) || isPenInteriorCell(to.gridX, to.gridY, width, height);
+    isPenGateCell(to.gridX, to.gridY, width, height) ||
+    isPenInteriorCell(to.gridX, to.gridY, width, height);
 
   return !fromInsidePen && toGateOrInterior;
 }
