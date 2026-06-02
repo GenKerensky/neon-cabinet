@@ -17,8 +17,10 @@
     "name": "studio-registry"
   },
   "scripts": {
-    "build": "echo 'implement build'",
-    "test": "echo 'implement test'"
+    "build": "vite build",
+    "test": "vitest run"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
 }

@@ -10,12 +10,15 @@ declare global {
 
 if (typeof globalThis !== "undefined" && !("DOMParser" in globalThis)) {
   const window = new Window();
-  (
-    globalThis as { DOMParser: typeof DOMParser; SVGElement: typeof SVGElement }
-  ).DOMParser = window.DOMParser;
-  (
-    globalThis as { DOMParser: typeof DOMParser; SVGElement: typeof SVGElement }
-  ).SVGElement = window.SVGElement;
+  Object.assign(window, {
+    DOMException,
+    Error,
+    SyntaxError,
+    TypeError,
+  });
+  const domGlobals = globalThis as unknown as Record<string, unknown>;
+  domGlobals.DOMParser = window.DOMParser;
+  domGlobals.SVGElement = window.SVGElement;
 }
 
 async function renderSVG(
@@ -68,7 +71,10 @@ async function renderSVG(
 
 const [, , input, output] = process.argv;
 if (input && output) {
-  renderSVG(input, output).catch(console.error);
+  renderSVG(input, output).catch((error: unknown) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
 } else {
   console.log("Usage: bun run render-svg.ts <input.svg> <output.png>");
 }
