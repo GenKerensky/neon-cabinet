@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 15">
+  <polygon id="icon-body" points="5,4 20,4 29,7.5 20,11 5,11" fill="#3a0b0b" stroke="#ff7840" stroke-width="1"/>
+  <polygon id="icon-nose" points="20,4 29,7.5 20,11" fill="#ffae38" stroke="#ffe2a2" stroke-width="1"/>
+  <polygon id="icon-top-fin" points="6,4 2,0.5 11,4" fill="#b91515" stroke="#ff7840" stroke-width="1"/>
+  <polygon id="icon-bottom-fin" points="6,11 2,14.5 11,11" fill="#b91515" stroke="#ff7840" stroke-width="1"/>
+  <rect id="icon-window" x="1" y="6" width="4" height="3" fill="#ffffff" opacity="0.9"/>
+</svg>

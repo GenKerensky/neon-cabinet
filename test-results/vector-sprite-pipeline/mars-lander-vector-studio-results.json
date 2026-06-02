@@ -1,0 +1,38 @@
+[
+  {
+    "asset": "flame",
+    "state": {
+      "title": "Vector Studio Preview",
+      "text": "NEON CABINET\nVector Studio\nAsset apps/mars-lander/public/assets/vector/flame.svg\nPREVIEW\nRELOAD\nSHADER\nDIRECTION\n↑\n←\n●\n→\n↓\nSCALE\n4.0x\n−\nRESET\n+\nANIMATION\n1.00x\n⟵\n−\n⏸\n+\n⟶\nLAYERS\nlayer_6mhwuow5c (circle)\nlayer_l2rc6jeaq (circle)\nlayer_cgzyjh65d (circle)\nlayer_h44e58zeq (circle)\nlayer_nhrkzgsep (circle)\nUse ?asset=apps/maze-runner/public/assets/vector/player.svg",
+      "canvases": 1,
+      "svg": 0
+    }
+  },
+  {
+    "asset": "particle",
+    "state": {
+      "title": "Vector Studio Preview",
+      "text": "NEON CABINET\nVector Studio\nAsset apps/mars-lander/public/assets/vector/particle.svg\nPREVIEW\nRELOAD\nSHADER\nDIRECTION\n↑\n←\n●\n→\n↓\nSCALE\n4.0x\n−\nRESET\n+\nANIMATION\n1.00x\n⟵\n−\n⏸\n+\n⟶\nLAYERS\nlayer_yzt5bjrzm (circle)\nUse ?asset=apps/maze-runner/public/assets/vector/player.svg",
+      "canvases": 1,
+      "svg": 0
+    }
+  },
+  {
+    "asset": "star",
+    "state": {
+      "title": "Vector Studio Preview",
+      "text": "NEON CABINET\nVector Studio\nAsset apps/mars-lander/public/assets/vector/star.svg\nPREVIEW\nRELOAD\nSHADER\nDIRECTION\n↑\n←\n●\n→\n↓\nSCALE\n4.0x\n−\nRESET\n+\nANIMATION\n1.00x\n⟵\n−\n⏸\n+\n⟶\nLAYERS\nlayer_ufdg7xyq3 (circle)\nUse ?asset=apps/maze-runner/public/assets/vector/player.svg",
+      "canvases": 1,
+      "svg": 0
+    }
+  },
+  {
+    "asset": "landing-pad",
+    "state": {
+      "title": "Vector Studio Preview",
+      "text": "NEON CABINET\nVector Studio\nAsset apps/mars-lander/public/assets/vector/landing-pad.svg\nPREVIEW\nRELOAD\nSHADER\nDIRECTION\n↑\n←\n●\n→\n↓\nSCALE\n4.0x\n−\nRESET\n+\nANIMATION\n1.00x\n⟵\n−\n⏸\n+\n⟶\nLAYERS\nlayer_9qkzm3knf (path)\nlayer_gfody7zxo (path)\nlayer_d22d2gh7w (path)\nUse ?asset=apps/maze-runner/public/assets/vector/player.svg",
+      "canvases": 1,
+      "svg": 0
+    }
+  }
+]

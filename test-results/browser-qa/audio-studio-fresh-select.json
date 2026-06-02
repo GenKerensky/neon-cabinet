@@ -1,0 +1,145 @@
+{
+  "items": [
+    {
+      "text": "",
+      "value": null,
+      "id": "",
+      "attrs": [
+        ["role", "slider"],
+        ["aria-valuemin", "0"],
+        ["aria-valuemax", "1600"],
+        ["aria-orientation", "horizontal"],
+        ["data-orientation", "horizontal"],
+        ["tabindex", "0"],
+        ["data-slot", "slider-thumb"],
+        [
+          "class",
+          "relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50"
+        ],
+        ["data-radix-collection-item", ""],
+        ["aria-valuenow", "0"],
+        ["style", ""]
+      ]
+    },
+    {
+      "text": "",
+      "value": null,
+      "id": "",
+      "attrs": [
+        ["role", "slider"],
+        ["aria-valuemin", "-1"],
+        ["aria-valuemax", "1"],
+        ["aria-orientation", "horizontal"],
+        ["data-orientation", "horizontal"],
+        ["tabindex", "0"],
+        ["data-slot", "slider-thumb"],
+        [
+          "class",
+          "relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50"
+        ],
+        ["data-radix-collection-item", ""],
+        ["aria-valuenow", "0"],
+        ["style", ""]
+      ]
+    },
+    {
+      "text": "",
+      "value": null,
+      "id": "",
+      "attrs": [
+        ["role", "slider"],
+        ["aria-valuemin", "0"],
+        ["aria-valuemax", "1.5"],
+        ["aria-orientation", "horizontal"],
+        ["data-orientation", "horizontal"],
+        ["tabindex", "0"],
+        ["data-slot", "slider-thumb"],
+        [
+          "class",
+          "relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50"
+        ],
+        ["data-radix-collection-item", ""],
+        ["aria-valuenow", "0.7"],
+        ["style", ""]
+      ]
+    },
+    {
+      "text": "Battle Tanks",
+      "value": null,
+      "id": "",
+      "attrs": [
+        ["role", "option"],
+        ["aria-labelledby", "radix-_r_d_"],
+        ["aria-selected", "false"],
+        ["data-state", "unchecked"],
+        ["tabindex", "-1"],
+        ["data-slot", "select-item"],
+        [
+          "class",
+          "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2"
+        ],
+        ["data-radix-collection-item", ""]
+      ]
+    },
+    {
+      "text": "Space Defender",
+      "value": null,
+      "id": "",
+      "attrs": [
+        ["role", "option"],
+        ["aria-labelledby", "radix-_r_e_"],
+        ["aria-selected", "false"],
+        ["data-state", "checked"],
+        ["tabindex", "-1"],
+        ["data-slot", "select-item"],
+        [
+          "class",
+          "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2"
+        ],
+        ["data-radix-collection-item", ""]
+      ]
+    },
+    {
+      "text": "Mars Lander",
+      "value": null,
+      "id": "",
+      "attrs": [
+        ["role", "option"],
+        ["aria-labelledby", "radix-_r_f_"],
+        ["aria-selected", "false"],
+        ["data-state", "unchecked"],
+        ["tabindex", "-1"],
+        ["data-slot", "select-item"],
+        [
+          "class",
+          "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2"
+        ],
+        ["data-radix-collection-item", ""]
+      ]
+    },
+    {
+      "text": "Maze Runner",
+      "value": null,
+      "id": "",
+      "attrs": [
+        ["role", "option"],
+        ["aria-labelledby", "radix-_r_g_"],
+        ["aria-selected", "false"],
+        ["data-state", "unchecked"],
+        ["tabindex", "-1"],
+        ["data-slot", "select-item"],
+        [
+          "class",
+          "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2"
+        ],
+        ["data-radix-collection-item", ""]
+      ]
+    }
+  ],
+  "marsFound": true,
+  "selected": "Mars Lander",
+  "hasThrustLoop": true,
+  "hasTouchdown": true,
+  "hasStarter": false,
+  "text": "Audio Studio\nMars Lander\nMars Lander\n\nMartian vector lander with orange thrust, cyan instruments, and tense touchdown cues.\n\nRUMBLE\nMars Lander Thrust Loop\nWEAPON\nNo weapon effects\nIMPACT\nMars Lander Gear Deploy\nMars Lander Touchdown\nEXPLOSION\nMars Lander Crash Explosion\nMUSIC CUE\nMars Lander Level Cleared\nMars Lander Game Over\nMars Lander Start\nMars Lander Pause\nMars Lander Resume\nMars Lander Low Fuel\nMars Lander Title Placeholder\nMars Lander Thrust Loop\nRumble\nUndo\nRedo\nReset\nOscillator\nLfo\nGain Envelope\nNoise Burst\nFilter\nStereo Panner\nSpatial Attenuation\nOutput\nThruster Tone\nOscillator\nFuel Flutter\nLfo\nNozzle Filter\nFilter\nThrottle Gain\nGain Envelope\nScreen Pan\nStereo Panner\nOutput\nOutput\nINSPECTOR\nDelete\nLabel\nWaveform\nsawtooth\nFrequency\nConnect to Output\nCollapse Export\nDownload JSON\n{\n  \"schemaVersion\": 1,\n  \"id\": \"mars-lander-thrust-loop\",\n  \"name\": \"Mars Lander Thrust Loop\",\n  \"category\": \"Rumble\",\n  \"duration\": 0,\n  \"preview\": {\n    \"intensity\": 0.75,\n    \"distance\": 0,\n    \"pan\": 0\n  },\n  \"nodes\": [\n    {\n      \"id\": \"thrust-tone\",\n      \"type\": \"oscillator\",\n      \"label\": \"Thruster Tone\",\n      \"position\": {\n        \"x\": 80,\n        \"y\": 130\n      },\n      \"waveform\": \"sawtooth\",\n      \"frequency\": 92,\n      \"detune\": -8\n    },\n    {\n      \"id\": \"fuel-flutter\",\n      \"type\": \"lfo\",\n      \"label\": \"Fuel Flutter\",\n      \"position\": {\n        \"x\": 80,\n        \"y\": 290\n      },\n      \"waveform\": \"triangle\",\n      \"frequency\": 8.5,\n      \"depth\": 9,\n      \"target\": \"t"
+}

@@ -1,0 +1,905 @@
+{
+  "audioStudio": {
+    "state": {
+      "title": "Audio Studio",
+      "hasMarsButton": false,
+      "hasThrustLoop": false,
+      "hasTouchdown": false,
+      "hasStarter": false,
+      "text": "Audio Studio\nBattle Tanks\nBattle Tanks\n\nWireframe 3D tank combat with deep engine rumbles, harsh cannon fire, and arcade battlefield impacts.\n\nRUMBLE\nBattle Tanks Player Rumble\nBattle Tanks Enemy Rumble\nWEAPON\nBattle Tanks Harsh Cannon Bang\nIMPACT\nBattle Tanks Armor Hit\nEXPLOSION\nBattle Tanks Explosion\nMUSIC CUE\nBattle Tanks Digital Taps\nBattle Tanks Armor Hit\nImpact\nUndo\nRedo\nReset\nOscillator\nLfo\nGain Envelope\nNoise Burst\nFilter\nStereo Panner\nSpatial Attenuation\nOutput\nMetal Bite\nOscillator\nCrunch Envelope\nGain Envelope\nSparks\nNoise Burst\nImpact Pan\nStereo Panner\nOutput\nOutput\nINSPECTOR\nDelete\nLabel\nGain\nAttack\nDecay\nSustain\nRelease\nConnect to Output\nCollapse Export\nDownload JSON\n{\n  \"schemaVersion\": 1,\n  \"id\": \"battle-tanks-impact-crunch\",\n  \"name\": \"Battle Tanks Armor Hit\",\n  \"category\": \"Impact\",\n  \"duration\": 0.32,\n  \"preview\": {\n    \"intensity\": 0.9,\n    \"distance\": 180,\n    \"pan\": 0.25\n  },\n  \"nodes\": [\n    {\n      \"id\": \"metal\",\n      \"type\": \"oscillator\",\n      \"label\": \"Metal Bite\",\n      \"position\": {\n        \"x\": 80,\n        \"y\": 120\n      },\n      \"waveform\": \"triangle\",\n      \"frequency\": 150,\n      \"duration\": 0.16\n    },\n    {\n      \"id\": \"crunch-envelope\",\n      \"t"
+    },
+    "consoleEventCount": 4
+  },
+  "marsLander": {
+    "titleState": {
+      "title": "Mars Lander",
+      "text": "",
+      "canvasCount": 1,
+      "audioFiles": [
+        "crash-explosion.wav",
+        "crash-explosion.wav",
+        "game-over.wav",
+        "game-over.wav",
+        "gear-deploy.wav",
+        "gear-deploy.wav",
+        "level-cleared.wav",
+        "level-cleared.wav",
+        "low-fuel.wav",
+        "low-fuel.wav",
+        "pause.wav",
+        "pause.wav",
+        "resume.wav",
+        "resume.wav",
+        "start.wav",
+        "start.wav",
+        "title-placeholder.wav",
+        "title-placeholder.wav",
+        "touchdown.wav",
+        "touchdown.wav"
+      ],
+      "vectorFiles": [
+        "flame.svg",
+        "flame.svg",
+        "lander.svg",
+        "lander.svg",
+        "landing-pad.svg",
+        "landing-pad.svg",
+        "particle.svg",
+        "particle.svg",
+        "star.svg",
+        "star.svg"
+      ]
+    },
+    "gameState": {
+      "title": "Mars Lander",
+      "text": "",
+      "canvasCount": 1,
+      "canvasSize": {
+        "width": 1600,
+        "height": 1200
+      },
+      "canvasDataPrefix": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABkAAAASwCAYAAACjAYaXAAAQAElEQVR4Ae",
+      "audioFiles": [
+        "crash-explosion.wav",
+        "crash-explosion.wav",
+        "game-over.wav",
+        "game-over.wav",
+        "gear-deploy.wav",
+        "gear-deploy.wav",
+        "level-cleared.wav",
+        "level-cleared.wav",
+        "low-fuel.wav",
+        "low-fuel.wav",
+        "pause.wav",
+        "pause.wav",
+        "resume.wav",
+        "resume.wav",
+        "start.wav",
+        "start.wav",
+        "title-placeholder.wav",
+        "title-placeholder.wav",
+        "touchdown.wav",
+        "touchdown.wav"
+      ],
+      "vectorFiles": [
+        "flame.svg",
+        "flame.svg",
+        "lander.svg",
+        "lander.svg",
+        "landing-pad.svg",
+        "landing-pad.svg",
+        "particle.svg",
+        "particle.svg",
+        "star.svg",
+        "star.svg"
+      ]
+    },
+    "consoleEvents": [
+      {
+        "type": "debug",
+        "args": [
+          {
+            "type": "string",
+            "value": "[vite] connecting..."
+          }
+        ],
+        "executionContextId": 2,
+        "timestamp": 1780380805079.091,
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 732,
+              "columnNumber": 8
+            }
+          ]
+        }
+      },
+      {
+        "type": "debug",
+        "args": [
+          {
+            "type": "string",
+            "value": "[vite] connected."
+          }
+        ],
+        "executionContextId": 2,
+        "timestamp": 1780380805104.456,
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "handleMessage",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 826,
+              "columnNumber": 11
+            },
+            {
+              "functionName": "",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 457,
+              "columnNumber": 41
+            },
+            {
+              "functionName": "dequeue",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 479,
+              "columnNumber": 7
+            },
+            {
+              "functionName": "",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 471,
+              "columnNumber": 8
+            },
+            {
+              "functionName": "enqueue",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 465,
+              "columnNumber": 9
+            },
+            {
+              "functionName": "",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 457,
+              "columnNumber": 27
+            },
+            {
+              "functionName": "onMessage",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 304,
+              "columnNumber": 5
+            },
+            {
+              "functionName": "",
+              "scriptId": "7",
+              "url": "http://localhost:4202/@vite/client",
+              "lineNumber": 412,
+              "columnNumber": 4
+            }
+          ]
+        }
+      },
+      {
+        "type": "info",
+        "args": [
+          {
+            "type": "string",
+            "value": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools"
+          },
+          {
+            "type": "string",
+            "value": "font-weight:bold"
+          }
+        ],
+        "executionContextId": 2,
+        "timestamp": 1780380805316.068,
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 20102,
+              "columnNumber": 53
+            },
+            {
+              "functionName": "../../node_modules/.bun/react-dom@19.2.3+83d5fd7b249dbeef/node_modules/react-dom/cjs/react-dom-client.development.js",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 20176,
+              "columnNumber": 6
+            },
+            {
+              "functionName": "__require",
+              "scriptId": "14",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/chunk-BUSYA2B4.js?v=5d698dce",
+              "lineNumber": 2,
+              "columnNumber": 49
+            },
+            {
+              "functionName": "../../node_modules/.bun/react-dom@19.2.3+83d5fd7b249dbeef/node_modules/react-dom/client.js",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 20187,
+              "columnNumber": 23
+            },
+            {
+              "functionName": "__require",
+              "scriptId": "14",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/chunk-BUSYA2B4.js?v=5d698dce",
+              "lineNumber": 2,
+              "columnNumber": 49
+            },
+            {
+              "functionName": "",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 20191,
+              "columnNumber": 15
+            }
+          ]
+        }
+      },
+      {
+        "type": "log",
+        "args": [
+          {
+            "type": "string",
+            "value": "%c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390"
+          },
+          {
+            "type": "string",
+            "value": "background: #ff0000"
+          },
+          {
+            "type": "string",
+            "value": "background: #ffff00"
+          },
+          {
+            "type": "string",
+            "value": "background: #00ff00"
+          },
+          {
+            "type": "string",
+            "value": "background: #00ffff"
+          },
+          {
+            "type": "string",
+            "value": "color: #ffffff; background: #000000"
+          },
+          {
+            "type": "string",
+            "value": "background: transparent"
+          }
+        ],
+        "executionContextId": 2,
+        "timestamp": 1780380805429.317,
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "DebugHeader",
+              "scriptId": "33",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+              "lineNumber": 8455,
+              "columnNumber": 32
+            },
+            {
+              "functionName": "boot",
+              "scriptId": "33",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+              "lineNumber": 8550,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "DOMContentLoaded",
+              "scriptId": "33",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+              "lineNumber": 16255,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "Game2",
+              "scriptId": "33",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+              "lineNumber": 8527,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "",
+              "scriptId": "17",
+              "url": "http://localhost:4202/src/PhaserGame.tsx",
+              "lineNumber": 85,
+              "columnNumber": 25
+            },
+            {
+              "functionName": "react_stack_bottom_frame",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 18566,
+              "columnNumber": 19
+            },
+            {
+              "functionName": "runWithFiberInDEV",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 996,
+              "columnNumber": 71
+            },
+            {
+              "functionName": "commitHookEffectListMount",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 9410,
+              "columnNumber": 162
+            },
+            {
+              "functionName": "commitHookLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 9390,
+              "columnNumber": 59
+            },
+            {
+              "functionName": "commitLayoutEffectOnFiber",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 9903,
+              "columnNumber": 25
+            },
+            {
+              "functionName": "recursivelyTraverseLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10791,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "commitLayoutEffectOnFiber",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 9991,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "recursivelyTraverseLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10791,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "commitLayoutEffectOnFiber",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 9902,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "recursivelyTraverseLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10791,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "commitLayoutEffectOnFiber",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10073,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "recursivelyTraverseLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10791,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "commitLayoutEffectOnFiber",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 9962,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "flushLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 12923,
+              "columnNumber": 119
+            },
+            {
+              "functionName": "commitRoot",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 12802,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "commitRootWhenReady",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 12015,
+              "columnNumber": 8
+            },
+            {
+              "functionName": "performWorkOnRoot",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 11949,
+              "columnNumber": 16
+            },
+            {
+              "functionName": "performWorkOnRootViaSchedulerTask",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 13504,
+              "columnNumber": 8
+            },
+            {
+              "functionName": "performWorkUntilDeadline",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 35,
+              "columnNumber": 49
+            }
+          ]
+        }
+      },
+      {
+        "type": "log",
+        "args": [
+          {
+            "type": "string",
+            "value": "%c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390"
+          },
+          {
+            "type": "string",
+            "value": "background: #ff0000"
+          },
+          {
+            "type": "string",
+            "value": "background: #ffff00"
+          },
+          {
+            "type": "string",
+            "value": "background: #00ff00"
+          },
+          {
+            "type": "string",
+            "value": "background: #00ffff"
+          },
+          {
+            "type": "string",
+            "value": "color: #ffffff; background: #000000"
+          },
+          {
+            "type": "string",
+            "value": "background: transparent"
+          }
+        ],
+        "executionContextId": 2,
+        "timestamp": 1780380805502.901,
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "DebugHeader",
+              "scriptId": "33",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+              "lineNumber": 8455,
+              "columnNumber": 32
+            },
+            {
+              "functionName": "boot",
+              "scriptId": "33",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+              "lineNumber": 8550,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "DOMContentLoaded",
+              "scriptId": "33",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+              "lineNumber": 16255,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "Game2",
+              "scriptId": "33",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+              "lineNumber": 8527,
+              "columnNumber": 20
+            },
+            {
+              "functionName": "",
+              "scriptId": "17",
+              "url": "http://localhost:4202/src/PhaserGame.tsx",
+              "lineNumber": 85,
+              "columnNumber": 25
+            },
+            {
+              "functionName": "react_stack_bottom_frame",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 18566,
+              "columnNumber": 19
+            },
+            {
+              "functionName": "runWithFiberInDEV",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 996,
+              "columnNumber": 71
+            },
+            {
+              "functionName": "commitHookEffectListMount",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 9410,
+              "columnNumber": 162
+            },
+            {
+              "functionName": "commitHookLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 9390,
+              "columnNumber": 59
+            },
+            {
+              "functionName": "reappearLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10864,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "recursivelyTraverseReappearLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10985,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "reappearLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10900,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "recursivelyTraverseReappearLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10985,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "reappearLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10859,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "recursivelyTraverseReappearLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10985,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "reappearLayoutEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 10964,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "doubleInvokeEffectsOnFiber",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 13338,
+              "columnNumber": 73
+            },
+            {
+              "functionName": "runWithFiberInDEV",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 996,
+              "columnNumber": 71
+            },
+            {
+              "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 13311,
+              "columnNumber": 77
+            },
+            {
+              "functionName": "commitDoubleInvokeEffectsInDEV",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 13346,
+              "columnNumber": 8
+            },
+            {
+              "functionName": "flushPassiveEffects",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 13156,
+              "columnNumber": 10
+            },
+            {
+              "functionName": "",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 12775,
+              "columnNumber": 12
+            },
+            {
+              "functionName": "performWorkUntilDeadline",
+              "scriptId": "11",
+              "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/react-dom_client.js?v=7acc3477",
+              "lineNumber": 35,
+              "columnNumber": 49
+            }
+          ]
+        }
+      },
+      {
+        "entry": {
+          "source": "network",
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1780380805575.57,
+          "url": "http://localhost:4202/favicon.ico",
+          "networkRequestId": "2610.83"
+        }
+      },
+      {
+        "entry": {
+          "source": "other",
+          "level": "warning",
+          "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+          "timestamp": 1780380805587.334,
+          "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+          "lineNumber": 115974,
+          "stackTrace": {
+            "callFrames": [
+              {
+                "functionName": "createAndStartLoopBufferSource",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 115974,
+                "columnNumber": 36
+              },
+              {
+                "functionName": "set",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 116466,
+                "columnNumber": 31
+              },
+              {
+                "functionName": "applyConfig",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 113503,
+                "columnNumber": 30
+              },
+              {
+                "functionName": "applyConfig",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 116066,
+                "columnNumber": 52
+              },
+              {
+                "functionName": "createAndStartBufferSource",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 115957,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "play",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 115879,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "playTitlePlaceholder",
+                "scriptId": "26",
+                "url": "http://localhost:4202/src/game/audio/MarsLanderAudio.ts",
+                "lineNumber": 126,
+                "columnNumber": 19
+              },
+              {
+                "functionName": "create",
+                "scriptId": "20",
+                "url": "http://localhost:4202/src/game/scenes/Title.ts",
+                "lineNumber": 19,
+                "columnNumber": 15
+              },
+              {
+                "functionName": "create",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 110812,
+                "columnNumber": 35
+              },
+              {
+                "functionName": "bootScene",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 110728,
+                "columnNumber": 27
+              },
+              {
+                "functionName": "start",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 111270,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "processQueue",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 110589,
+                "columnNumber": 36
+              },
+              {
+                "functionName": "update",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 110767,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "step",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 8623,
+                "columnNumber": 31
+              },
+              {
+                "functionName": "step",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 9077,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "step",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 16404,
+                "columnNumber": 28
+              }
+            ]
+          }
+        }
+      },
+      {
+        "entry": {
+          "source": "other",
+          "level": "warning",
+          "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+          "timestamp": 1780380805587.435,
+          "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+          "lineNumber": 115958,
+          "stackTrace": {
+            "callFrames": [
+              {
+                "functionName": "createAndStartBufferSource",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 115958,
+                "columnNumber": 32
+              },
+              {
+                "functionName": "play",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 115879,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "playTitlePlaceholder",
+                "scriptId": "26",
+                "url": "http://localhost:4202/src/game/audio/MarsLanderAudio.ts",
+                "lineNumber": 126,
+                "columnNumber": 19
+              },
+              {
+                "functionName": "create",
+                "scriptId": "20",
+                "url": "http://localhost:4202/src/game/scenes/Title.ts",
+                "lineNumber": 19,
+                "columnNumber": 15
+              },
+              {
+                "functionName": "create",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 110812,
+                "columnNumber": 35
+              },
+              {
+                "functionName": "bootScene",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 110728,
+                "columnNumber": 27
+              },
+              {
+                "functionName": "start",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 111270,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "processQueue",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 110589,
+                "columnNumber": 36
+              },
+              {
+                "functionName": "update",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 110767,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "step",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 8623,
+                "columnNumber": 31
+              },
+              {
+                "functionName": "step",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 9077,
+                "columnNumber": 25
+              },
+              {
+                "functionName": "step",
+                "scriptId": "33",
+                "url": "http://localhost:4202/@fs/var/home/falco/code/neon-cabinet/node_modules/.vite/apps/mars-lander/deps/phaser.js?v=72d990a3",
+                "lineNumber": 16404,
+                "columnNumber": 28
+              }
+            ]
+          }
+        }
+      },
+      {
+        "entry": {
+          "source": "network",
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1780380807821.303,
+          "url": "http://localhost:4202/favicon.ico",
+          "networkRequestId": "2610.88"
+        }
+      }
+    ]
+  }
+}

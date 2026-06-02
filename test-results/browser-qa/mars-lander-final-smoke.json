@@ -1,0 +1,49 @@
+{
+  "titleState": {
+    "canvasCount": 1,
+    "audioFiles": [
+      "crash-explosion.wav",
+      "crash-explosion.wav",
+      "game-over.wav",
+      "game-over.wav",
+      "gear-deploy.wav",
+      "gear-deploy.wav",
+      "level-cleared.wav",
+      "level-cleared.wav",
+      "low-fuel.wav",
+      "low-fuel.wav",
+      "pause.wav",
+      "pause.wav",
+      "resume.wav",
+      "resume.wav",
+      "start.wav",
+      "start.wav",
+      "title-placeholder.wav",
+      "title-placeholder.wav",
+      "touchdown.wav",
+      "touchdown.wav"
+    ],
+    "vectorFiles": [
+      "flame.svg",
+      "flame.svg",
+      "lander.svg",
+      "lander.svg",
+      "landing-pad.svg",
+      "landing-pad.svg",
+      "particle.svg",
+      "particle.svg",
+      "star.svg",
+      "star.svg"
+    ]
+  },
+  "gameState": {
+    "canvasCount": 1,
+    "canvasSize": {
+      "width": 1600,
+      "height": 1200
+    },
+    "canvasDataPrefix": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABkAAAASwCAYAAACjAYaXAAAQAElEQVR4Ae"
+  },
+  "warningTexts": ["error", "Failed to load resource"],
+  "consoleEventCount": 6
+}

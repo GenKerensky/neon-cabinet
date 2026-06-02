@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16">
+  <polygon id="outer-flame" points="2,8 11,1 23,8 11,15" fill="#005cff" opacity="0.45" data-anim-pulse='{"frequency":7,"amplitude":0.35,"speed":1}'/>
+  <polygon id="mid-flame" points="4,8 11,3 19,8 11,13" fill="#33aaff" opacity="0.72" data-anim-pulse='{"frequency":9,"amplitude":0.25,"speed":1}'/>
+  <polygon id="inner-flame" points="6,8 11,5 15,8 11,11" fill="#d7f5ff" opacity="0.95"/>
+</svg>
