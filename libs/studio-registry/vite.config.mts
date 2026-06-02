@@ -5,41 +5,31 @@ import * as path from "path";
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
-  cacheDir: "../../node_modules/.vite/libs/ui",
+  cacheDir: "../../node_modules/.vite/libs/studio-registry",
   plugins: [
     dts({
       entryRoot: "src",
       tsconfigPath: path.join(import.meta.dirname, "tsconfig.lib.json"),
+      insertTypesEntry: true,
     }),
   ],
   build: {
-    outDir: "./dist",
+    outDir: "dist",
     emptyOutDir: true,
     reportCompressedSize: true,
     lib: {
       entry: "src/index.ts",
-      name: "@neon-cabinet/ui",
+      name: "studio-registry",
       fileName: "index",
       formats: ["es" as const],
     },
-    rollupOptions: {
-      external: [
-        "@fontsource-variable/geist",
-        "class-variance-authority",
-        "clsx",
-        "lucide-react",
-        "radix-ui",
-        "react",
-        "react-dom",
-        "tailwind-merge",
-      ],
-    },
+    minify: false,
   },
   test: {
-    name: "ui",
+    name: "studio-registry",
     watch: false,
     globals: true,
-    environment: "happy-dom",
+    environment: "node",
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
     reporters: ["default"],
   },
