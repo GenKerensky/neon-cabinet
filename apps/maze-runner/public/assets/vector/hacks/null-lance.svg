@@ -1,0 +1,9 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <g id="body" data-anim-wobble='{"frequency":7,"amplitude":0.8}'>
+    <path d="M 6 18 L 11 6 L 25 9 L 27 22 L 15 28 Z" fill="#260807" stroke="#ff5a3d" stroke-width="2" />
+    <path d="M 10 18 L 13 10 L 22 12 L 24 20 L 16 24 Z" fill="#ff9b42" opacity="0.28" />
+  </g>
+  <path id="lance" d="M 5 25 L 13 17 L 11 13 L 27 6 L 19 21 L 15 19 L 7 27 Z" fill="#ffffff" stroke="#ff9b42" stroke-width="1" data-anim-flash='{"frequency":8,"min":0.45,"max":1}' />
+  <circle id="core" cx="16" cy="16" r="3" fill="#2a0806" stroke="#ffffff" stroke-width="1.5" />
+  <circle id="socket_signal" cx="16" cy="16" r="1" fill="#ff5a3d" />
+</svg>
