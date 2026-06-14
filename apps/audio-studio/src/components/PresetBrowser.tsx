@@ -71,7 +71,7 @@ export function PresetBrowser({
           <SelectTrigger aria-label="Select game" className="game-select">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="game-select-content">
             {games.map((game) => (
               <SelectItem key={game.id} value={game.id}>
                 <span className="game-option">

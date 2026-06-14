@@ -1,3 +1,9 @@
+import type {
+  StudioGameIcon,
+  StudioGameMetadata,
+  StudioGameTheme,
+} from "@neon-cabinet/studio-registry";
+
 export const SOUND_PATCH_SCHEMA_VERSION = 2;
 export const LEGACY_SOUND_PATCH_SCHEMA_VERSION = 1;
 
@@ -243,40 +249,9 @@ export interface PatchInstance {
   stop(): void;
 }
 
-export interface AudioStudioGameIcon {
-  label: string;
-  svgDataUri: string;
-  svgPath: string;
-  pngPaths: {
-    16: string;
-    32: string;
-    48: string;
-  };
-}
-
-export interface AudioStudioGameMetadata {
-  description: string;
-  href: string;
-  status?: "available" | "coming-soon";
-}
-
-export interface AudioStudioGameTheme {
-  accent: string;
-  accentForeground: string;
-  audioGrid: string;
-  audioLine: string;
-  audioPanel: string;
-  audioPanelStrong: string;
-  background: string;
-  border: string;
-  foreground: string;
-  input: string;
-  primary: string;
-  primaryForeground: string;
-  ring: string;
-  secondary: string;
-  secondaryForeground: string;
-}
+export type AudioStudioGameIcon = StudioGameIcon;
+export type AudioStudioGameMetadata = StudioGameMetadata;
+export type AudioStudioGameTheme = StudioGameTheme;
 
 export interface AudioStudioGameRegistration {
   id: string;

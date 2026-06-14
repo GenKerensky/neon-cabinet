@@ -1,5 +1,5 @@
 import { Button } from "@neon-cabinet/ui/components/ui/button";
-import { Slider } from "@neon-cabinet/ui/components/ui/slider";
+import { GradientSlider } from "@neon-cabinet/ui/components/gradient-slider";
 import { PauseIcon, PlayIcon, RepeatIcon } from "lucide-react";
 import { PreviewKey } from "../hooks/use-studio-history";
 
@@ -84,7 +84,7 @@ function SliderControl({
   return (
     <label>
       {label}
-      <Slider
+      <GradientSlider
         aria-label={label}
         max={max}
         min={min}

@@ -9,7 +9,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@neon-cabinet/ui/components/ui/tabs";
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, useEffect, useMemo, useState } from "react";
 import {
   ComposeMode,
   InstrumentMode,
@@ -56,8 +56,13 @@ function App() {
         "--audio-panel-strong": studio.selectedGame.theme.audioPanelStrong,
         "--background": studio.selectedGame.theme.background,
         "--border": studio.selectedGame.theme.border,
+        "--destructive": "#ff5f6d",
         "--foreground": studio.selectedGame.theme.foreground,
         "--input": studio.selectedGame.theme.input,
+        "--muted": studio.selectedGame.theme.secondary,
+        "--muted-foreground": studio.selectedGame.theme.foreground,
+        "--popover": studio.selectedGame.theme.audioPanelStrong,
+        "--popover-foreground": studio.selectedGame.theme.foreground,
         "--primary": studio.selectedGame.theme.primary,
         "--primary-foreground": studio.selectedGame.theme.primaryForeground,
         "--ring": studio.selectedGame.theme.ring,
@@ -84,6 +89,28 @@ function App() {
       }) as CSSProperties,
     [gameThemeStyle, sidebarWidth],
   );
+
+  useEffect(() => {
+    const target = document.body;
+    const entries = Object.entries(gameThemeStyle) as [string, string][];
+    const previous = new Map(
+      entries.map(([key]) => [key, target.style.getPropertyValue(key)]),
+    );
+
+    for (const [key, value] of entries) {
+      target.style.setProperty(key, value);
+    }
+
+    return () => {
+      for (const [key, value] of previous) {
+        if (value) {
+          target.style.setProperty(key, value);
+        } else {
+          target.style.removeProperty(key);
+        }
+      }
+    };
+  }, [gameThemeStyle]);
 
   function toggleJsonPanel(panel: keyof JsonPanelState): void {
     setJsonPanels((current) => ({ ...current, [panel]: !current[panel] }));
@@ -203,7 +230,11 @@ function App() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="compose">
-            <ComposeMode onUpdatePatch={studio.updatePatch} patch={patch} />
+            <ComposeMode
+              onUpdatePatch={studio.updatePatch}
+              patch={patch}
+              playhead={preview.playback}
+            />
           </TabsContent>
           <TabsContent value="tracker">
             <TrackerMode onUpdatePatch={studio.updatePatch} patch={patch} />

@@ -1,12 +1,31 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  beatsToTicks,
   createLoopingPatch,
+  deleteClipNotes,
+  duplicateClipNotes,
+  findNeighborNote,
+  frequencyToPitch,
   getConstraintWarnings,
+  midiToPitch,
   migratePatchToCurrentSchema,
+  moveClipNotes,
   noteToFrequency,
+  pitchToMidi,
   playPatchOnce,
   parsePatch,
+  quantizeBeat,
+  quantizeClipNotes,
+  quantizeTick,
+  quantizeUnitTicks,
+  resizeClipNote,
+  secondsToTicks,
+  selectNotesInRange,
   serializePatch,
+  sortClipNotes,
+  ticksToBeats,
+  ticksToSeconds,
+  transposeClipNotes,
   validatePatch,
 } from "./audio-tools";
 import { BATTLE_TANKS_AUDIO_PATCHES } from "./battle-tanks-presets";
@@ -17,7 +36,7 @@ import {
 } from "./game-registry";
 import { MARS_LANDER_AUDIO_PATCHES } from "./mars-lander-presets";
 import { SPACE_DEFENDER_AUDIO_PATCHES } from "./space-defender-presets";
-import { SoundPatch } from "./types";
+import { AudioClip, ClipNote, ClipNotePitch, SoundPatch } from "./types";
 
 class MockAudioParam {
   value = 0;
@@ -93,6 +112,33 @@ class MockAudioContext {
     (_channels: number, length: number) => new MockAudioBuffer(length),
   );
   createBufferSource = vi.fn(() => new MockBufferSourceNode());
+}
+
+const c4: ClipNotePitch = { note: "C", accidental: "natural", octave: 4 };
+const d4: ClipNotePitch = { note: "D", accidental: "natural", octave: 4 };
+const e4: ClipNotePitch = { note: "E", accidental: "natural", octave: 4 };
+const g5: ClipNotePitch = { note: "G", accidental: "natural", octave: 5 };
+
+function createTestClip(
+  notes: Array<Partial<ClipNote> & { id: string }>,
+): AudioClip {
+  return {
+    id: "test-clip",
+    bpm: 120,
+    channels: [{ id: "pulse-1", engine: "pulse", name: "Pulse 1" }],
+    name: "Test Clip",
+    notes: notes.map((note) => ({
+      channelId: "pulse-1",
+      durationBeats: 1,
+      instrumentId: "lead",
+      pitch: c4,
+      startBeat: 0,
+      velocity: 0.75,
+      ...note,
+    })),
+    timeSignature: [4, 4],
+    type: "music",
+  };
 }
 
 describe("audio-tools", () => {
@@ -278,6 +324,156 @@ describe("audio-tools", () => {
     expect(
       noteToFrequency({ note: "D", accidental: "b", octave: 4 }),
     ).toBeCloseTo(277.18, 1);
+  });
+
+  it("converts between pitch names, midi notes, and frequencies", () => {
+    expect(pitchToMidi({ note: "A", accidental: "natural", octave: 4 })).toBe(
+      69,
+    );
+    expect(pitchToMidi({ note: "D", accidental: "b", octave: 4 })).toBe(61);
+    expect(midiToPitch(60)).toEqual({
+      note: "C",
+      accidental: "natural",
+      octave: 4,
+    });
+    expect(midiToPitch(61)).toEqual({ note: "C", accidental: "#", octave: 4 });
+    expect(frequencyToPitch(277.18)).toEqual({
+      note: "C",
+      accidental: "#",
+      octave: 4,
+    });
+    expect(
+      noteToFrequency({ note: "A", accidental: "natural", octave: 4 }),
+    ).toBeCloseTo(440, 3);
+  });
+
+  it("converts clip beats to ticks and seconds", () => {
+    expect(beatsToTicks(1.5)).toBe(720);
+    expect(beatsToTicks(1.5, 960)).toBe(1440);
+    expect(ticksToBeats(720)).toBe(1.5);
+    expect(ticksToSeconds(960, 120)).toBe(1);
+    expect(secondsToTicks(0.5, 120)).toBe(480);
+  });
+
+  it("quantizes ticks to straight, dotted, and triplet grids", () => {
+    expect(
+      quantizeTick(250, {
+        denominator: 4,
+        mode: "straight",
+        rounding: "round",
+      }),
+    ).toBe(480);
+    expect(
+      quantizeTick(700, {
+        denominator: 8,
+        mode: "straight",
+        rounding: "floor",
+      }),
+    ).toBe(480);
+    expect(
+      quantizeTick(700, {
+        denominator: 8,
+        mode: "straight",
+        rounding: "ceil",
+      }),
+    ).toBe(720);
+    expect(quantizeUnitTicks({ denominator: 8, mode: "triplet" })).toBe(160);
+    expect(quantizeUnitTicks({ denominator: 8, mode: "dotted" })).toBe(360);
+    expect(quantizeBeat(0.63, { denominator: 16, mode: "straight" })).toBe(
+      0.75,
+    );
+  });
+
+  it("moves, resizes, transposes, duplicates, deletes, and quantizes notes immutably", () => {
+    const clip = createTestClip([
+      { id: "a", durationBeats: 1, pitch: c4, startBeat: 1 },
+      { id: "b", durationBeats: 0.5, pitch: e4, startBeat: 2 },
+    ]);
+
+    const moved = moveClipNotes(clip, ["a"], {
+      beatDelta: 1,
+      semitoneDelta: 2,
+    });
+    expect(moved.notes[0]).toMatchObject({ pitch: d4, startBeat: 2 });
+    expect(clip.notes[0]).toMatchObject({ pitch: c4, startBeat: 1 });
+
+    const clampedMove = moveClipNotes(clip, ["a"], {
+      beatDelta: -5,
+      semitoneDelta: -100,
+    });
+    expect(clampedMove.notes[0].startBeat).toBe(0);
+    expect(pitchToMidi(clampedMove.notes[0].pitch)).toBe(0);
+
+    const resizedEnd = resizeClipNote(clip, "a", "end", 3);
+    expect(resizedEnd.notes[0]).toMatchObject({
+      durationBeats: 2,
+      startBeat: 1,
+    });
+
+    const resizedStart = resizeClipNote(clip, "a", "start", 1.9);
+    expect(resizedStart.notes[0]).toMatchObject({
+      durationBeats: 0.25,
+      startBeat: 1.75,
+    });
+
+    const transposed = transposeClipNotes(clip, ["b"], 3);
+    expect(transposed.notes[1].pitch).toEqual({
+      note: "G",
+      accidental: "natural",
+      octave: 4,
+    });
+
+    const duplicated = duplicateClipNotes(clip, ["a"], 4);
+    expect(duplicated.notes.map((note) => note.id)).toEqual([
+      "a",
+      "b",
+      "a-copy",
+    ]);
+    expect(duplicated.notes[2]).toMatchObject({
+      durationBeats: 1,
+      pitch: c4,
+      startBeat: 5,
+    });
+
+    expect(deleteClipNotes(clip, ["b"]).notes.map((note) => note.id)).toEqual([
+      "a",
+    ]);
+
+    const quantized = quantizeClipNotes(
+      createTestClip([
+        { id: "a", durationBeats: 0.6, pitch: c4, startBeat: 0.6 },
+      ]),
+      ["a"],
+      { denominator: 4, mode: "straight" },
+    );
+    expect(quantized.notes[0]).toMatchObject({
+      durationBeats: 1,
+      startBeat: 1,
+    });
+  });
+
+  it("selects and sorts notes by beat and pitch", () => {
+    const clip = createTestClip([
+      { id: "later-high", durationBeats: 1, pitch: g5, startBeat: 2 },
+      { id: "early-low", durationBeats: 1, pitch: c4, startBeat: 0 },
+      { id: "middle", durationBeats: 1, pitch: e4, startBeat: 1 },
+    ]);
+
+    expect(
+      selectNotesInRange(clip, {
+        endBeat: 1.5,
+        highMidi: 72,
+        lowMidi: 48,
+        startBeat: 0,
+      }),
+    ).toEqual(["early-low", "middle"]);
+    expect(sortClipNotes(clip.notes).map((note) => note.id)).toEqual([
+      "early-low",
+      "middle",
+      "later-high",
+    ]);
+    expect(findNeighborNote(clip, "middle", -1)?.id).toBe("early-low");
+    expect(findNeighborNote(clip, "middle", 1)?.id).toBe("later-high");
   });
 
   it("emits advisory constraint warnings without rejecting mixed-chip patches", () => {

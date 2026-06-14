@@ -16,15 +16,21 @@ Vector Studio allows artists and developers to iterate on SVG-based characters a
 
 2. **Open in browser:**
    The studio runs on port **4300** by default.
-   - [Preview Player](http://localhost:4300/?asset=apps/maze-runner/public/assets/vector/player.svg)
-   - [Preview Ghost](http://localhost:4300/?asset=apps/maze-runner/public/assets/vector/ghost.svg)
+   - [Vector Studio](http://localhost:4300/)
+   - [Preview Maze Runner Player](http://localhost:4300/?game=maze-runner&asset=maze-runner-vector-player)
+   - [Preview Space Defender Ship](http://localhost:4300/?game=space-defender&asset=space-defender-vector-ship)
 
-3. **URL Parameter:**
-   Use the `?asset=` query parameter with the workspace-relative path to any SVG asset.
+3. **Game and asset selection:**
+   Use the game selector in the left sidebar, then choose an SVG from the file tree. Vector Studio discovers SVGs under each game's `public/assets/vector` folder at build time.
+
+4. **URL parameters:**
+   The preferred deep-link format is `?game=<game-id>&asset=<stable-asset-id>`. Legacy workspace-relative links such as `?asset=apps/maze-runner/public/assets/vector/player.svg` are still resolved when the asset exists in the manifest.
 
 ## Features
 
 - **Procedural Preview**: Renders `data-anim-wave` and `data-anim-wobble` animations in real-time.
+- **Game Themes**: Uses the same registered game themes and icons as Audio Studio.
+- **Asset Tree**: Loads each game's vector assets from the sidebar without typing direct paths.
 - **Shader Toggle**: Test how assets look with and without the CRT/Bloom post-processing.
 - **Directional Control**: Test eye-sliding and layer movement using the direction buttons.
 - **Live Reload**: Automatically refreshes when the underlying SVG file is saved.

@@ -1,9 +1,15 @@
 import "fake-indexeddb/auto";
 
 class ResizeObserverMock {
-  disconnect() {}
-  observe() {}
-  unobserve() {}
+  disconnect() {
+    return undefined;
+  }
+  observe() {
+    return undefined;
+  }
+  unobserve() {
+    return undefined;
+  }
 }
 
 globalThis.ResizeObserver ??= ResizeObserverMock;

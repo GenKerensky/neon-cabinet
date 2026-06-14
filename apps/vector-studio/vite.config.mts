@@ -1,5 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 import * as path from "path";
 
@@ -17,7 +19,7 @@ export default defineConfig(() => ({
     port: 4300,
     host: "localhost",
   },
-  plugins: [nxViteTsPaths()],
+  plugins: [react(), nxViteTsPaths(), tailwindcss()],
   define: {
     CANVAS_RENDERER: JSON.stringify(true),
     WEBGL_RENDERER: JSON.stringify(true),
@@ -34,5 +36,13 @@ export default defineConfig(() => ({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
+  },
+  test: {
+    name: "vector-studio",
+    watch: false,
+    globals: true,
+    environment: "happy-dom",
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    reporters: ["default"],
   },
 }));

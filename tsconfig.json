@@ -49,6 +49,9 @@
     },
     {
       "path": "./libs/ui"
+    },
+    {
+      "path": "./libs/studio-registry"
     }
   ]
 }

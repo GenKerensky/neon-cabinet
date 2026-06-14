@@ -129,6 +129,32 @@ button {
   border-radius: 4px;
 }
 
+.game-select-content,
+.audio-context-menu {
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--audio-panel-strong) 94%, black 6%);
+  color: var(--foreground);
+  box-shadow:
+    0 16px 42px rgba(0, 0, 0, 0.55),
+    0 0 0 1px color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.game-select-content [data-slot="select-item"],
+.audio-context-menu [data-slot="context-menu-item"] {
+  color: var(--foreground);
+}
+
+.game-select-content [data-slot="select-item"]:focus,
+.game-select-content [data-slot="select-item"][data-highlighted],
+.audio-context-menu [data-slot="context-menu-item"]:focus {
+  background: color-mix(in srgb, var(--accent) 20%, var(--audio-panel));
+  color: var(--accent-foreground);
+}
+
+.audio-context-menu [data-variant="destructive"] {
+  color: var(--destructive);
+}
+
 h1,
 h2 {
   margin: 0;
@@ -242,11 +268,7 @@ h1 {
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background:
-    linear-gradient(var(--audio-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--audio-grid) 1px, transparent 1px),
-    rgba(5, 9, 10, 0.8);
-  background-size: 28px 28px;
+  background: rgba(5, 9, 10, 0.8);
 }
 
 .mode-toolbar {
@@ -271,122 +293,10 @@ h1 {
   font-size: 12px;
 }
 
-.piano-roll,
 .tracker-table,
 .instrument-panel {
   height: calc(100% - 50px);
   overflow: auto;
-}
-
-.beat-ruler {
-  display: grid;
-  grid-template-columns: 88px repeat(8, 64px);
-  height: 28px;
-  padding-left: 88px;
-  color: var(--accent);
-  font-size: 11px;
-  border-bottom: 1px solid var(--border);
-}
-
-.beat-ruler span {
-  display: grid;
-  align-items: center;
-  border-left: 1px solid var(--audio-grid);
-}
-
-.piano-grid {
-  position: relative;
-  min-width: 1120px;
-  height: 1470px;
-  overflow: hidden;
-  background:
-    linear-gradient(
-      90deg,
-      transparent 0 87px,
-      var(--border) 87px 88px,
-      transparent 88px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 63px,
-      color-mix(in srgb, var(--audio-grid) 76%, transparent) 63px 64px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0 29px,
-      color-mix(in srgb, var(--audio-grid) 76%, transparent) 29px 30px
-    );
-  cursor: crosshair;
-  touch-action: none;
-  user-select: none;
-}
-
-.piano-key-column {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  display: grid;
-  grid-template-rows: repeat(49, 30px);
-  width: 88px;
-  background: color-mix(in srgb, var(--audio-panel) 88%, transparent);
-}
-
-.piano-key-column span {
-  display: grid;
-  place-items: center;
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid color-mix(in srgb, var(--audio-grid) 76%, transparent);
-  color: var(--foreground);
-  font-size: 12px;
-}
-
-.piano-note-lanes {
-  position: absolute;
-  inset: 0 0 0 88px;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 15px,
-      color-mix(in srgb, var(--audio-grid) 36%, transparent) 15px 16px,
-      transparent 16px 63px,
-      color-mix(in srgb, var(--audio-grid) 82%, transparent) 63px 64px
-    );
-  pointer-events: none;
-}
-
-.piano-note {
-  position: absolute;
-  z-index: 3;
-  display: grid;
-  place-items: center;
-  height: 22px;
-  overflow: hidden;
-  border: 1px solid var(--primary);
-  border-radius: 5px;
-  background: color-mix(in srgb, var(--primary) 38%, var(--audio-panel));
-  color: var(--primary-foreground);
-  cursor: grab;
-  font-size: 11px;
-  line-height: 1;
-  text-align: center;
-  touch-action: none;
-}
-
-.piano-note:active {
-  cursor: grabbing;
-}
-
-.piano-note-resize {
-  position: absolute;
-  inset: 2px 0 2px auto;
-  width: 10px;
-  border-left: 1px solid color-mix(in srgb, var(--primary) 68%, white 20%);
-  cursor: ew-resize;
-}
-
-.piano-note-resize:focus-visible {
-  outline: 1px solid var(--ring);
-  outline-offset: 1px;
 }
 
 .tracker-table {

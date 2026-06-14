@@ -4,11 +4,19 @@ import {
   playPatchOnce,
   type PatchInstance,
 } from "@neon-cabinet/audio-tools";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+
+export type PreviewPlayback = {
+  durationSeconds: number;
+  mode: "loop" | "once";
+  startedAtMs: number;
+};
 
 export function usePatchPreview() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const loopRef = useRef<PatchInstance | null>(null);
+  const playTokenRef = useRef(0);
+  const [playback, setPlayback] = useState<PreviewPlayback | null>(null);
 
   function getAudioContext(): AudioContext {
     if (!audioContextRef.current) {
@@ -27,9 +35,21 @@ export function usePatchPreview() {
   ): Promise<void> {
     loopRef.current?.stop();
     loopRef.current = null;
-    const context = getAudioContext();
-    if (context.state !== "running") await context.resume();
-    await playPatchOnce(context, patch, options);
+    const token = ++playTokenRef.current;
+    setPlayback({
+      durationSeconds: patch.duration,
+      mode: "once",
+      startedAtMs: performance.now(),
+    });
+    try {
+      const context = getAudioContext();
+      if (context.state !== "running") await context.resume();
+      await playPatchOnce(context, patch, options);
+    } finally {
+      if (playTokenRef.current === token) {
+        setPlayback(null);
+      }
+    }
   }
 
   async function toggleLoop(
@@ -39,16 +59,24 @@ export function usePatchPreview() {
     if (loopRef.current) {
       loopRef.current.stop();
       loopRef.current = null;
+      ++playTokenRef.current;
+      setPlayback(null);
       return false;
     }
 
     const context = getAudioContext();
     if (context.state !== "running") await context.resume();
     loopRef.current = createLoopingPatch(context, patch, options);
+    setPlayback({
+      durationSeconds: patch.duration,
+      mode: "loop",
+      startedAtMs: performance.now(),
+    });
     return true;
   }
 
   return {
+    playback,
     isLooping: Boolean(loopRef.current),
     playPreview,
     toggleLoop,

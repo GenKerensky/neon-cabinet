@@ -3,7 +3,6 @@ import {
   AudioNodeConfig,
   ChipConstraintProfile,
   ClipInstrument,
-  ClipNotePitch,
   ConstraintWarning,
   GainEnvelopeConfig,
   LEGACY_SOUND_PATCH_SCHEMA_VERSION,
@@ -15,6 +14,9 @@ import {
   SoundPatch,
   ValidationResult,
 } from "./types";
+import { frequencyToPitch, noteToFrequency } from "./music";
+
+export * from "./music";
 
 interface RuntimeNode {
   input?: AudioNode;
@@ -230,44 +232,6 @@ export function migratePatchToCurrentSchema(patch: unknown): SoundPatch {
     constraintProfileId: "fantasy",
     instruments: authoringData?.instruments ?? [],
   };
-}
-
-export function noteToFrequency(pitch: ClipNotePitch): number {
-  const semitoneByNote: Record<ClipNotePitch["note"], number> = {
-    C: 0,
-    D: 2,
-    E: 4,
-    F: 5,
-    G: 7,
-    A: 9,
-    B: 11,
-  };
-  const accidental =
-    pitch.accidental === "#" ? 1 : pitch.accidental === "b" ? -1 : 0;
-  const midi =
-    (pitch.octave + 1) * 12 + semitoneByNote[pitch.note] + accidental;
-  return 440 * 2 ** ((midi - 69) / 12);
-}
-
-export function frequencyToPitch(frequency: number): ClipNotePitch {
-  const midi = Math.round(69 + 12 * Math.log2(frequency / 440));
-  const octave = Math.floor(midi / 12) - 1;
-  const semitone = ((midi % 12) + 12) % 12;
-  const notes: ClipNotePitch[] = [
-    { note: "C", accidental: "natural", octave },
-    { note: "C", accidental: "#", octave },
-    { note: "D", accidental: "natural", octave },
-    { note: "D", accidental: "#", octave },
-    { note: "E", accidental: "natural", octave },
-    { note: "F", accidental: "natural", octave },
-    { note: "F", accidental: "#", octave },
-    { note: "G", accidental: "natural", octave },
-    { note: "G", accidental: "#", octave },
-    { note: "A", accidental: "natural", octave },
-    { note: "A", accidental: "#", octave },
-    { note: "B", accidental: "natural", octave },
-  ];
-  return notes[semitone];
 }
 
 export function getConstraintWarnings(patch: SoundPatch): ConstraintWarning[] {

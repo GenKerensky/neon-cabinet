@@ -5,6 +5,18 @@
   "dependencies": {
     "@neon-cabinet/shaders": "workspace:*",
     "@neon-cabinet/sprite-tools": "workspace:*",
-    "phaser": "catalog:"
+    "@neon-cabinet/studio-registry": "workspace:*",
+    "@neon-cabinet/ui": "workspace:*",
+    "@svgedit/svgcanvas": "^7.4.1",
+    "@tailwindcss/vite": "^4.3.0",
+    "lucide-react": "^1.17.0",
+    "phaser": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "rxdb": "^16.20.0",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "^6.2.5"
   }
 }

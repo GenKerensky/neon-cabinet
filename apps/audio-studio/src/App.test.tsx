@@ -17,6 +17,7 @@ import {
   normalizeHistory,
 } from "./hooks/use-studio-history";
 import { createStarterPatchForGame } from "./lib/patch-utils";
+import { createComposeTransform } from "./components/compose/use-compose-transform";
 import {
   gameHistoryStatePath,
   getAudioStudioRxState,
@@ -31,15 +32,30 @@ const auditionOscillators: MockAuditionOscillator[] = [];
 
 class MockAuditionOscillator {
   connect = vi.fn();
+  detune = new MockAuditionAudioParam();
   frequency = { value: 0 };
   start = vi.fn();
   stop = vi.fn();
   type = "sine";
 }
 
+class MockAuditionAudioParam {
+  value = 0;
+  cancelScheduledValues = vi.fn();
+  exponentialRampToValueAtTime = vi.fn((value: number) => {
+    this.value = value;
+  });
+  linearRampToValueAtTime = vi.fn((value: number) => {
+    this.value = value;
+  });
+  setValueAtTime = vi.fn((value: number) => {
+    this.value = value;
+  });
+}
+
 class MockAuditionGain {
   connect = vi.fn();
-  gain = { value: 0 };
+  gain = new MockAuditionAudioParam();
 }
 
 class MockAuditionAudioContext {
@@ -104,6 +120,37 @@ describe("Audio Studio", () => {
     render(<App />);
 
     expect(screen.getByRole("tabpanel", { name: "Patch Graph" })).toBeTruthy();
+  });
+
+  it("renders Compose through the extracted compose module", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: "Compose" }));
+
+    expect(
+      screen.getByRole("grid", { name: "Piano roll note grid" }),
+    ).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Add note" })).toBeTruthy();
+  });
+
+  it("maps beats and pitch rows through the compose transform", () => {
+    const transform = createComposeTransform({
+      beatWidth: 64,
+      labelWidth: 88,
+      maxMidi: 84,
+      noteHeight: 22,
+      rowHeight: 30,
+    });
+
+    expect(transform.beatToX(2)).toBe(216);
+    expect(transform.xToBeat(216)).toBe(2);
+    expect(
+      transform.pitchToY({
+        accidental: "natural",
+        note: "C",
+        octave: 4,
+      }),
+    ).toBe(24 * 30 + 4);
   });
 
   it("edits shared clip notes through Compose and Tracker modes", () => {
@@ -181,6 +228,16 @@ describe("Audio Studio", () => {
     expect(auditionOscillators.at(-1)?.start).toHaveBeenCalled();
   });
 
+  it("renders compose rows without a background grid overlay", () => {
+    const { container } = render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: "Compose" }));
+
+    expect(container.querySelector(".piano-note-lanes")).toBeNull();
+    expect(container.querySelector(".piano-row-guide")).toBeTruthy();
+    expect(container.querySelector(".piano-beat-column")).toBeTruthy();
+  });
+
   it("auditions an existing note when clicked", () => {
     render(<App />);
 
@@ -201,6 +258,41 @@ describe("Audio Studio", () => {
 
     expect(auditionOscillators.at(-1)?.frequency.value).toBeCloseTo(392, 0);
     expect(auditionOscillators.at(-1)?.start).toHaveBeenCalled();
+  });
+
+  it("deletes notes from a themed context menu and keeps undo support", async () => {
+    render(<App />);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /battle tanks digital taps/i }),
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Compose" }));
+    const beforeCount = readPatch().clips?.[0]?.notes?.length ?? 0;
+
+    fireEvent.contextMenu(
+      screen.getAllByRole("button", { name: "Audition G4 note" })[0],
+    );
+    fireEvent.click(
+      await screen.findByRole("menuitem", { name: "Delete note" }),
+    );
+
+    expect(readPatch().clips?.[0]?.notes).toHaveLength(beforeCount - 1);
+
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+
+    expect(readPatch().clips?.[0]?.notes).toHaveLength(beforeCount);
+  });
+
+  it("shows a playhead on Compose while the tune is playing", async () => {
+    render(<App />);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /battle tanks digital taps/i }),
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Compose" }));
+    fireEvent.click(screen.getByRole("button", { name: "Play" }));
+
+    expect(await screen.findByTestId("compose-playhead")).toBeTruthy();
   });
 
   it("moves and resizes notes as draft edits until pointer up", () => {
@@ -424,6 +516,25 @@ describe("Audio Studio", () => {
       screen.queryByRole("button", { name: /battle tanks player rumble/i }),
     ).toBeNull();
     expect(readPatch().id).toBe("maze-runner-starter-effect");
+  });
+
+  it("renders the game dropdown with the active audio studio theme", async () => {
+    render(<App />);
+
+    const trigger = screen.getByRole("combobox", { name: "Select game" });
+    fireEvent.pointerDown(trigger, {
+      button: 0,
+      buttons: 1,
+      clientX: 10,
+      clientY: 10,
+      pointerId: 19,
+      pointerType: "mouse",
+    });
+
+    const option = await screen.findByRole("option", {
+      name: "Space Defender",
+    });
+    expect(option.closest(".game-select-content")).toBeTruthy();
   });
 
   it("switches to Mars Lander registered presets instead of a starter patch", async () => {
