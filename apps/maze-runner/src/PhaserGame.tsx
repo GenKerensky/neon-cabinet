@@ -28,75 +28,9 @@ const isTestMode = () => {
   return new URLSearchParams(window.location.search).get("test") === "1";
 };
 
-const formatDebugValue = (value: unknown): string => {
-  if (value !== null && typeof value === "object") {
-    return JSON.stringify(value);
-  }
-  return JSON.stringify(value);
-};
-
-const createPassiveDebugOverlay = (
-  gameInstance: PhaserGameInstance,
-  getGame: () => PhaserGameInstance | undefined,
-) => {
+const registerDevGameHandle = (gameInstance: PhaserGameInstance) => {
   (window as unknown as Record<string, unknown>).__NEON_DEBUG_GAME__ =
     gameInstance;
-  document.getElementById("neon-debug")?.remove();
-
-  const container = document.createElement("div");
-  container.id = "neon-debug";
-  Object.assign(container.style, {
-    position: "fixed",
-    bottom: "8px",
-    left: "8px",
-    zIndex: "10000",
-    background: "rgba(0, 0, 0, 0.75)",
-    color: "#0f0",
-    fontFamily: "monospace",
-    fontSize: "12px",
-    padding: "8px 12px",
-    borderRadius: "4px",
-    whiteSpace: "pre-wrap",
-    pointerEvents: "none",
-    display:
-      localStorage.getItem("neon-debug-overlay-visible") === "false"
-        ? "none"
-        : "block",
-    maxHeight: "40vh",
-    overflow: "auto",
-  });
-  document.body.appendChild(container);
-
-  const writeOverlay = () => {
-    const state = getMazeRunnerStateSnapshot(gameInstance) as Record<
-      string,
-      unknown
-    >;
-    const lines = ["Scene: ", "Seed: 0"];
-
-    for (const [key, value] of Object.entries(state)) {
-      if (value !== null && typeof value === "object") {
-        lines.push(`${key}:`);
-        for (const [childKey, childValue] of Object.entries(
-          value as Record<string, unknown>,
-        )) {
-          lines.push(`  ${childKey}: ${formatDebugValue(childValue)}`);
-        }
-      } else {
-        lines.push(`${key}: ${formatDebugValue(value)}`);
-      }
-    }
-
-    container.textContent = lines.join("\n");
-  };
-
-  const update = () => {
-    if (getGame() !== gameInstance || !container.isConnected) return;
-    writeOverlay();
-    requestAnimationFrame(update);
-  };
-
-  requestAnimationFrame(update);
 };
 
 const registerHarnessCommands = (
@@ -134,8 +68,9 @@ const initDebugBridge = (
   gameInstance: PhaserGameInstance,
   getGame: () => PhaserGameInstance | undefined,
 ) => {
+  registerDevGameHandle(gameInstance);
+
   if (!isTestMode()) {
-    createPassiveDebugOverlay(gameInstance, getGame);
     return;
   }
 
@@ -143,13 +78,12 @@ const initDebugBridge = (
     import("@neon-cabinet/phaser-debug-bridge").then(
       ({ createDebugBridge }) => {
         if (getGame() !== gameInstance) return;
-        (window as unknown as Record<string, unknown>).__NEON_DEBUG_GAME__ =
-          gameInstance;
         const commands: HarnessCommands = {};
         registerHarnessCommands(gameInstance, commands);
         const harness = createTestHarness(gameInstance, {
           state: () => getMazeRunnerStateSnapshot(gameInstance),
           commands,
+          debugOverlay: false,
         });
         if (harness) {
           createDebugBridge(
@@ -172,7 +106,6 @@ const cleanupDebugBridge = (gameInstance?: PhaserGameInstance) => {
   delete w.__PHASER_BRIDGE__;
   delete w.__TEST__;
   delete w.__NEON_DEBUG_GAME__;
-  document.getElementById("neon-debug")?.remove();
 };
 
 const FONT_FAMILY = "Orbitron, sans-serif";

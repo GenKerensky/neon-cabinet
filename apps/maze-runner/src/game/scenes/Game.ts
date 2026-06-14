@@ -38,6 +38,15 @@ import {
 const PLAYER_CHOMP_FREQUENCY = 15;
 const MOVEMENT_SFX_INTERVAL_MS = (Math.PI / PLAYER_CHOMP_FREQUENCY) * 1000;
 const MOVEMENT_SFX_VOLUME = 0.12;
+const HUD_SAFE_EDGE_X = 72;
+const HUD_TOP_Y = 42;
+const HACK_HUD_WIDTH = 240;
+const HACK_HUD_HEIGHT = 48;
+const HACK_HUD_BOTTOM_MARGIN = 86;
+const LIFE_ICON_START_X = 72;
+const LIFE_ICON_Y = 70;
+const LIFE_ICON_SPACING = 24;
+const LIFE_ICON_RADIUS = 11;
 
 export class Game extends Scene {
   private generator!: MazeGenerator;
@@ -232,7 +241,7 @@ export class Game extends Scene {
       .setOrigin(0.5, 0);
 
     this.levelText = this.add
-      .text(camW - 20, 20, `LEVEL: ${this.levelValue}`, {
+      .text(camW - HUD_SAFE_EDGE_X, HUD_TOP_Y, `LEVEL: ${this.levelValue}`, {
         fontFamily,
         fontSize: "16px",
         color: "#ffffff",
@@ -247,8 +256,12 @@ export class Game extends Scene {
       })
       .setOrigin(0.5, 1);
 
-    this.createHackHudSlot("def", 20, camH - 58);
-    this.createHackHudSlot("atk", camW - 260, camH - 58);
+    this.createHackHudSlot("def", HUD_SAFE_EDGE_X, camH - HACK_HUD_BOTTOM_MARGIN);
+    this.createHackHudSlot(
+      "atk",
+      camW - HUD_SAFE_EDGE_X - HACK_HUD_WIDTH,
+      camH - HACK_HUD_BOTTOM_MARGIN,
+    );
 
     this.renderLivesHud();
     this.refreshScoreHud();
@@ -273,20 +286,20 @@ export class Game extends Scene {
 
     for (let i = 0; i < this.livesValue; i++) {
       const icon = this.add.graphics();
-      const x = 24 + i * 28;
-      const y = 30;
-      const radius = 8;
+      const x = LIFE_ICON_START_X + i * LIFE_ICON_SPACING;
+      const y = LIFE_ICON_Y;
+      const radius = LIFE_ICON_RADIUS;
 
       icon.x = x;
       icon.y = y;
 
       icon.fillStyle(0xffff00, 1);
-      icon.fillCircle(x, y, radius);
+      icon.fillCircle(0, 0, radius);
       icon.fillStyle(0x000000, 1);
       icon.beginPath();
-      icon.moveTo(x, y);
-      icon.lineTo(x + radius, y - radius / 2);
-      icon.lineTo(x + radius, y + radius / 2);
+      icon.moveTo(0, 0);
+      icon.lineTo(radius, -radius / 2);
+      icon.lineTo(radius, radius / 2);
       icon.closePath();
       icon.fillPath();
 
@@ -345,8 +358,8 @@ export class Game extends Scene {
     const background = this.add.graphics();
     background.fillStyle(0x050812, 0.9);
     background.lineStyle(1, color, 0.95);
-    background.fillRoundedRect(x, y, 240, 48, 8);
-    background.strokeRoundedRect(x, y, 240, 48, 8);
+    background.fillRoundedRect(x, y, HACK_HUD_WIDTH, HACK_HUD_HEIGHT, 8);
+    background.strokeRoundedRect(x, y, HACK_HUD_WIDTH, HACK_HUD_HEIGHT, 8);
     background.setDepth(100);
 
     const label = this.add

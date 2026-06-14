@@ -453,7 +453,7 @@ describe("Game", () => {
     expect(textCalls).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ x: 400, y: 20, value: "SCORE: 0" }),
-        expect.objectContaining({ x: 780, y: 20, value: "LEVEL: 1" }),
+        expect.objectContaining({ x: 728, y: 42, value: "LEVEL: 1" }),
         expect.objectContaining({ x: 400, y: 576, value: "HIGH: 000000" }),
       ]),
     );
@@ -467,7 +467,9 @@ describe("Game", () => {
     expect(lifeIcons).toHaveLength(3);
     expect(hackSlotBackgrounds).toHaveLength(2);
     for (const [index, icon] of lifeIcons.entries()) {
-      expect(icon.fillCircle).toHaveBeenCalledWith(24 + index * 28, 30, 8);
+      expect(icon.x).toBe(72 + index * 24);
+      expect(icon.y).toBe(70);
+      expect(icon.fillCircle).toHaveBeenCalledWith(0, 0, 11);
     }
   });
 
