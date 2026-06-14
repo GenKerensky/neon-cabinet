@@ -134,6 +134,7 @@ vi.mock("../../src/game/objects/Collectible", () => ({
     DOT: "dot",
     POWER_PELLET: "power_pellet",
     BONUS_ITEM: "bonus_item",
+    HACK_PICKUP: "hack_pickup",
   },
   CollectibleManager: class {
     createAll = vi.fn(() => []);
@@ -151,6 +152,7 @@ vi.mock("../../src/game/utils/sceneTransitions", () => mockSceneTransitions);
 import { Game } from "../../src/game/scenes/Game";
 import { CollectibleType } from "../../src/game/objects/Collectible";
 import { EnemyState } from "../../src/game/objects/Enemy";
+import { HackPickupId } from "../../src/game/config/hackDefinitions";
 import { Direction } from "../../src/game/utils/DirectionUtils";
 import { CellType, type MazeCell } from "../../src/game/utils/MazeGenerator";
 
@@ -292,6 +294,10 @@ describe("Game", () => {
         fillPath: vi.fn(),
         fillStyle: vi.fn(),
         fillCircle: vi.fn(),
+        lineStyle: vi.fn(),
+        fillRoundedRect: vi.fn(),
+        strokeRoundedRect: vi.fn(),
+        setDepth: vi.fn(),
         destroy: vi.fn(),
       })),
       rectangle: vi.fn(() => ({ setDepth: vi.fn() })),
@@ -299,9 +305,11 @@ describe("Game", () => {
         const textObj: {
           setOrigin: ReturnType<typeof vi.fn>;
           setText: ReturnType<typeof vi.fn>;
+          setDepth: ReturnType<typeof vi.fn>;
         } = {
           setOrigin: vi.fn(() => textObj),
           setText: vi.fn(),
+          setDepth: vi.fn(() => textObj),
         };
         return textObj;
       }),
@@ -347,6 +355,14 @@ describe("Game", () => {
     game.create();
 
     expect(mockSceneTransitions.fadeInScene).toHaveBeenCalledWith(game);
+    expect((game as any).input.keyboard.on).toHaveBeenCalledWith(
+      "keydown-Q",
+      expect.any(Function),
+    );
+    expect((game as any).input.keyboard.on).toHaveBeenCalledWith(
+      "keydown-E",
+      expect.any(Function),
+    );
     handlers["keydown-ESC"]();
     expect(mockSceneTransitions.launchSceneWithFade).toHaveBeenCalledWith(
       game,
@@ -367,6 +383,10 @@ describe("Game", () => {
       fillPath: vi.fn(),
       fillStyle: vi.fn(),
       fillCircle: vi.fn(),
+      lineStyle: vi.fn(),
+      fillRoundedRect: vi.fn(),
+      strokeRoundedRect: vi.fn(),
+      setDepth: vi.fn(),
       destroy: vi.fn(),
     };
 
@@ -385,6 +405,10 @@ describe("Game", () => {
         const icon = {
           fillStyle: vi.fn(),
           fillCircle: vi.fn(),
+          lineStyle: vi.fn(),
+          fillRoundedRect: vi.fn(),
+          strokeRoundedRect: vi.fn(),
+          setDepth: vi.fn(),
           beginPath: vi.fn(),
           moveTo: vi.fn(),
           lineTo: vi.fn(),
@@ -401,9 +425,11 @@ describe("Game", () => {
         const textObj: {
           setOrigin: ReturnType<typeof vi.fn>;
           setText: ReturnType<typeof vi.fn>;
+          setDepth: ReturnType<typeof vi.fn>;
         } = {
           setOrigin: vi.fn(() => textObj),
           setText: vi.fn(),
+          setDepth: vi.fn(() => textObj),
         };
         return textObj;
       }),
@@ -431,8 +457,15 @@ describe("Game", () => {
       ]),
     );
 
-    expect(iconGraphics).toHaveLength(3);
-    for (const [index, icon] of iconGraphics.entries()) {
+    const lifeIcons = iconGraphics.filter(
+      (icon) => icon.fillCircle.mock.calls.length > 0,
+    );
+    const hackSlotBackgrounds = iconGraphics.filter(
+      (icon) => icon.fillRoundedRect.mock.calls.length > 0,
+    );
+    expect(lifeIcons).toHaveLength(3);
+    expect(hackSlotBackgrounds).toHaveLength(2);
+    for (const [index, icon] of lifeIcons.entries()) {
       expect(icon.fillCircle).toHaveBeenCalledWith(24 + index * 28, 30, 8);
     }
   });
@@ -533,6 +566,39 @@ describe("Game", () => {
     expect(playSfx).toHaveBeenCalledWith("maze_runner_ghost_vulnerable", {
       volume: 0.45,
     });
+  });
+
+  it("leaves a hack pickup in the maze and shows FULL when its slot is occupied", () => {
+    const game = new Game();
+    const collectible = {
+      x: 50,
+      y: 60,
+      getType: vi.fn(() => CollectibleType.HACK_PICKUP),
+      getHackId: vi.fn(() => HackPickupId.SHIELD_RING),
+    };
+    (game as any).hackSystem = {
+      collectHack: vi.fn(() => ({
+        heldHack: HackPickupId.PHASE_CHIP,
+        slot: "def",
+        collected: false,
+        full: true,
+      })),
+    };
+    (game as any).collectibleManager = {
+      removeCollectible: vi.fn(),
+      shouldSpawnBonus: vi.fn(() => false),
+      isLevelComplete: vi.fn(() => false),
+    };
+    (game as any).refreshHackHud = vi.fn();
+    (game as any).showHackEffect = vi.fn();
+    (game as any).playSfx = vi.fn();
+
+    game.onCollectibleHit({}, collectible);
+
+    expect(
+      (game as any).collectibleManager.removeCollectible,
+    ).not.toHaveBeenCalled();
+    expect((game as any).showHackEffect).toHaveBeenCalledWith("FULL", 50, 60);
   });
 
   it("plays movement sound from player motion during update", () => {
