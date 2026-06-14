@@ -2,7 +2,7 @@
 
 ## Context
 
-Maze Runner already has a hack system with eight SVG-backed pickups, a single held-hack slot, `E` activation, and random per-tile spawning. This design keeps the term `HACK` and improves player clarity, inventory behavior, visual consistency, and level pacing.
+Maze Runner already has a hack system with eight SVG-backed pickups, a single held-hack slot, `E` activation, and random per-tile spawning. This design keeps the term `HACK`, improves player clarity, inventory behavior, visual consistency, and level pacing, and adds one new late-game attack hack.
 
 The goal is to make hacks feel like intentional power-ups:
 
@@ -66,7 +66,7 @@ Recommended effect copy should stay practical rather than lore-heavy, for exampl
 
 ## Hack Roster
 
-Use the existing eight hacks and classify them by slot.
+Use the existing eight hacks, add `Null Lance`, and classify each hack by slot.
 
 ### DEF HACK / Q / Cool Hues
 
@@ -89,8 +89,36 @@ These hacks manipulate enemies, ghost access, pressure, or risk.
 | Ghost Jammer     | Targeting disruption | hot pink/orange          |
 | Gate Key         | Ghost-pen control    | orange/green-warm accent |
 | Overclock Pellet | Risk/reward pressure | orange/red               |
+| Null Lance       | Line attack          | red/orange/white         |
 
 `ATK HACK` is the player-facing slot label. Longer copy can use "attack hack" when space allows.
+
+### Null Lance
+
+`Null Lance` is a late-game `ATK HACK` that fires a straight exploit beam in the player's current facing direction.
+
+Behavior:
+
+- activates with `E` from the `ATK HACK` slot
+- traces forward from the player along the current grid direction
+- stops at maze walls
+- hits the first living ghost in that line
+- treats the hit ghost as eaten: award `+200`, show floating score, play the ghost-eaten sound, set the ghost to the dead/return-to-pen state, then let it revive through existing ghost behavior
+- consumes the hack whether it hits or misses
+- shows a short `MISS` burst if no living ghost is hit
+
+HUD copy:
+
+- `Beam the first ghost in your line.`
+
+Asset direction:
+
+- 32x32 Signal Hack SVG
+- dark angular targeting-chip body
+- red/orange neon outline
+- white-hot lance or beam glyph through the center
+- small `socket_signal`
+- subtle pulse and beam flash animation
 
 ## Level Placement Policy
 
@@ -104,7 +132,7 @@ Hack placement is semi-random within level rules. The policy should define a tar
 | 4     |     3 | Phase Chip, Shield Ring, Score Magnet, Reverse Pulse |
 | 5     |     4 | add Decoy Spark, Ghost Jammer                        |
 | 6     |     4 | add Gate Key                                         |
-| 7+    |     5 | full pool, including Overclock Pellet                |
+| 7+    |     5 | full pool, including Overclock Pellet and Null Lance |
 
 Placement rules:
 
@@ -195,6 +223,10 @@ Required focused tests:
 - rejected full-slot pickup remains active in the maze
 - `Q` activates only the defensive slot
 - `E` activates only the attack slot
+- `Null Lance` hits the first living ghost in the player's line of sight
+- `Null Lance` is blocked by maze walls
+- `Null Lance` consumes itself and shows a miss state when no living ghost is hit
+- `Null Lance` applies the same dead/return-to-pen behavior as an eaten ghost
 - active effects still clean up correctly
 - all hack SVGs remain parseable 32x32 sprite-tool assets
 
@@ -209,7 +241,7 @@ Run `sprite-tools` tests if SVG/UAD metadata or parser-facing assets change. Run
 
 ## Open Implementation Notes
 
-Keep the first implementation pass focused on improving the existing eight hacks. Do not add new hack types, loadouts, or multi-item inventories beyond the one `DEF HACK` slot and one `ATK HACK` slot.
+Keep the first implementation pass focused on improving the existing eight hacks and adding `Null Lance`. Do not add additional hack types, loadouts, or multi-item inventories beyond the one `DEF HACK` slot and one `ATK HACK` slot.
 
 If a current hack's type feels borderline during implementation, prefer player clarity over perfect taxonomy:
 
