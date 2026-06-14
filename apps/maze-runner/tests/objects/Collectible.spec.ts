@@ -55,7 +55,6 @@ import {
   CollectibleManager,
   CollectibleType,
 } from "../../src/game/objects/Collectible";
-import { HackPickupId } from "../../src/game/config/hackDefinitions";
 
 function gridFromPattern(pattern: string[]): MazeCell[][] {
   return pattern.map((row) =>
@@ -193,7 +192,7 @@ describe("CollectibleManager", () => {
       }
     });
 
-    it("can create hack pickups without counting them toward level completion", () => {
+    it("places zero hack pickups on level 1", () => {
       const grid = gridFromPattern([
         "WWWWWWWWW",
         "W.......W",
@@ -207,8 +206,33 @@ describe("CollectibleManager", () => {
       ]);
       const scene = createMockScene();
       const mgr = new CollectibleManager(scene, grid, 9, 9, 16, 0, 0, 1, {
-        hackSpawnChance: 1,
-        hackPickupIds: [HackPickupId.PHASE_CHIP],
+        rng: () => 0,
+      });
+
+      const collectibles = mgr.createAll();
+
+      expect(
+        collectibles.filter(
+          (collectible) =>
+            collectible.getType() === CollectibleType.HACK_PICKUP,
+        ),
+      ).toHaveLength(0);
+    });
+
+    it("places count-based hack pickups without counting them toward level completion", () => {
+      const grid = gridFromPattern([
+        "WWWWWWWWW",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "W.......W",
+        "WWWWWWWWW",
+      ]);
+      const scene = createMockScene();
+      const mgr = new CollectibleManager(scene, grid, 9, 9, 16, 0, 0, 2, {
         rng: () => 0,
       });
 
@@ -217,10 +241,11 @@ describe("CollectibleManager", () => {
         (collectible) => collectible.getType() === CollectibleType.HACK_PICKUP,
       );
 
-      expect(hackPickups.length).toBeGreaterThan(0);
-      expect(
-        hackPickups.every((pickup) => pickup.getHackId() === "phase-chip"),
-      ).toBe(true);
+      expect(hackPickups).toHaveLength(2);
+      expect(hackPickups.map((pickup) => pickup.getHackId()).sort()).toEqual([
+        "phase-chip",
+        "shield-ring",
+      ]);
 
       for (const collectible of [...mgr.getCollectibles()]) {
         if (collectible.getType() !== CollectibleType.HACK_PICKUP) {

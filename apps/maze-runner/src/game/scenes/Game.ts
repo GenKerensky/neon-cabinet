@@ -287,9 +287,7 @@ export class Game extends Scene {
 
   private createCollectibleManager(): CollectibleManager {
     const progression = readHackProgression();
-    const hackSpawnChance = progression.unlocks.includes("spawn-chance")
-      ? 0.075
-      : 0.045;
+    const extraHackCount = progression.unlocks.includes("spawn-chance") ? 1 : 0;
     return new CollectibleManager(
       this,
       this.grid,
@@ -300,8 +298,7 @@ export class Game extends Scene {
       this.offsetY,
       this.levelValue,
       {
-        hackSpawnChance,
-        hackPickupIds,
+        extraHackCount,
       },
     );
   }
