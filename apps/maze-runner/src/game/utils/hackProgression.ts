@@ -9,7 +9,6 @@ export type HackUpgradeId =
   | "spawn-chance"
   | "longer-duration"
   | "stronger-shield"
-  | "replacement-bonus"
   | "magnet-pull";
 
 export type HackAchievementId =
@@ -105,12 +104,6 @@ export const hackUpgradeDefinitions: readonly HackUpgradeDefinition[] = [
     name: "Shield Bloom",
     cost: 20,
     description: "Shield saves stun ghosts in a wider pulse.",
-  },
-  {
-    id: "replacement-bonus",
-    name: "Recycle Bonus",
-    cost: 12,
-    description: "Replacing held hacks grants more score.",
   },
   {
     id: "magnet-pull",

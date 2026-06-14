@@ -704,7 +704,7 @@ export class Game extends Scene {
 
   private resolveEnemyContact(enemy: Enemy): void {
     if (enemy.getState() === EnemyState.FRIGHTENED) {
-      this.defeatEnemyAsEaten(enemy);
+      this.defeatEnemyAsEaten(enemy, { countPowerWindow: true });
     } else if (
       enemy.getState() !== EnemyState.DEAD &&
       !this.player.isDyingState() &&
@@ -748,11 +748,16 @@ export class Game extends Scene {
     return true;
   }
 
-  private defeatEnemyAsEaten(enemy: Enemy): void {
+  private defeatEnemyAsEaten(
+    enemy: Enemy,
+    options: { countPowerWindow?: boolean } = {},
+  ): void {
     this.addScore(200);
-    this.ghostsEatenInPowerWindow++;
-    if (this.ghostsEatenInPowerWindow >= 3) {
-      completeAchievement("eat-3-ghosts-power-window");
+    if (options.countPowerWindow) {
+      this.ghostsEatenInPowerWindow++;
+      if (this.ghostsEatenInPowerWindow >= 3) {
+        completeAchievement("eat-3-ghosts-power-window");
+      }
     }
     this.showFloatingScore(enemy.x, enemy.y, 200);
     this.playSfx("maze_runner_ghost_eaten", { volume: 0.6 });

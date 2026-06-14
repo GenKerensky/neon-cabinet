@@ -155,6 +155,7 @@ import { EnemyState } from "../../src/game/objects/Enemy";
 import { HackPickupId } from "../../src/game/config/hackDefinitions";
 import { Direction } from "../../src/game/utils/DirectionUtils";
 import { CellType, type MazeCell } from "../../src/game/utils/MazeGenerator";
+import { MAZE_RUNNER_ACHIEVEMENTS_KEY } from "../../src/game/utils/hackProgression";
 
 type MockEnemy = {
   getState: ReturnType<typeof vi.fn>;
@@ -786,6 +787,45 @@ describe("Game", () => {
       { volume: 0.6 },
     );
     expect(target.setEnemyState).toHaveBeenCalledWith(EnemyState.DEAD);
+  });
+
+  it("does not count Null Lance defeats toward the power-window ghost streak", () => {
+    const stored: Record<string, string> = {
+      [MAZE_RUNNER_ACHIEVEMENTS_KEY]: "[]",
+    };
+    const storage = {
+      getItem: vi.fn((key: string) => stored[key] ?? null),
+      setItem: vi.fn((key: string, value: string) => {
+        stored[key] = value;
+      }),
+    };
+    vi.stubGlobal("localStorage", storage as unknown as Storage);
+    const game = new Game();
+    const target = createMockEnemy(EnemyState.CHASE);
+    target.x = 130;
+    target.y = 100;
+    (game as any).ghostsEatenInPowerWindow = 2;
+    (game as any).player = {
+      x: 100,
+      y: 100,
+      getCurrentDirection: vi.fn(() => Direction.RIGHT),
+    };
+    (game as any).enemies = [target];
+    (game as any).grid = gridFromPattern(["WWWWWWW", "W.....W", "WWWWWWW"]);
+    (game as any).gridWidth = 7;
+    (game as any).gridHeight = 3;
+    (game as any).tileSize = 30;
+    (game as any).offsetX = -5;
+    (game as any).offsetY = 55;
+    (game as any).addScore = vi.fn();
+    (game as any).showFloatingScore = vi.fn();
+    (game as any).playSfx = vi.fn();
+
+    expect((game as any).fireNullLance()).toBe(true);
+
+    expect((game as any).ghostsEatenInPowerWindow).toBe(2);
+    expect(stored[MAZE_RUNNER_ACHIEVEMENTS_KEY]).toBe("[]");
+    vi.unstubAllGlobals();
   });
 
   it("plays player death sound when a life is lost", () => {
