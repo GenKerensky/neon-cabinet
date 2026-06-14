@@ -32,6 +32,7 @@ function createContext(): HackSystemContext {
     addScore: vi.fn(),
     setGateHackActive: vi.fn(),
     showEffect: vi.fn(),
+    fireNullLance: vi.fn(() => true),
     completeAchievement: vi.fn(),
   };
 }
@@ -103,6 +104,19 @@ describe("HackSystem", () => {
     expect(system.activateHeldHack("atk", { blocked: true })).toBe(false);
     expect(system.getHeldHack("atk")).toBe("reverse-pulse");
     expect(context.enemies[0].forceReverse).not.toHaveBeenCalled();
+  });
+
+  it("fires Null Lance through the ATK slot and records a miss effect when it misses", () => {
+    const context = createContext();
+    context.fireNullLance = vi.fn(() => false);
+    const system = new HackSystem(context);
+    system.collectHack("null-lance");
+
+    expect(system.activateHeldHack("atk")).toBe(true);
+
+    expect(context.fireNullLance).toHaveBeenCalled();
+    expect(system.getHeldHack("atk")).toBeNull();
+    expect(context.showEffect).toHaveBeenCalledWith("MISS", 100, 100);
   });
 
   it("clears held and active hacks on death", () => {

@@ -44,6 +44,7 @@ export interface HackSystemContext {
   addScore(points: number): void;
   setGateHackActive(active: boolean): void;
   showEffect(name: string, x: number, y: number): void;
+  fireNullLance(): boolean;
   completeAchievement(id: HackAchievementId): void;
 }
 
@@ -178,6 +179,15 @@ export class HackSystem {
         this.context.setGateHackActive(true);
         this.addEffect(id, durationMs);
         break;
+      case HackPickupId.NULL_LANCE: {
+        const hit = this.context.fireNullLance();
+        this.context.showEffect(
+          hit ? definition.shortName : "MISS",
+          this.context.player.x,
+          this.context.player.y,
+        );
+        return true;
+      }
     }
 
     this.context.showEffect(

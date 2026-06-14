@@ -28,6 +28,7 @@ import { HackSystem } from "../systems/HackSystem";
 import { fadeInScene, launchSceneWithFade } from "../utils/sceneTransitions";
 import { formatScore, readHighScore } from "../utils/highScore";
 import { getCellCenter, getPenGeometry } from "../utils/gridGeometry";
+import { findNullLanceTarget } from "../utils/nullLance";
 import {
   completeAchievement,
   readHackProgression,
@@ -180,6 +181,7 @@ export class Game extends Scene {
         addScore: (points) => this.addScore(points),
         setGateHackActive: (active) => this.setGateHackActive(active),
         showEffect: (name, x, y) => this.showHackEffect(name, x, y),
+        fireNullLance: () => this.fireNullLance(),
         completeAchievement: (id) => completeAchievement(id),
       },
       { unlockedUpgrades: readHackProgression().unlocks },
@@ -655,14 +657,7 @@ export class Game extends Scene {
 
   private resolveEnemyContact(enemy: Enemy): void {
     if (enemy.getState() === EnemyState.FRIGHTENED) {
-      this.addScore(200);
-      this.ghostsEatenInPowerWindow++;
-      if (this.ghostsEatenInPowerWindow >= 3) {
-        completeAchievement("eat-3-ghosts-power-window");
-      }
-      this.showFloatingScore(enemy.x, enemy.y, 200);
-      this.playSfx("maze_runner_ghost_eaten", { volume: 0.6 });
-      enemy.setEnemyState(EnemyState.DEAD);
+      this.defeatEnemyAsEaten(enemy);
     } else if (
       enemy.getState() !== EnemyState.DEAD &&
       !this.player.isDyingState() &&
@@ -682,6 +677,39 @@ export class Game extends Scene {
         killerIndex >= 0 ? this.activeGhostDefinitions[killerIndex] : undefined;
       this.loseLife(killerDefinition);
     }
+  }
+
+  private fireNullLance(): boolean {
+    const target = findNullLanceTarget({
+      grid: this.grid,
+      gridWidth: this.gridWidth,
+      gridHeight: this.gridHeight,
+      tileSize: this.tileSize,
+      offsetX: this.offsetX,
+      offsetY: this.offsetY,
+      player: {
+        x: this.player.x,
+        y: this.player.y,
+        direction: this.player.getCurrentDirection(),
+      },
+      enemies: this.enemies,
+    });
+
+    if (!target) return false;
+
+    this.defeatEnemyAsEaten(target);
+    return true;
+  }
+
+  private defeatEnemyAsEaten(enemy: Enemy): void {
+    this.addScore(200);
+    this.ghostsEatenInPowerWindow++;
+    if (this.ghostsEatenInPowerWindow >= 3) {
+      completeAchievement("eat-3-ghosts-power-window");
+    }
+    this.showFloatingScore(enemy.x, enemy.y, 200);
+    this.playSfx("maze_runner_ghost_eaten", { volume: 0.6 });
+    enemy.setEnemyState(EnemyState.DEAD);
   }
 
   private isEnemyOverlappingPlayerTile(enemy: Enemy): boolean {

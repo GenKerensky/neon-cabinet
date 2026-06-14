@@ -151,6 +151,8 @@ vi.mock("../../src/game/utils/sceneTransitions", () => mockSceneTransitions);
 import { Game } from "../../src/game/scenes/Game";
 import { CollectibleType } from "../../src/game/objects/Collectible";
 import { EnemyState } from "../../src/game/objects/Enemy";
+import { Direction } from "../../src/game/utils/DirectionUtils";
+import { CellType, type MazeCell } from "../../src/game/utils/MazeGenerator";
 
 type MockEnemy = {
   getState: ReturnType<typeof vi.fn>;
@@ -178,6 +180,15 @@ function createMockEnemy(state: EnemyState): MockEnemy {
     x: 15,
     y: 15,
   };
+}
+
+function gridFromPattern(pattern: string[]): MazeCell[][] {
+  return pattern.map((row) =>
+    [...row].map((ch) => ({
+      type: ch === "." ? CellType.PASSAGE : CellType.WALL,
+      visited: false,
+    })),
+  );
 }
 
 function createGameHarness() {
@@ -678,6 +689,37 @@ describe("Game", () => {
       "maze_runner_ghost_eaten",
       { volume: 0.6 },
     );
+  });
+
+  it("defeats the first living ghost hit by Null Lance as though eaten", () => {
+    const game = new Game();
+    const target = createMockEnemy(EnemyState.CHASE);
+    target.x = 130;
+    target.y = 100;
+    (game as any).player = {
+      x: 100,
+      y: 100,
+      getCurrentDirection: vi.fn(() => Direction.RIGHT),
+    };
+    (game as any).enemies = [target];
+    (game as any).grid = gridFromPattern(["WWWWWWW", "W.....W", "WWWWWWW"]);
+    (game as any).gridWidth = 7;
+    (game as any).gridHeight = 3;
+    (game as any).tileSize = 30;
+    (game as any).offsetX = -5;
+    (game as any).offsetY = 55;
+    (game as any).addScore = vi.fn();
+    (game as any).showFloatingScore = vi.fn();
+    (game as any).playSfx = vi.fn();
+
+    expect((game as any).fireNullLance()).toBe(true);
+    expect((game as any).addScore).toHaveBeenCalledWith(200);
+    expect((game as any).showFloatingScore).toHaveBeenCalledWith(130, 100, 200);
+    expect((game as any).playSfx).toHaveBeenCalledWith(
+      "maze_runner_ghost_eaten",
+      { volume: 0.6 },
+    );
+    expect(target.setEnemyState).toHaveBeenCalledWith(EnemyState.DEAD);
   });
 
   it("plays player death sound when a life is lost", () => {
