@@ -37,21 +37,40 @@ function createContext(): HackSystemContext {
 }
 
 describe("HackSystem", () => {
-  it("stores one held hack and awards replacement score when overwritten", () => {
+  it("stores one DEF hack and one ATK hack without replacement", () => {
     const context = createContext();
     const system = new HackSystem(context);
 
     expect(system.collectHack("phase-chip")).toEqual({
       heldHack: "phase-chip",
-      replaced: false,
-      replacementBonus: 0,
+      slot: "def",
+      collected: true,
+      full: false,
     });
+    expect(system.collectHack("reverse-pulse")).toEqual({
+      heldHack: "reverse-pulse",
+      slot: "atk",
+      collected: true,
+      full: false,
+    });
+    expect(system.getHeldHack("def")).toBe("phase-chip");
+    expect(system.getHeldHack("atk")).toBe("reverse-pulse");
+  });
+
+  it("rejects collecting into a full matching slot", () => {
+    const context = createContext();
+    const system = new HackSystem(context);
+
+    system.collectHack("phase-chip");
+
     expect(system.collectHack("shield-ring")).toEqual({
-      heldHack: "shield-ring",
-      replaced: true,
-      replacementBonus: 50,
+      heldHack: "phase-chip",
+      slot: "def",
+      collected: false,
+      full: true,
     });
-    expect(context.addScore).toHaveBeenCalledWith(50);
+    expect(system.getHeldHack("def")).toBe("phase-chip");
+    expect(context.addScore).not.toHaveBeenCalled();
   });
 
   it("activates held hacks with timers and clears the held slot", () => {
@@ -59,8 +78,8 @@ describe("HackSystem", () => {
     const system = new HackSystem(context);
     system.collectHack("overclock-pellet");
 
-    expect(system.activateHeldHack()).toBe(true);
-    expect(system.getHeldHack()).toBeNull();
+    expect(system.activateHeldHack("atk")).toBe(true);
+    expect(system.getHeldHack("atk")).toBeNull();
     expect(system.getActiveEffect("overclock-pellet")?.remainingMs).toBe(5000);
     expect(context.player.setHackSpeedMultiplier).toHaveBeenCalledWith(1.35);
 
@@ -81,8 +100,8 @@ describe("HackSystem", () => {
     const system = new HackSystem(context);
     system.collectHack("reverse-pulse");
 
-    expect(system.activateHeldHack({ blocked: true })).toBe(false);
-    expect(system.getHeldHack()).toBe("reverse-pulse");
+    expect(system.activateHeldHack("atk", { blocked: true })).toBe(false);
+    expect(system.getHeldHack("atk")).toBe("reverse-pulse");
     expect(context.enemies[0].forceReverse).not.toHaveBeenCalled();
   });
 
@@ -90,11 +109,11 @@ describe("HackSystem", () => {
     const context = createContext();
     const system = new HackSystem(context);
     system.collectHack("shield-ring");
-    system.activateHeldHack();
+    system.activateHeldHack("def");
 
     system.clearForDeath();
 
-    expect(system.getHeldHack()).toBeNull();
+    expect(system.getHeldHacks()).toEqual({ def: null, atk: null });
     expect(system.getActiveEffects()).toHaveLength(0);
     expect(context.player.clearHackEffects).toHaveBeenCalled();
   });
