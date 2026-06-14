@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { Direction } from "../../src/game/utils/DirectionUtils";
+import { HackPickupId } from "../../src/game/config/hackDefinitions";
 import {
   HackSystem,
   type HackSystemContext,
@@ -42,46 +43,48 @@ describe("HackSystem", () => {
     const context = createContext();
     const system = new HackSystem(context);
 
-    expect(system.collectHack("phase-chip")).toEqual({
-      heldHack: "phase-chip",
+    expect(system.collectHack(HackPickupId.PHASE_CHIP)).toEqual({
+      heldHack: HackPickupId.PHASE_CHIP,
       slot: "def",
       collected: true,
       full: false,
     });
-    expect(system.collectHack("reverse-pulse")).toEqual({
-      heldHack: "reverse-pulse",
+    expect(system.collectHack(HackPickupId.REVERSE_PULSE)).toEqual({
+      heldHack: HackPickupId.REVERSE_PULSE,
       slot: "atk",
       collected: true,
       full: false,
     });
-    expect(system.getHeldHack("def")).toBe("phase-chip");
-    expect(system.getHeldHack("atk")).toBe("reverse-pulse");
+    expect(system.getHeldHack("def")).toBe(HackPickupId.PHASE_CHIP);
+    expect(system.getHeldHack("atk")).toBe(HackPickupId.REVERSE_PULSE);
   });
 
   it("rejects collecting into a full matching slot", () => {
     const context = createContext();
     const system = new HackSystem(context);
 
-    system.collectHack("phase-chip");
+    system.collectHack(HackPickupId.PHASE_CHIP);
 
-    expect(system.collectHack("shield-ring")).toEqual({
-      heldHack: "phase-chip",
+    expect(system.collectHack(HackPickupId.SHIELD_RING)).toEqual({
+      heldHack: HackPickupId.PHASE_CHIP,
       slot: "def",
       collected: false,
       full: true,
     });
-    expect(system.getHeldHack("def")).toBe("phase-chip");
+    expect(system.getHeldHack("def")).toBe(HackPickupId.PHASE_CHIP);
     expect(context.addScore).not.toHaveBeenCalled();
   });
 
   it("activates held hacks with timers and clears the held slot", () => {
     const context = createContext();
     const system = new HackSystem(context);
-    system.collectHack("overclock-pellet");
+    system.collectHack(HackPickupId.OVERCLOCK_PELLET);
 
     expect(system.activateHeldHack("atk")).toBe(true);
     expect(system.getHeldHack("atk")).toBeNull();
-    expect(system.getActiveEffect("overclock-pellet")?.remainingMs).toBe(5000);
+    expect(system.getActiveEffect(HackPickupId.OVERCLOCK_PELLET)?.remainingMs).toBe(
+      5000,
+    );
     expect(context.player.setHackSpeedMultiplier).toHaveBeenCalledWith(1.35);
 
     system.update(5000);
@@ -99,10 +102,10 @@ describe("HackSystem", () => {
   it("ignores activation while gameplay is blocked", () => {
     const context = createContext();
     const system = new HackSystem(context);
-    system.collectHack("reverse-pulse");
+    system.collectHack(HackPickupId.REVERSE_PULSE);
 
     expect(system.activateHeldHack("atk", { blocked: true })).toBe(false);
-    expect(system.getHeldHack("atk")).toBe("reverse-pulse");
+    expect(system.getHeldHack("atk")).toBe(HackPickupId.REVERSE_PULSE);
     expect(context.enemies[0].forceReverse).not.toHaveBeenCalled();
   });
 
@@ -110,7 +113,7 @@ describe("HackSystem", () => {
     const context = createContext();
     context.fireNullLance = vi.fn(() => false);
     const system = new HackSystem(context);
-    system.collectHack("null-lance");
+    system.collectHack(HackPickupId.NULL_LANCE);
 
     expect(system.activateHeldHack("atk")).toBe(true);
 
@@ -122,7 +125,7 @@ describe("HackSystem", () => {
   it("clears held and active hacks on death", () => {
     const context = createContext();
     const system = new HackSystem(context);
-    system.collectHack("shield-ring");
+    system.collectHack(HackPickupId.SHIELD_RING);
     system.activateHeldHack("def");
 
     system.clearForDeath();
