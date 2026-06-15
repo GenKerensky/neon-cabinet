@@ -44,6 +44,17 @@ describe("upgrades", () => {
     expect(result.state.bounties).toBe(0);
   });
 
+  it("prevents duplicate purchases", () => {
+    const first = purchaseUpgrade(createUpgradeState(1_000), "laser-damage-1");
+    const second = purchaseUpgrade(first.state, "laser-damage-1");
+
+    expect(first.purchased).toBe(true);
+    expect(second.purchased).toBe(false);
+    expect(second.state.purchased).toEqual(["laser-damage-1"]);
+    expect(second.state.bounties).toBe(first.state.bounties);
+    expect(second.state.laserDamageMultiplier).toBe(1.25);
+  });
+
   it("spends bounties, records purchases, and applies effects", () => {
     let state = createUpgradeState(2_000);
 

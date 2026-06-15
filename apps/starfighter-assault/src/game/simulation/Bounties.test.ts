@@ -38,4 +38,12 @@ describe("bounties", () => {
     expect(first.state.streakMultiplier).toBe(1);
     expect(second.state.streakMultiplier).toBe(1);
   });
+
+  it("does not increase streak multiplier for out-of-order timestamps", () => {
+    const first = awardBounty(createBountyState(), "fighter", 4_000);
+    const second = awardBounty(first.state, "fighter", 3_000);
+
+    expect(first.state.streakMultiplier).toBe(1);
+    expect(second.state.streakMultiplier).toBe(1);
+  });
 });

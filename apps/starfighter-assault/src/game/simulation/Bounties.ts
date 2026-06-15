@@ -46,9 +46,10 @@ export function awardBounty(
   targetKind: BountyTargetKind,
   awardedAt: number,
 ): BountyAwardResult {
+  const awardDelta =
+    state.lastAwardAt === null ? null : awardedAt - state.lastAwardAt;
   const isStreak =
-    state.lastAwardAt !== null &&
-    awardedAt - state.lastAwardAt <= STREAK_WINDOW_MS;
+    awardDelta !== null && awardDelta >= 0 && awardDelta <= STREAK_WINDOW_MS;
   const streakMultiplier = isStreak
     ? Math.min(MAX_STREAK_MULTIPLIER, state.streakMultiplier + STREAK_STEP)
     : 1;
