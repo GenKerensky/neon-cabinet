@@ -1,0 +1,17 @@
+{
+  "name": "starfighter-assault",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "dependencies": {
+    "@neon-cabinet/shaders": "workspace:*",
+    "@neon-cabinet/typed-event-emitter": "workspace:*",
+    "phaser": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}
