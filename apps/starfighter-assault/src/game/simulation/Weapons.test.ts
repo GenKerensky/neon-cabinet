@@ -13,11 +13,12 @@ describe("weapons", () => {
 
   it("fires left and right lasers without consuming ammo", () => {
     const state = createWeaponsState();
-    const result = fireLaser(state, "fighter-1");
+    const target = { x: 0, y: 0 };
+    const result = fireLaser(state, target);
 
     expect(result.shots).toEqual([
-      { cannon: "left-cannon", target: "fighter-1", damage: 10 },
-      { cannon: "right-cannon", target: "fighter-1", damage: 10 },
+      { cannon: "left-cannon", target: { x: 0, y: 0 }, damage: 10 },
+      { cannon: "right-cannon", target: { x: 0, y: 0 }, damage: 10 },
     ]);
     expect(result.state.torpedoes).toBe(state.torpedoes);
     expect(result.state.torpedoCapacity).toBe(state.torpedoCapacity);
@@ -26,7 +27,7 @@ describe("weapons", () => {
 
   it("caps laser heat at 100", () => {
     const state = { ...createWeaponsState(), laserHeat: 95 };
-    const result = fireLaser(state, "turret-1");
+    const result = fireLaser(state, { x: 12, y: -8 });
 
     expect(result.state.laserHeat).toBe(100);
   });

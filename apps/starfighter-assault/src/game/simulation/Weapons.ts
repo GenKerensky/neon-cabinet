@@ -7,9 +7,14 @@ export interface WeaponsState {
 
 export type LaserCannon = "left-cannon" | "right-cannon";
 
+export interface AimPoint {
+  x: number;
+  y: number;
+}
+
 export interface LaserShot {
   cannon: LaserCannon;
-  target: string;
+  target: AimPoint;
   damage: number;
 }
 
@@ -41,7 +46,7 @@ export function createWeaponsState(): WeaponsState {
 
 export function fireLaser(
   state: WeaponsState,
-  target: string,
+  target: AimPoint,
 ): LaserFireResult {
   return {
     state: {
@@ -52,8 +57,16 @@ export function fireLaser(
       ),
     },
     shots: [
-      { cannon: "left-cannon", target, damage: state.laserDamage },
-      { cannon: "right-cannon", target, damage: state.laserDamage },
+      {
+        cannon: "left-cannon",
+        target: { ...target },
+        damage: state.laserDamage,
+      },
+      {
+        cannon: "right-cannon",
+        target: { ...target },
+        damage: state.laserDamage,
+      },
     ],
   };
 }

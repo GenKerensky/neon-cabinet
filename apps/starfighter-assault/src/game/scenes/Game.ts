@@ -64,7 +64,6 @@ export class Game extends Scene {
   }
 
   private fireLaserAtPlayerTarget(): void {
-    const { x, y } = this.player.target;
-    this.weapons = fireLaser(this.weapons, `${x},${y}`).state;
+    this.weapons = fireLaser(this.weapons, this.player.target).state;
   }
 }
