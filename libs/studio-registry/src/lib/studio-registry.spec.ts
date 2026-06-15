@@ -3,6 +3,10 @@ import {
   getStudioGameById,
   getStudioGames,
 } from "./studio-registry";
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+
+const workspaceRoot = fileURLToPath(new URL("../../../../", import.meta.url));
 
 describe("studio-registry", () => {
   it("returns the shared Neon Cabinet games in suite order", () => {
@@ -21,6 +25,10 @@ describe("studio-registry", () => {
       expect(game.icon.svgPath).toBe(
         `apps/${game.id}/public/assets/favicon.svg`,
       );
+      expect(existsSync(`${workspaceRoot}${game.icon.svgPath}`)).toBe(true);
+      for (const pngPath of Object.values(game.icon.pngPaths)) {
+        expect(existsSync(`${workspaceRoot}${pngPath}`)).toBe(true);
+      }
       expect(game.icon.svgDataUri).toMatch(/^data:image\/svg\+xml,/);
       expect(game.theme.primary).toBeTruthy();
       expect(game.theme.accent).toBeTruthy();
