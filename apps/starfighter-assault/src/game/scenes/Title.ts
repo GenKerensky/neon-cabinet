@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../../utils/font";
 import { createTitleAttractState, type TitleAttractState } from "./TitleAttract";
+import { formatHighScore, readHighScore } from "../utils/highScore";
 
 const FRAME_BLUE = 0x23d9ff;
 const GLASS_CYAN = 0x7be8ff;
@@ -53,6 +54,20 @@ export class Title extends Scene {
         fontSize: "16px",
         color: "#ffdf6e",
       })
+      .setOrigin(0.5)
+      .setDepth(21);
+
+    this.add
+      .text(
+        width / 2,
+        height * 0.41,
+        `HIGH SCORE: ${formatHighScore(readHighScore(this.registry))}`,
+        {
+          fontFamily,
+          fontSize: "18px",
+          color: "#7be8ff",
+        },
+      )
       .setOrigin(0.5)
       .setDepth(21);
 

@@ -1,5 +1,10 @@
 import { Scene } from "phaser";
 import { getFontFamily } from "../../utils/font";
+import {
+  formatHighScore,
+  readHighScore,
+  writeHighScore,
+} from "../utils/highScore";
 
 interface GameOverSceneData {
   status?: "victory" | "game-over";
@@ -15,6 +20,9 @@ export class GameOver extends Scene {
     const { width, height } = this.cameras.main;
     const fontFamily = getFontFamily(this);
     const didWin = data.status === "victory";
+    const previousHighScore = readHighScore(this.registry);
+    const highScore = writeHighScore(data.bounties ?? 0, this.registry);
+    const isNewHighScore = highScore > previousHighScore;
 
     this.cameras.main.setBackgroundColor(0x020107);
     this.cameras.main.setPostPipeline("VectorShader");
@@ -38,7 +46,20 @@ export class GameOver extends Scene {
       .setOrigin(0.5);
 
     this.add
-      .text(width / 2, height * 0.66, "SPACE OR CLICK TO RETURN", {
+      .text(
+        width / 2,
+        height * 0.58,
+        `${isNewHighScore ? "NEW " : ""}HIGH SCORE: ${formatHighScore(highScore)}`,
+        {
+          fontFamily,
+          fontSize: "18px",
+          color: isNewHighScore ? "#ffdf6e" : "#7be8ff",
+        },
+      )
+      .setOrigin(0.5);
+
+    this.add
+      .text(width / 2, height * 0.7, "SPACE OR CLICK TO RETURN", {
         fontFamily,
         fontSize: "16px",
         color: "#7be8ff",
