@@ -42,5 +42,6 @@ vite.config.*.timestamp*
 .worktrees
 .claude/worktrees
 .claude/settings.local.json
+.superpowers/
 
 storybook-static
