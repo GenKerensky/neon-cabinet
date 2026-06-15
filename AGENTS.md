@@ -2,6 +2,57 @@
 
 Neon cabinet is a web arcade of html games inspired by classic coin-op machines, but with modern features and style.
 
+## Style
+
+Games should use combinations of solid color shapes with neon outlines for game sprites and assets. The "glow" is created by the heavy bloom of the vector shader `libs/shaders/src/shaders/VectorShader.ts` applied on top of each of the games.
+
+## Engine
+
+2D games should use the phaser game engine. Sprites should be designed as SVG assets, and then imported into the games as VectorPuppets.
+
+## Git
+
+### Worktrees
+
+The project folder contains the branches, and all new features should use new git worktrees in the project folder:
+
+```text
+neon-cabinet
+  ├── main
+  └── feature-new-feature
+```
+
+### Commit Messages
+
+Use **conventional commits** fo all commit messages. Prefer bullets point lists of work done to long prose in message body.
+
+**Format:**
+
+```text
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Example:**
+
+```text
+feat(auth): implement JWT token refresh strategy
+
+Update the authentication flow to handle expired tokens automatically
+without forcing a user logout.
+
+- Add 'RefreshToken' service to handle token rotation.
+
+- Update 'AuthInterceptor' to catch 401 errors.
+
+- Add unit tests for token expiration scenarios.
+
+- Update API documentation with new endpoint details.
+```
+
 ## Art Assets
 
 - For creating, editing, rendering, critiquing, or integrating game art assets, always invoke the `vector-sprite-pipeline` skill first. It is the definitive workflow for SVG sprites, Vector Studio previews, renderer handoffs, Art Critic approval, and user approval before moving to the next sprite.
