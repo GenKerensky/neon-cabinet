@@ -1,4 +1,0 @@
-=== nx test maze-runner ===
-Test Files 17 passed
-Tests 211 passed
-Duration 32.97s

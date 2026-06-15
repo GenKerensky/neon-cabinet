@@ -1,5 +1,0 @@
-Task 6 browser scenarios completed.
-- Title attract screenshot: .omo/evidence/task-6-title-attract.png
-- Game HUD screenshot: .omo/evidence/task-6-game-hud.png
-- Movement/pen snapshot: .omo/evidence/task-6-movement-pen.json
-- Captured scene: Game

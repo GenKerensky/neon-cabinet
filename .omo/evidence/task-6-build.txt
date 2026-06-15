@@ -1,3 +1,0 @@
-=== nx build maze-runner ===
-Successfully ran target build
-built in 2.78s

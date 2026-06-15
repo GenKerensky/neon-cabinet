@@ -1,0 +1,49 @@
+<h2>Power-Up Visual Language</h2>
+<p class="subtitle">Which direction should Maze Runner power-ups use? Click one, or answer in chat.</p>
+
+<div class="cards">
+  <div class="card" data-choice="signal-hacks" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#080512; padding:18px;">
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; align-items:center;">
+        <div style="aspect-ratio:1; border:2px solid #58f7ff; box-shadow:0 0 14px #58f7ff66; background:#0a1b22; clip-path:polygon(48% 4%,88% 28%,70% 92%,18% 72%,35% 34%);"></div>
+        <div style="aspect-ratio:1; border:2px solid #ff66dd; box-shadow:0 0 14px #ff66dd66; background:#31102f; border-radius:50% 50% 6px 6px;"></div>
+        <div style="aspect-ratio:1; border:2px solid #76ff7a; box-shadow:0 0 14px #76ff7a66; background:#06220a; border-radius:50%; position:relative;"></div>
+        <div style="aspect-ratio:1; border:2px solid #fff266; box-shadow:0 0 14px #fff26666; background:#272004; border-radius:50%;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Signal Hacks</h3>
+      <p>Keep the current hacker/arcade fantasy. Standardize each pickup around a dark core, neon stroke, signal socket, and unique animated glyph.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="arcade-relics" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#080512; padding:18px;">
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; align-items:center;">
+        <div style="aspect-ratio:1; border:2px solid #ffd84d; box-shadow:0 0 14px #ffd84d66; background:#2a1f05; border-radius:6px; transform:rotate(45deg);"></div>
+        <div style="aspect-ratio:1; border:2px solid #3cf2ff; box-shadow:0 0 14px #3cf2ff66; background:#071e25; border-radius:8px; transform:rotate(45deg);"></div>
+        <div style="aspect-ratio:1; border:2px solid #ff4fd8; box-shadow:0 0 14px #ff4fd866; background:#26071f; border-radius:8px; transform:rotate(45deg);"></div>
+        <div style="aspect-ratio:1; border:2px solid #39ff14; box-shadow:0 0 14px #39ff1466; background:#062407; border-radius:8px; transform:rotate(45deg);"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Arcade Relics</h3>
+      <p>Reframe pickups as collectible chips/gems. More readable at maze scale, but less connected to the existing hack progression and HUD language.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="combat-tools" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#080512; padding:18px;">
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; align-items:center;">
+        <div style="aspect-ratio:1; border:2px solid #ffffff; box-shadow:0 0 14px #58f7ff66; background:#102331; border-radius:4px 14px 4px 14px;"></div>
+        <div style="aspect-ratio:1; border:2px solid #ffffff; box-shadow:0 0 14px #ff66dd66; background:#311025; border-radius:14px 4px 14px 4px;"></div>
+        <div style="aspect-ratio:1; border:2px solid #ffffff; box-shadow:0 0 14px #76ff7a66; background:#12310f; border-radius:50% 6px 50% 6px;"></div>
+        <div style="aspect-ratio:1; border:2px solid #ffffff; box-shadow:0 0 14px #fff26666; background:#332b08; border-radius:6px 50% 6px 50%;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Combat Tools</h3>
+      <p>Make each pickup feel like active equipment. Strong action readability, but risks making Maze Runner feel more like an action game.</p>
+    </div>
+  </div>
+</div>

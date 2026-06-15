@@ -1,0 +1,107 @@
+<h2>Offensive Hack Label</h2>
+<p class="subtitle">Pick the slim label that reads clearly beside DEF/Q without sounding like a toggle.</p>
+
+<style>
+  .label-preview {
+    background:
+      linear-gradient(rgba(8, 5, 18, 0.88), rgba(8, 5, 18, 0.88)),
+      repeating-linear-gradient(0deg, transparent, transparent 23px, #1028a8 24px),
+      repeating-linear-gradient(90deg, transparent, transparent 23px, #1028a8 24px);
+    min-height: 230px;
+    padding: 18px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .slot {
+    width: 46%;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: rgba(5, 8, 18, 0.94);
+    color: #f3f3ff;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .def-slot {
+    border: 1px solid #58f7ff;
+    box-shadow: 0 0 18px #58f7ff66;
+  }
+
+  .atk-slot {
+    border: 1px solid #ff9b42;
+    box-shadow: 0 0 18px #ff9b4266;
+  }
+
+  .slot-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+  }
+
+  .def-icon {
+    border: 2px solid #58f7ff;
+    background: #061b22;
+    box-shadow: 0 0 14px #58f7ff99;
+  }
+
+  .atk-icon {
+    border: 2px solid #ff9b42;
+    background: #2a1405;
+    box-shadow: 0 0 14px #ff9b4299;
+  }
+
+  .keycap {
+    margin-left: auto;
+    display: inline-flex;
+    min-width: 26px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #fff;
+    background: #171923;
+    color: #fff;
+    font-weight: 700;
+  }
+</style>
+
+<div class="cards">
+  <div class="card" data-choice="atk" onclick="toggleSelect(this)">
+    <div class="card-image label-preview">
+      <div class="slot def-slot"><div class="slot-icon def-icon"></div><div><strong>DEF HACK</strong><br>Phase through a wall.</div><div class="keycap">Q</div></div>
+      <div class="slot atk-slot"><div class="slot-icon atk-icon"></div><div><strong>ATK HACK</strong><br>Reverse nearby ghosts.</div><div class="keycap">E</div></div>
+    </div>
+    <div class="card-body">
+      <h3>A. ATK HACK</h3>
+      <p>Shortest and clearest arcade shorthand. Pairs naturally with DEF, but slightly more combat-game flavored.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="strike" onclick="toggleSelect(this)">
+    <div class="card-image label-preview">
+      <div class="slot def-slot"><div class="slot-icon def-icon"></div><div><strong>DEF HACK</strong><br>Phase through a wall.</div><div class="keycap">Q</div></div>
+      <div class="slot atk-slot"><div class="slot-icon atk-icon"></div><div><strong>STRIKE</strong><br>Reverse nearby ghosts.</div><div class="keycap">E</div></div>
+    </div>
+    <div class="card-body">
+      <h3>B. STRIKE</h3>
+      <p>Readable and active. Less symmetrical with DEF, and it implies direct damage more than control.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="disrupt" onclick="toggleSelect(this)">
+    <div class="card-image label-preview">
+      <div class="slot def-slot"><div class="slot-icon def-icon"></div><div><strong>DEF HACK</strong><br>Phase through a wall.</div><div class="keycap">Q</div></div>
+      <div class="slot atk-slot"><div class="slot-icon atk-icon"></div><div><strong>DISRUPT</strong><br>Reverse nearby ghosts.</div><div class="keycap">E</div></div>
+    </div>
+    <div class="card-body">
+      <h3>C. DISRUPT</h3>
+      <p>Best describes what these hacks do to ghosts, but it is longer and less scannable in a fast HUD.</p>
+    </div>
+  </div>
+</div>

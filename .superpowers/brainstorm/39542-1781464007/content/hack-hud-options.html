@@ -1,0 +1,129 @@
+<h2>Hack HUD Pattern</h2>
+<p class="subtitle">A hack stays named HACK, but the UI needs to show what is held, how to use it, and what it does.</p>
+
+<style>
+  .hud-preview {
+    background:
+      linear-gradient(rgba(8, 5, 18, 0.86), rgba(8, 5, 18, 0.86)),
+      repeating-linear-gradient(0deg, transparent, transparent 19px, #1028a8 20px),
+      repeating-linear-gradient(90deg, transparent, transparent 19px, #1028a8 20px);
+    min-height: 210px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hud-player {
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    width: 26px;
+    height: 26px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #fff266;
+    box-shadow: 0 0 14px #fff266;
+  }
+
+  .hud-ghost {
+    position: absolute;
+    right: 27%;
+    top: 38%;
+    width: 24px;
+    height: 28px;
+    border-radius: 50% 50% 6px 6px;
+    background: #ff66dd;
+    box-shadow: 0 0 12px #ff66dd;
+  }
+
+  .hack-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid #76ff7a;
+    background: rgba(3, 18, 6, 0.9);
+    box-shadow: 0 0 16px #76ff7a66;
+    color: #eaffea;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .hack-icon {
+    width: 34px;
+    height: 34px;
+    border: 2px solid #76ff7a;
+    border-radius: 50%;
+    background: #06220a;
+    box-shadow: 0 0 12px #76ff7a99;
+    flex: 0 0 auto;
+  }
+
+  .keycap {
+    display: inline-flex;
+    min-width: 22px;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #fff;
+    background: #171923;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .effect {
+    color: #a7ffad;
+  }
+</style>
+
+<div class="cards">
+  <div class="card" data-choice="compact-slot" onclick="toggleSelect(this)">
+    <div class="card-image hud-preview">
+      <div class="hud-player"></div>
+      <div class="hud-ghost"></div>
+      <div class="hack-chip" style="position:absolute; left:14px; bottom:14px; width:220px;">
+        <div class="hack-icon"></div>
+        <div><strong>HACK: SHIELD</strong><br><span class="effect">E to absorb 1 hit</span></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Compact Slot</h3>
+      <p>Keeps the existing bottom-left footprint. Clearer than today, but cramped when active timers and effect text are both present.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="command-bar" onclick="toggleSelect(this)">
+    <div class="card-image hud-preview">
+      <div class="hud-player"></div>
+      <div class="hud-ghost"></div>
+      <div class="hack-chip" style="position:absolute; left:14px; right:14px; bottom:14px;">
+        <div class="hack-icon"></div>
+        <div style="flex:1;"><strong>HELD HACK: SHIELD RING</strong><br><span class="effect">Absorbs 1 lethal hit and stuns nearby ghosts</span></div>
+        <div><span class="keycap">E</span> USE</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Command Bar</h3>
+      <p>Most explicit: icon, name, effect, and key prompt live together. Larger footprint, but it sits below the maze action.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="context-pop" onclick="toggleSelect(this)">
+    <div class="card-image hud-preview">
+      <div class="hud-player"></div>
+      <div class="hud-ghost"></div>
+      <div class="hack-chip" style="position:absolute; left:50%; top:22%; transform:translateX(-50%); width:250px;">
+        <div class="hack-icon"></div>
+        <div><strong>SHIELD READY</strong><br><span class="effect">Press E near danger</span></div>
+      </div>
+      <div class="hack-chip" style="position:absolute; left:14px; bottom:14px; width:132px;">
+        <div class="hack-icon"></div>
+        <div><strong>HACK</strong><br><span class="effect">READY</span></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Context Pop</h3>
+      <p>Strong onboarding when pickup changes or danger is near. Needs a stable fallback HUD so it does not become noisy.</p>
+    </div>
+  </div>
+</div>

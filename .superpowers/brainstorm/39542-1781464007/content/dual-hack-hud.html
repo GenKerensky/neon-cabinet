@@ -1,0 +1,149 @@
+<h2>Dual Hack Inventory</h2>
+<p class="subtitle">Revised model: defensive/evasive hacks use Q on the left, offensive hacks use E on the right.</p>
+
+<style>
+  .maze-preview {
+    min-height: 330px;
+    background:
+      linear-gradient(rgba(8, 5, 18, 0.85), rgba(8, 5, 18, 0.85)),
+      repeating-linear-gradient(0deg, transparent, transparent 23px, #1028a8 24px),
+      repeating-linear-gradient(90deg, transparent, transparent 23px, #1028a8 24px);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #272b6f;
+  }
+
+  .player-dot {
+    position: absolute;
+    left: 49%;
+    top: 44%;
+    width: 28px;
+    height: 28px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #fff266;
+    box-shadow: 0 0 16px #fff266;
+  }
+
+  .ghost-dot {
+    position: absolute;
+    right: 28%;
+    top: 33%;
+    width: 28px;
+    height: 32px;
+    border-radius: 50% 50% 8px 8px;
+    background: #ff5a3d;
+    box-shadow: 0 0 16px #ff5a3d;
+  }
+
+  .slot {
+    position: absolute;
+    bottom: 16px;
+    width: 310px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: rgba(5, 8, 18, 0.92);
+    color: #f3f3ff;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .def-slot {
+    left: 16px;
+    border: 1px solid #58f7ff;
+    box-shadow: 0 0 18px #58f7ff66;
+  }
+
+  .off-slot {
+    right: 16px;
+    border: 1px solid #ff9b42;
+    box-shadow: 0 0 18px #ff9b4266;
+  }
+
+  .slot-icon {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+  }
+
+  .def-icon {
+    border: 2px solid #58f7ff;
+    background: #061b22;
+    box-shadow: 0 0 14px #58f7ff99;
+  }
+
+  .off-icon {
+    border: 2px solid #ff9b42;
+    background: #2a1405;
+    box-shadow: 0 0 14px #ff9b4299;
+  }
+
+  .keycap {
+    margin-left: auto;
+    display: inline-flex;
+    min-width: 26px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #fff;
+    background: #171923;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .pickup {
+    position: absolute;
+    left: 32%;
+    top: 58%;
+    width: 38px;
+    height: 38px;
+    border: 2px solid #58f7ff;
+    border-radius: 50%;
+    background: #061b22;
+    box-shadow: 0 0 14px #58f7ff;
+  }
+
+  .full-pop {
+    position: absolute;
+    left: 32%;
+    top: 48%;
+    transform: translateX(-18%);
+    padding: 4px 8px;
+    border: 1px solid #58f7ff;
+    background: #050812;
+    color: #58f7ff;
+    font-size: 12px;
+    box-shadow: 0 0 10px #58f7ff88;
+  }
+</style>
+
+<div class="mockup">
+  <div class="mockup-header">Preview: split hack inventory</div>
+  <div class="mockup-body maze-preview">
+    <div class="player-dot"></div>
+    <div class="ghost-dot"></div>
+    <div class="pickup"></div>
+    <div class="full-pop">FULL</div>
+
+    <div class="slot def-slot">
+      <div class="slot-icon def-icon"></div>
+      <div>
+        <strong>DEF HACK: PHASE CHIP</strong><br>
+        Cool/evasive. Breach one wall in your direction.
+      </div>
+      <div class="keycap">Q</div>
+    </div>
+
+    <div class="slot off-slot">
+      <div class="slot-icon off-icon"></div>
+      <div>
+        <strong>OFF HACK: REVERSE PULSE</strong><br>
+        Warm/offensive. Reverse nearby ghosts.
+      </div>
+      <div class="keycap">E</div>
+    </div>
+  </div>
+</div>
