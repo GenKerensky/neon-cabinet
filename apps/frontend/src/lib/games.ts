@@ -44,9 +44,8 @@ export const games: Game[] = [
     id: "starfighter-assault",
     name: "Starfighter Assault",
     description:
-      "Climb into the cockpit for a vector-drawn assault on an enemy superstructure. Inspired by Atari's legendary 1983 trench run.",
-    href: "#",
+      "Climb into a bounty hunter cockpit for a neon wireframe assault on a Star Destroyer-like capital ship.",
+    href: "/games/starfighter-assault",
     thumbnail: "/assets/starfighter-assault-cabinet.png",
-    comingSoon: true,
   },
 ];

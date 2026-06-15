@@ -105,6 +105,38 @@ const registeredGames: StudioGame[] = [
     },
   },
   {
+    id: "starfighter-assault",
+    title: "Starfighter Assault",
+    icon: createGameIcon(
+      "starfighter-assault",
+      "Starfighter Assault",
+      starfighterAssaultIconSvg(),
+    ),
+    metadata: {
+      description:
+        "Cockpit-view wireframe rail combat with bounty upgrades, torpedoes, and a capital ship finale.",
+      href: "/games/starfighter-assault",
+      status: "available",
+    },
+    theme: {
+      accent: "#ff43d6",
+      accentForeground: "#150018",
+      audioGrid: "rgba(123, 232, 255, 0.06)",
+      audioLine: "#ff43d6",
+      audioPanel: "rgba(5, 3, 13, 0.92)",
+      audioPanelStrong: "#100a28",
+      background: "#05030d",
+      border: "rgba(123, 232, 255, 0.24)",
+      foreground: "#f3fbff",
+      input: "rgba(255, 67, 214, 0.2)",
+      primary: "#7be8ff",
+      primaryForeground: "#020107",
+      ring: "rgba(255, 67, 214, 0.5)",
+      secondary: "#120d2e",
+      secondaryForeground: "#f3fbff",
+    },
+  },
+  {
     id: "mars-lander",
     title: "Mars Lander",
     icon: createGameIcon("mars-lander", "Mars Lander", marsLanderIconSvg()),
@@ -199,6 +231,10 @@ function battleTanksIconSvg(): string {
 
 function spaceDefenderIconSvg(): string {
   return '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="10" fill="#05070d"/><g fill="#05070d" stroke-linecap="round" stroke-linejoin="round"><path d="M32 5 41 30 51 53 37 47 32 59 27 47 13 53 23 30Z" stroke="#f8ffff" stroke-width="4"/><path d="M32 11 36 31 44 45M32 11 28 31 20 45M25 34h14" fill="none" stroke="#9aa5ad" stroke-width="2.5"/><path d="M24 15 18 45M40 15l6 30" fill="none" stroke="#00ffff" stroke-width="3"/><path d="M28 51h8" fill="none" stroke="#66ffff" stroke-width="4"/></g><circle cx="12" cy="13" r="1.8" fill="#ffffff" opacity="0.9"/><circle cx="52" cy="16" r="1.4" fill="#66ffff" opacity="0.8"/><circle cx="50" cy="47" r="1.2" fill="#ffffff" opacity="0.7"/></svg>';
+}
+
+function starfighterAssaultIconSvg(): string {
+  return '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="10" fill="#05030d"/><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 18 25 34 8 46" stroke="#b04cff" stroke-width="4"/><path d="M56 18 39 34 56 46" stroke="#b04cff" stroke-width="4"/><path d="M22 48 32 27 42 48" stroke="#7be8ff" stroke-width="4"/><path d="M25 43h14" stroke="#ff43d6" stroke-width="3"/><ellipse cx="32" cy="50" rx="15" ry="6" stroke="#7be8ff" stroke-width="3"/><path d="M25 20h14M32 13v14" stroke="#ff43d6" stroke-width="3"/></g><circle cx="18" cy="27" r="2" fill="#ff1f35"/><circle cx="46" cy="30" r="2" fill="#ff1f35"/></svg>';
 }
 
 function marsLanderIconSvg(): string {

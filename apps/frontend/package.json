@@ -22,6 +22,7 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "space-defender": "workspace:*",
+    "starfighter-assault": "workspace:*",
     "tailwind-merge": "^2.6.0"
   }
 }
