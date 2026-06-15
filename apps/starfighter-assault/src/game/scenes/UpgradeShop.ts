@@ -1,14 +1,25 @@
 import { Scene } from "phaser";
 import { getFontFamily } from "../../utils/font";
 import { EventBus } from "../EventBus";
+import type { GeneratedSortie } from "../rail/SegmentTypes";
+import type { BountyState } from "../simulation/Bounties";
+import type { RunState } from "../simulation/RunState";
 import { getAvailableUpgrades } from "../simulation/Upgrades";
+import type { WeaponsState } from "../simulation/Weapons";
+
+interface UpgradeShopSceneData {
+  runState?: RunState;
+  sortie?: GeneratedSortie;
+  bountyState?: BountyState;
+  weapons?: WeaponsState;
+}
 
 export class UpgradeShop extends Scene {
   constructor() {
     super("UpgradeShop");
   }
 
-  create(): void {
+  create(data: UpgradeShopSceneData = {}): void {
     const { width, height } = this.cameras.main;
     const fontFamily = getFontFamily(this);
     this.cameras.main.setBackgroundColor(0x020107);
@@ -42,6 +53,14 @@ export class UpgradeShop extends Scene {
       });
 
     this.add
+      .text(width / 2, height * 0.33, `${data.runState?.bounties ?? 0} BOUNTIES`, {
+        fontFamily,
+        fontSize: "18px",
+        color: "#ffdf6e",
+      })
+      .setOrigin(0.5);
+
+    this.add
       .text(width / 2, height - 56, "SPACE OR CLICK TO LAUNCH", {
         fontFamily,
         fontSize: "16px",
@@ -49,7 +68,17 @@ export class UpgradeShop extends Scene {
       })
       .setOrigin(0.5);
 
-    const startGame = () => this.scene.start("Game");
+    const startGame = () =>
+      this.scene.start("Game", {
+        ...data,
+        runState:
+          data.runState === undefined
+            ? undefined
+            : {
+                ...data.runState,
+                status: "playing",
+              },
+      });
     this.input.keyboard?.once("keydown-SPACE", startGame);
     this.input.once("pointerdown", startGame);
 

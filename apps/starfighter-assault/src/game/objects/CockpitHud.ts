@@ -1,5 +1,7 @@
 import type { GameObjects, Scene } from "phaser";
+import { getFontFamily } from "../../utils/font";
 import type { RadarDot } from "../hud/RadarProjection";
+import type { ThreatKind } from "../rail/SegmentTypes";
 import type { FlightPoint } from "./RailPlayer";
 
 const FRAME_BLUE = 0x23d9ff;
@@ -9,12 +11,37 @@ const LASER_PINK = 0xff2bd6;
 const LASER_PURPLE = 0x8e44ff;
 const SHADOW = 0x020107;
 
+export interface CockpitHudStatus {
+  label: string;
+  contacts: number;
+  bounties: number;
+  torpedoes: number;
+  isFinale: boolean;
+}
+
+export interface CockpitThreatMarker {
+  id: string;
+  kind: ThreatKind;
+  x: number;
+  y: number;
+  z: number;
+  threat: number;
+}
+
 export class CockpitHud {
   private readonly graphics: GameObjects.Graphics;
+  private readonly statusText: GameObjects.Text;
 
   constructor(scene: Scene) {
     this.graphics = scene.add.graphics();
     this.graphics.setDepth(1000);
+    this.statusText = scene.add
+      .text(22, 18, "", {
+        fontFamily: getFontFamily(scene),
+        fontSize: "14px",
+        color: "#7be8ff",
+      })
+      .setDepth(1001);
   }
 
   render(
@@ -22,19 +49,107 @@ export class CockpitHud {
     height: number,
     dots: RadarDot[],
     aimOffset: FlightPoint = { x: 0, y: 0 },
+    status?: CockpitHudStatus,
+    threats: CockpitThreatMarker[] = [],
   ): void {
     this.graphics.clear();
 
+    if (status?.isFinale) {
+      this.drawCapitalShipSilhouette(width, height);
+    }
+
+    this.drawThreatMarkers(width, height, threats);
     this.drawCanopyFrame(width, height);
     this.drawSidePanels(width, height);
     this.drawNose(width, height);
     this.drawLaserCannons(width, height);
     this.drawReticle(width, height, aimOffset);
     this.drawRadar(width, height, dots);
+    this.renderStatus(status);
   }
 
   destroy(): void {
     this.graphics.destroy();
+    this.statusText.destroy();
+  }
+
+  private renderStatus(status?: CockpitHudStatus): void {
+    if (status === undefined) {
+      this.statusText.setText("");
+      return;
+    }
+
+    this.statusText.setText(
+      `${status.label}  CONTACTS ${status.contacts}  BOUNTIES ${status.bounties}  TORP ${status.torpedoes}`,
+    );
+  }
+
+  private drawCapitalShipSilhouette(width: number, height: number): void {
+    const centerX = width / 2;
+    const noseY = height * 0.14;
+    const sternY = height * 0.46;
+    const halfSternW = width * 0.28;
+
+    this.graphics.fillStyle(LASER_PURPLE, 0.07);
+    this.graphics.fillTriangle(
+      centerX,
+      noseY,
+      centerX - halfSternW,
+      sternY,
+      centerX + halfSternW,
+      sternY,
+    );
+
+    this.graphics.lineStyle(2, LASER_PURPLE, 0.62);
+    this.strokePath([
+      [centerX, noseY],
+      [centerX - halfSternW, sternY],
+      [centerX + halfSternW, sternY],
+      [centerX, noseY],
+    ]);
+
+    this.graphics.lineStyle(1, GLASS_CYAN, 0.35);
+    this.strokePath([
+      [centerX, noseY + 18],
+      [centerX - halfSternW * 0.18, sternY - 24],
+      [centerX + halfSternW * 0.18, sternY - 24],
+      [centerX, noseY + 18],
+    ]);
+    this.strokePath([
+      [centerX - halfSternW * 0.58, sternY - 12],
+      [centerX + halfSternW * 0.58, sternY - 12],
+    ]);
+  }
+
+  private drawThreatMarkers(
+    width: number,
+    height: number,
+    threats: CockpitThreatMarker[],
+  ): void {
+    for (const threat of threats) {
+      const projection = projectThreatToViewport(width, height, threat);
+      if (projection === null) continue;
+
+      const color = threat.threat > 0.75 ? LASER_PINK : GLASS_CYAN;
+      this.graphics.lineStyle(2, color, projection.alpha);
+      this.graphics.strokeRect(
+        projection.x - projection.size / 2,
+        projection.y - projection.size / 2,
+        projection.size,
+        projection.size,
+      );
+
+      this.graphics.beginPath();
+      this.graphics.moveTo(projection.x - projection.size * 0.8, projection.y);
+      this.graphics.lineTo(projection.x - projection.size * 0.42, projection.y);
+      this.graphics.moveTo(projection.x + projection.size * 0.42, projection.y);
+      this.graphics.lineTo(projection.x + projection.size * 0.8, projection.y);
+      this.graphics.moveTo(projection.x, projection.y - projection.size * 0.8);
+      this.graphics.lineTo(projection.x, projection.y - projection.size * 0.42);
+      this.graphics.moveTo(projection.x, projection.y + projection.size * 0.42);
+      this.graphics.lineTo(projection.x, projection.y + projection.size * 0.8);
+      this.graphics.strokePath();
+    }
   }
 
   private drawCanopyFrame(width: number, height: number): void {
@@ -297,4 +412,28 @@ export class CockpitHud {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+function projectThreatToViewport(
+  width: number,
+  height: number,
+  threat: CockpitThreatMarker,
+): { x: number; y: number; size: number; alpha: number } | null {
+  if (threat.z <= 0) return null;
+
+  const depthScale = clamp(900 / threat.z, 0.55, 1.6);
+  const x = width / 2 + (threat.x / threat.z) * width * 0.95;
+  const y = height * 0.46 + (threat.y / threat.z) * height * 0.9;
+  const size = clamp(34 * depthScale, 18, 62);
+
+  if (x < width * 0.08 || x > width * 0.92 || y < height * 0.14 || y > height * 0.72) {
+    return null;
+  }
+
+  return {
+    x,
+    y,
+    size,
+    alpha: clamp(depthScale, 0.5, 0.95),
+  };
 }
