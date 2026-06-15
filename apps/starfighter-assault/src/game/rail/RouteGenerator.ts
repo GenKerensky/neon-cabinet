@@ -39,7 +39,7 @@ const ROLE_PICKUPS: Record<SegmentRole, PickupKind[]> = {
 export function generateSortie(options: GenerateSortieOptions): GeneratedSortie {
   const random = createSeededRandom(options.seed);
   const roles = pickRoles(random);
-  const difficulty = clamp(Math.floor(options.difficulty), 1, 9);
+  const difficulty = normalizeDifficulty(options.difficulty);
   const segments = roles.map((role, index) =>
     createSegment(role, index, difficulty, random),
   );
@@ -50,7 +50,7 @@ export function generateSortie(options: GenerateSortieOptions): GeneratedSortie 
     segments,
     branches: [
       createBranches(segments[1], segments[2]),
-      createBranches(segments[2], segments[0]),
+      createFinalSegmentBranches(segments[2]),
     ],
     finale: {
       kind: "capital-ship",
@@ -62,7 +62,10 @@ export function generateSortie(options: GenerateSortieOptions): GeneratedSortie 
 function pickRoles(random: () => number): SegmentRole[] {
   const first = "approach";
   const second = ROLE_ORDER[1 + Math.floor(random() * 3)];
-  const third = ROLE_ORDER[2 + Math.floor(random() * 3)] ?? "trench-run";
+  const thirdCandidates = ROLE_ORDER.slice(2).filter((role) => role !== second);
+  const third =
+    thirdCandidates[Math.floor(random() * thirdCandidates.length)] ??
+    "trench-run";
   return [first, second, third];
 }
 
@@ -80,7 +83,7 @@ function createSegment(
     id: `${index + 1}-${role}`,
     role,
     label: formatRoleLabel(role),
-    allowedThreats: ROLE_THREATS[role],
+    allowedThreats: [...ROLE_THREATS[role]],
     constraints: {
       maxSimultaneousThreats: clamp(pressure, 3, 8),
       guaranteedDodgeLanes: role === "trench-run" ? 1 : 2,
@@ -118,6 +121,23 @@ function createBranches(
   ];
 }
 
+function createFinalSegmentBranches(segment: GeneratedSegment): BranchChoice[] {
+  return [
+    {
+      segmentId: segment.id,
+      label: `${segment.label}: ${rewardLabel(segment.role)}`,
+      risk: segment.role === "trench-run" ? "high" : "medium",
+      reward: rewardKind(segment.role),
+    },
+    {
+      segmentId: segment.id,
+      label: `${segment.label}: Clean Attack Vector`,
+      risk: "medium",
+      reward: "shield",
+    },
+  ];
+}
+
 function rewardKind(role: SegmentRole): BranchChoice["reward"] {
   if (role === "debris-corridor") return "torpedo";
   if (role === "battery-field" || role === "trench-run") return "bounty";
@@ -146,6 +166,13 @@ function createSeededRandom(seed: number): () => number {
     value = (value * 1664525 + 1013904223) >>> 0;
     return value / 0x100000000;
   };
+}
+
+function normalizeDifficulty(difficulty: number): number {
+  if (!Number.isFinite(difficulty)) {
+    return 1;
+  }
+  return clamp(Math.floor(difficulty), 1, 9);
 }
 
 function clamp(value: number, min: number, max: number): number {
