@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+import Phaser, { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { projectThreatsToRadar } from "../hud/RadarProjection";
 import { CockpitHud } from "../objects/CockpitHud";

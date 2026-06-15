@@ -31,7 +31,7 @@ export class Vector3D {
   }
 
   /**
-   * Rotate around Y axis (primary rotation for tank game)
+   * Rotate around Y axis
    * Positive angle = clockwise when viewed from above (turn right)
    */
   rotateY(angle: number): Vector3D {
