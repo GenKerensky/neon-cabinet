@@ -3,6 +3,7 @@ import { VectorShader } from "@neon-cabinet/shaders";
 import { GAME_HEIGHT, GAME_WIDTH } from "../utils/settings";
 import { Boot } from "./scenes/Boot";
 import { Title } from "./scenes/Title";
+import { OpeningCrawl } from "./scenes/OpeningCrawl";
 import { Game } from "./scenes/Game";
 import { Pause } from "./scenes/Pause";
 import { GameOver } from "./scenes/GameOver";
@@ -31,6 +32,6 @@ export function initializeGame(): Phaser.Game {
         }
       },
     },
-    scene: [Boot, Title, Game, Pause, GameOver],
+    scene: [Boot, Title, OpeningCrawl, Game, Pause, GameOver],
   });
 }

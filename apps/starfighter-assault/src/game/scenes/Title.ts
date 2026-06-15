@@ -31,7 +31,7 @@ export class Title extends Scene {
       })
       .setOrigin(0.5);
 
-    const startRun = () => this.scene.start("Game");
+    const startRun = () => this.scene.start("OpeningCrawl");
     this.input.keyboard?.once("keydown-SPACE", startRun);
     this.input.once("pointerdown", startRun);
 
