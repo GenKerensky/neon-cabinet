@@ -6,7 +6,7 @@
 
 **Architecture:** Use the existing Neon Cabinet Phaser/Vite app pattern and reuse the proven `battle-tanks` custom wireframe projection approach instead of introducing Three.js in the MVP. Keep pure game rules in `simulation`, path generation in `rail`, renderer-only code in Phaser scenes/objects, and projection/HUD math isolated so tests can cover the core loop without a browser.
 
-**Tech Stack:** React 19, Phaser 3.90 catalog dependency, Vite, Vitest, Nx via `bun nx`, Neon Cabinet `VectorShader`, custom wireframe renderer patterned after `apps/battle-tanks`.
+**Tech Stack:** React 19, Phaser 3.90 catalog dependency, Vite, Vitest, Nx via `bunx nx`, Neon Cabinet `VectorShader`, custom wireframe renderer patterned after `apps/battle-tanks`.
 
 ---
 
@@ -57,12 +57,12 @@ Create the new game app under `apps/starfighter-assault`:
 
 Use Nx through Bun:
 
-- `bun nx test starfighter-assault`
-- `bun nx build starfighter-assault`
-- `bun nx test frontend`
-- `bun nx build frontend`
+- `bunx nx test starfighter-assault`
+- `bunx nx build starfighter-assault`
+- `bunx nx test frontend`
+- `bunx nx build frontend`
 
-If Nx cannot infer the new package after scaffolding, run `bun nx show projects` and verify `starfighter-assault` appears before continuing.
+If Nx cannot infer the new package after scaffolding, run `bunx nx show projects` and verify `starfighter-assault` appears before continuing.
 
 ### Task 1: Scaffold The App Package
 
@@ -547,15 +547,15 @@ export class GameOver extends Scene {
 
 - [ ] **Step 6: Run scaffold verification**
 
-Run: `bun nx show projects | rg "starfighter-assault"`
+Run: `bunx nx show projects | rg "starfighter-assault"`
 
 Expected: output contains `starfighter-assault`.
 
-Run: `bun nx test starfighter-assault`
+Run: `bunx nx test starfighter-assault`
 
 Expected: command exits 0 with no test files or with the Vite test runner reporting success.
 
-Run: `bun nx build starfighter-assault`
+Run: `bunx nx build starfighter-assault`
 
 Expected: command exits 0 and writes `apps/starfighter-assault/dist`.
 
@@ -610,7 +610,7 @@ describe("opening crawl config", () => {
 
 - [ ] **Step 2: Run the failing test**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/config/crawl.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/config/crawl.test.ts`
 
 Expected: FAIL because `./crawl` does not exist.
 
@@ -634,7 +634,7 @@ export function getCrawlText(): string {
 
 - [ ] **Step 4: Run crawl config test**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/config/crawl.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/config/crawl.test.ts`
 
 Expected: PASS.
 
@@ -725,11 +725,11 @@ const startRun = () => this.scene.start("OpeningCrawl");
 
 - [ ] **Step 7: Run verification**
 
-Run: `bun nx test starfighter-assault`
+Run: `bunx nx test starfighter-assault`
 
 Expected: PASS.
 
-Run: `bun nx build starfighter-assault`
+Run: `bunx nx build starfighter-assault`
 
 Expected: PASS.
 
@@ -806,7 +806,7 @@ describe("run state", () => {
 
 - [ ] **Step 2: Run failing tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/simulation/RunState.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/simulation/RunState.test.ts`
 
 Expected: FAIL because `./RunState` does not exist.
 
@@ -927,7 +927,7 @@ export function progressFinale(state: RunState): RunState {
 
 - [ ] **Step 4: Run run state tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/simulation/RunState.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/simulation/RunState.test.ts`
 
 Expected: PASS.
 
@@ -987,7 +987,7 @@ describe("route generator", () => {
 
 - [ ] **Step 2: Run failing generator tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/rail/RouteGenerator.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/rail/RouteGenerator.test.ts`
 
 Expected: FAIL because `./RouteGenerator` does not exist.
 
@@ -1224,7 +1224,7 @@ function round(value: number): number {
 
 - [ ] **Step 5: Run generator tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/rail/RouteGenerator.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/rail/RouteGenerator.test.ts`
 
 Expected: PASS.
 
@@ -1337,7 +1337,7 @@ describe("upgrades", () => {
 
 - [ ] **Step 2: Run failing tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/simulation`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/simulation`
 
 Expected: FAIL because the modules do not exist.
 
@@ -1548,7 +1548,7 @@ export function purchaseUpgrade(
 
 - [ ] **Step 6: Run simulation tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/simulation`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/simulation`
 
 Expected: PASS.
 
@@ -1607,7 +1607,7 @@ describe("radar projection", () => {
 
 - [ ] **Step 2: Run failing radar tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/hud/RadarProjection.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/hud/RadarProjection.test.ts`
 
 Expected: FAIL because `./RadarProjection` does not exist.
 
@@ -1659,7 +1659,7 @@ function clamp(value: number, min: number, max: number): number {
 
 - [ ] **Step 4: Run radar tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/hud/RadarProjection.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/hud/RadarProjection.test.ts`
 
 Expected: PASS.
 
@@ -1699,7 +1699,7 @@ Keep imports local to `./Vector3D`, `./Camera3D`, and `./WireframeModel`.
 
 - [ ] **Step 2: Run copied engine tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/engine`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/engine`
 
 Expected: PASS.
 
@@ -1834,11 +1834,11 @@ update(): void {
 
 - [ ] **Step 5: Run verification**
 
-Run: `bun nx test starfighter-assault`
+Run: `bunx nx test starfighter-assault`
 
 Expected: PASS.
 
-Run: `bun nx build starfighter-assault`
+Run: `bunx nx build starfighter-assault`
 
 Expected: PASS.
 
@@ -1885,7 +1885,7 @@ describe("rail player", () => {
 
 - [ ] **Step 2: Run failing player tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/objects/RailPlayer.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/objects/RailPlayer.test.ts`
 
 Expected: FAIL because `./RailPlayer` does not exist.
 
@@ -1929,7 +1929,7 @@ function clamp(value: number, min: number, max: number): number {
 
 - [ ] **Step 4: Run player tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/objects/RailPlayer.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/objects/RailPlayer.test.ts`
 
 Expected: PASS.
 
@@ -1974,11 +1974,11 @@ this.player.update(delta / 1000);
 
 - [ ] **Step 6: Run verification**
 
-Run: `bun nx test starfighter-assault`
+Run: `bunx nx test starfighter-assault`
 
 Expected: PASS.
 
-Run: `bun nx build starfighter-assault`
+Run: `bunx nx build starfighter-assault`
 
 Expected: PASS.
 
@@ -2023,7 +2023,7 @@ describe("threats", () => {
 
 - [ ] **Step 2: Run failing tests**
 
-Run: `bun nx test starfighter-assault -- apps/starfighter-assault/src/game/objects/Threats.test.ts`
+Run: `bunx nx test starfighter-assault -- apps/starfighter-assault/src/game/objects/Threats.test.ts`
 
 Expected: FAIL because `./Threats` does not exist.
 
@@ -2174,11 +2174,11 @@ const radarDots = projectThreatsToRadar(
 
 - [ ] **Step 6: Run verification**
 
-Run: `bun nx test starfighter-assault`
+Run: `bunx nx test starfighter-assault`
 
 Expected: PASS.
 
-Run: `bun nx build starfighter-assault`
+Run: `bunx nx build starfighter-assault`
 
 Expected: PASS.
 
@@ -2310,19 +2310,19 @@ function starfighterAssaultIconSvg(): string {
 
 - [ ] **Step 5: Run integration verification**
 
-Run: `bun nx test starfighter-assault`
+Run: `bunx nx test starfighter-assault`
 
 Expected: PASS.
 
-Run: `bun nx build starfighter-assault`
+Run: `bunx nx build starfighter-assault`
 
 Expected: PASS.
 
-Run: `bun nx test frontend`
+Run: `bunx nx test frontend`
 
 Expected: PASS.
 
-Run: `bun nx build frontend`
+Run: `bunx nx build frontend`
 
 Expected: PASS.
 
@@ -2344,7 +2344,7 @@ git commit -m "feat(starfighter-assault): integrate game route" -m "- Add the fr
 
 - [ ] **Step 1: Start dev server**
 
-Run: `bun nx serve frontend`
+Run: `bunx nx serve frontend`
 
 Expected: frontend starts and prints a localhost URL.
 
@@ -2386,8 +2386,8 @@ Expected:
 For each visual/control issue, make one focused fix and run:
 
 ```bash
-bun nx test starfighter-assault
-bun nx build starfighter-assault
+bunx nx test starfighter-assault
+bunx nx build starfighter-assault
 ```
 
 Expected: both commands pass before committing each fix.
@@ -2397,10 +2397,10 @@ Expected: both commands pass before committing each fix.
 Run:
 
 ```bash
-bun nx test starfighter-assault
-bun nx build starfighter-assault
-bun nx test frontend
-bun nx build frontend
+bunx nx test starfighter-assault
+bunx nx build starfighter-assault
+bunx nx test frontend
+bunx nx build frontend
 git status --short --branch
 ```
 
