@@ -9,6 +9,7 @@ describe("studio-registry", () => {
     expect(getStudioGames().map((game) => game.id)).toEqual([
       "battle-tanks",
       "space-defender",
+      "starfighter-assault",
       "mars-lander",
       "maze-runner",
     ]);
