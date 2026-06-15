@@ -35,6 +35,10 @@ const SEGMENTS_BEFORE_FINALE = 3;
 const BASE_SHIELDS = 100;
 const BASE_TORPEDOES = 3;
 
+function isTerminalStatus(status: RunStatus): boolean {
+  return status === "game-over" || status === "victory";
+}
+
 export function createInitialRunState(seed: number): RunState {
   return {
     seed,
@@ -63,7 +67,12 @@ export function getCurrentPhase(state: RunState): "segment" | "finale" {
 }
 
 export function damageShield(state: RunState, damage: number): RunState {
-  const nextShield = state.shields.current - damage;
+  if (isTerminalStatus(state.status)) {
+    return state;
+  }
+
+  const damageAmount = Math.max(0, damage);
+  const nextShield = state.shields.current - damageAmount;
   if (nextShield > 0) {
     return {
       ...state,
@@ -71,7 +80,7 @@ export function damageShield(state: RunState, damage: number): RunState {
     };
   }
 
-  const nextLives = state.lives - 1;
+  const nextLives = Math.max(0, state.lives - 1);
   return {
     ...state,
     lives: nextLives,
@@ -81,6 +90,10 @@ export function damageShield(state: RunState, damage: number): RunState {
 }
 
 export function finishSegment(state: RunState): RunState {
+  if (getCurrentPhase(state) === "finale" || isTerminalStatus(state.status)) {
+    return state;
+  }
+
   const currentSegmentIndex = state.currentSegmentIndex + 1;
   return {
     ...state,
@@ -91,6 +104,10 @@ export function finishSegment(state: RunState): RunState {
 }
 
 export function progressFinale(state: RunState): RunState {
+  if (getCurrentPhase(state) !== "finale" || isTerminalStatus(state.status)) {
+    return state;
+  }
+
   const stageOrder: FinaleStage[] = [
     "approach",
     "surface-skim",
