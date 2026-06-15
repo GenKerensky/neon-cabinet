@@ -9,6 +9,9 @@
       "path": "./apps/battle-tanks"
     },
     {
+      "path": "./apps/starfighter-assault"
+    },
+    {
       "path": "./apps/mars-lander"
     },
     {
