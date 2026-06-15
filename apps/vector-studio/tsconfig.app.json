@@ -1,0 +1,37 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "types": ["node", "vite/client"],
+    "rootDir": "src",
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
+    "paths": {
+      "@neon-cabinet/sprite-tools": ["../../libs/sprite-tools/src/index"],
+      "@neon-cabinet/shaders": ["../../libs/shaders/src/index"]
+    }
+  },
+  "exclude": [
+    "out-tsc",
+    "dist",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.tsx"
+  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "references": [
+    {
+      "path": "../../libs/ui/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/studio-registry/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/sprite-tools/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shaders/tsconfig.lib.json"
+    }
+  ]
+}

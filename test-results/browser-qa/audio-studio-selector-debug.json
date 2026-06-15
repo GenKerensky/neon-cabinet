@@ -1,0 +1,159 @@
+{
+  "debugBefore": [
+    {
+      "i": 0,
+      "tag": "DIV",
+      "role": null,
+      "text": "Audio StudioBattle TanksBattle TanksWireframe 3D tank combat with deep engine ru",
+      "cls": ""
+    },
+    {
+      "i": 1,
+      "tag": "DIV",
+      "role": null,
+      "text": "Audio StudioBattle TanksBattle TanksWireframe 3D tank combat with deep engine ru",
+      "cls": "brand-block"
+    },
+    {
+      "i": 4,
+      "tag": "BUTTON",
+      "role": "combobox",
+      "text": "Battle Tanks",
+      "cls": "flex w-fit items-center justify-between gap-1.5 rounded-lg b"
+    },
+    {
+      "i": 5,
+      "tag": "SPAN",
+      "role": null,
+      "text": "Battle Tanks",
+      "cls": ""
+    },
+    {
+      "i": 6,
+      "tag": "SPAN",
+      "role": null,
+      "text": "Battle Tanks",
+      "cls": "game-option"
+    },
+    {
+      "i": 7,
+      "tag": "DIV",
+      "role": null,
+      "text": "Battle TanksWireframe 3D tank combat with deep engine rumbles, harsh cannon fire",
+      "cls": "game-meta"
+    },
+    {
+      "i": 8,
+      "tag": "DIV",
+      "role": null,
+      "text": "Battle TanksWireframe 3D tank combat with deep engine rumbles, harsh cannon fire",
+      "cls": ""
+    },
+    {
+      "i": 10,
+      "tag": "DIV",
+      "role": null,
+      "text": "RumbleBattle Tanks Player RumbleBattle Tanks Enemy RumbleWeaponBattle Tanks Hars",
+      "cls": "size-full rounded-[inherit] transition-[color,box-shadow] ou"
+    },
+    {
+      "i": 11,
+      "tag": "DIV",
+      "role": null,
+      "text": "RumbleBattle Tanks Player RumbleBattle Tanks Enemy RumbleWeaponBattle Tanks Hars",
+      "cls": ""
+    },
+    {
+      "i": 12,
+      "tag": "DIV",
+      "role": null,
+      "text": "Battle Tanks Player RumbleBattle Tanks Enemy Rumble",
+      "cls": "preset-list"
+    },
+    {
+      "i": 13,
+      "tag": "BUTTON",
+      "role": null,
+      "text": "Battle Tanks Player Rumble",
+      "cls": "group/button inline-flex shrink-0 items-center justify-cente"
+    },
+    {
+      "i": 14,
+      "tag": "BUTTON",
+      "role": null,
+      "text": "Battle Tanks Enemy Rumble",
+      "cls": "group/button inline-flex shrink-0 items-center justify-cente"
+    },
+    {
+      "i": 15,
+      "tag": "DIV",
+      "role": null,
+      "text": "Battle Tanks Harsh Cannon Bang",
+      "cls": "preset-list"
+    },
+    {
+      "i": 16,
+      "tag": "BUTTON",
+      "role": null,
+      "text": "Battle Tanks Harsh Cannon Bang",
+      "cls": "group/button inline-flex shrink-0 items-center justify-cente"
+    },
+    {
+      "i": 17,
+      "tag": "DIV",
+      "role": null,
+      "text": "Battle Tanks Armor Hit",
+      "cls": "preset-list"
+    },
+    {
+      "i": 18,
+      "tag": "BUTTON",
+      "role": null,
+      "text": "Battle Tanks Armor Hit",
+      "cls": "group/button inline-flex shrink-0 items-center justify-cente"
+    },
+    {
+      "i": 19,
+      "tag": "DIV",
+      "role": null,
+      "text": "Battle Tanks Explosion",
+      "cls": "preset-list"
+    },
+    {
+      "i": 20,
+      "tag": "BUTTON",
+      "role": null,
+      "text": "Battle Tanks Explosion",
+      "cls": "group/button inline-flex shrink-0 items-center justify-cente"
+    },
+    {
+      "i": 21,
+      "tag": "DIV",
+      "role": null,
+      "text": "Battle Tanks Digital Taps",
+      "cls": "preset-list"
+    },
+    {
+      "i": 22,
+      "tag": "BUTTON",
+      "role": null,
+      "text": "Battle Tanks Digital Taps",
+      "cls": "group/button inline-flex shrink-0 items-center justify-cente"
+    },
+    {
+      "i": 23,
+      "tag": "DIV",
+      "role": null,
+      "text": "Battle Tanks Harsh Cannon BangWeapon",
+      "cls": "patch-heading"
+    }
+  ],
+  "selected": {
+    "triggerFound": true,
+    "marsFound": true,
+    "hasThrustLoop": false,
+    "hasTouchdown": false,
+    "hasStarter": false,
+    "text": "Audio Studio\nBattle Tanks\nBattle Tanks\n\nWireframe 3D tank combat with deep engine rumbles, harsh cannon fire, and arcade battlefield impacts.\n\nRUMBLE\nBattle Tanks Player Rumble\nBattle Tanks Enemy Rumble\nWEAPON\nBattle Tanks Harsh Cannon Bang\nIMPACT\nBattle Tanks Armor Hit\nEXPLOSION\nBattle Tanks Explosion\nMUSIC CUE\nBattle Tanks Digital Taps\nBattle Tanks Armor Hit\nImpact\nUndo\nRedo\nReset\nOscillator\nLfo\nGain Envelope\nNoise Burst\nFilter\nStereo Panner\nSpatial Attenuation\nOutput\nMetal Bite\nOscillator\nCrunch Envelope\nGain Envelope\nSparks\nNoise Burst\nImpact Pan\nStereo Panner\nOutput\nOutput\nINSPECTOR\nDelete\nLabel\nGain\nAttack\nDecay\nSustain\nRelease\nConnect to Output\nCollapse Export\nDownload JSON\n{\n  \"schemaVersion\": 1,\n  \"id\": \"battle-tanks-impact-crunch\",\n  \"name\": \"Battle Tanks Armor Hit\",\n  \"category\": \"Impact\",\n  \"duration\": 0.32,\n  \"preview\": {\n    \"intensity\": 0.9,\n    \"distance\": 180,\n    \"pan\": 0.25\n  },\n  \"nodes\": [\n    {\n      \"id\": \"metal\",\n      \"type\": \"oscillator\",\n      \"label\": \"Metal Bite\",\n      \"position\": {\n        \"x\": 80,\n        \"y\": 120\n      },\n      \"waveform\": \"triangle\",\n      \"frequency\": 150,\n      \"duration\": 0.16\n    },\n    {\n      \"id\": \"crunch-envelope\",\n      \"type\": \"gainEnvelope\",\n      \"label\": \"Crunch Envelope\",\n      \"position\": {\n        \"x\": 320,\n        \"y\": 120\n      },\n      \"gain\": 0.18,\n      \"attack\": 0.012,\n      \"decay\": 0.04,\n      \"sustain\":"
+  }
+}

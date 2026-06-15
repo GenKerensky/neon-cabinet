@@ -1,0 +1,21 @@
+{
+  "openState": {
+    "text": "Audio Studio\nBattle Tanks\nBattle Tanks\n\nWireframe 3D tank combat with deep engine rumbles, harsh cannon fire, and arcade battlefield impacts.\n\nRUMBLE\nBattle Tanks Player Rumble\nBattle Tanks Enemy Rumble\nWEAPON\nBattle Tanks Harsh Cannon Bang\nIMPACT\nBattle Tanks Armor Hit\nEXPLOSION\nBattle Tanks Explosion\nMUSIC CUE\nBattle Tanks Digital Taps\nBattle Tanks Harsh Cannon Bang\nWeapon\nUndo\nRedo\nReset\nOscillator\nLfo\nGain Envelope\nNoise Burst\nFilter\nStereo Panner\nSpatial Attenuation\nOutput\nLow Bang\nOscillator\nBang Envelope\nGain Envelope\nMuzzle Crack\nNoise Burst\nBarrel Body\nNoise Burst\nShot Pan\nStereo Panner\nOutput\nOutput\nINSPECTOR\nDelete\nLabel\nWaveform\nsquare\nFrequency\nConnect to Output\nCollapse Export\nDownload JSON\n{\n  \"schemaVersion\": 1,\n  \"id\": \"battle-tanks-cannon-bang\",\n  \"name\": \"Battle Tanks Harsh Cannon Bang\",\n  \"category\": \"Weapon\",\n  \"duration\": 0.28,\n  \"preview\": {\n    \"intensity\": 1,\n    \"distance\": 0,\n    \"pan\": 0\n  },\n  \"nodes\": [\n    {\n      \"id\": \"thump\",\n      \"type\": \"oscillator\",\n      \"label\": \"Low Bang\",\n      \"position\": {\n        \"x\": 70,\n        \"y\": 90\n      },\n      \"waveform\": \"square\",\n      \"frequency\": 64,\n      \"duration\": 0.17\n    },\n    {\n      \"id\": \"thump-envelope\",\n      \"type\": \"gainEnvelope\",\n      \"label\": \"Bang Envelope\",\n      \"position\": {\n        \"x\": 310,\n        \"y\": 90\n      },\n      \"gain\": 0.45,\n      \"attack\": 0.004,\n      \"decay\": 0.05,\n      \"sustain\": 0.25,\n      \"release\": 0.11,\n      \"duration\": 0.17\n    },\n    {\n      \"id\": \"crack\",\n",
+    "options": [
+      "",
+      "",
+      "",
+      "Battle Tanks",
+      "Space Defender",
+      "Mars Lander",
+      "Maze Runner"
+    ]
+  },
+  "selected": {
+    "selected": "Mars Lander",
+    "hasThrustLoop": true,
+    "hasTouchdown": true,
+    "hasStarter": true,
+    "text": "Audio Studio\nMars Lander\nMars Lander\n\nMartian vector lander with orange thrust, cyan instruments, and tense touchdown cues.\n\nRUMBLE\nMars Lander Thrust Loop\nWEAPON\nNo weapon effects\nIMPACT\nMars Lander Gear Deploy\nMars Lander Touchdown\nEXPLOSION\nMars Lander Crash Explosion\nMUSIC CUE\nMars Lander Level Cleared\nMars Lander Game Over\nMars Lander Start\nMars Lander Pause\nMars Lander Resume\nMars Lander Low Fuel\nMars Lander Title Placeholder\nMars Lander Starter Effect\nRumble\nUndo\nRedo\nReset\nOscillator\nLfo\nGain Envelope\nNoise Burst\nFilter\nStereo Panner\nSpatial Attenuation\nOutput\nOutput\nOutput\nINSPECTOR\nDelete\nLabel\nConnect to Output\nCollapse Export\nDownload JSON\n{\n  \"schemaVersion\": 1,\n  \"id\": \"mars-lander-starter-effect\",\n  \"name\": \"Mars Lander Starter Effect\",\n  \"category\": \"Rumble\",\n  \"duration\": 0.25,\n  \"preview\": {\n    \"intensity\": 1,\n    \"distance\": 0,\n    \"pan\": 0\n  },\n  \"nodes\": [\n    {\n      \"id\": \"output\",\n      \"type\": \"output\",\n      \"label\": \"Output\",\n      \"position\": {\n        \"x\": 360,\n        \"y\": 180\n      }\n    }\n  ],\n  \"connections\": []\n}\nExpand Import\nImport\nPlay\nLoop\nDistance\nPan\nIntensity\nGAME LOADED"
+  }
+}

@@ -26,7 +26,11 @@ export default function SpaceDefenderPage() {
 
   return (
     <GameView>
-      <PhaserGame ref={phaserRef} currentActiveScene={onCurrentActiveScene} />
+      <PhaserGame
+        ref={phaserRef}
+        assetBaseUrl="/space-defender-assets"
+        currentActiveScene={onCurrentActiveScene}
+      />
     </GameView>
   );
 }

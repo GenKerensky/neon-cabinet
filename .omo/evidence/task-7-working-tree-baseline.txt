@@ -1,0 +1,140 @@
+ D .opencode/commands/opsx-apply.md
+ D .opencode/commands/opsx-archive.md
+ D .opencode/commands/opsx-explore.md
+ D .opencode/commands/opsx-propose.md
+ D .opencode/opencode-swarm.json
+ D .opencode/skills/openspec-apply-change/SKILL.md
+ D .opencode/skills/openspec-archive-change/SKILL.md
+ D .opencode/skills/openspec-explore/SKILL.md
+ D .opencode/skills/openspec-propose/SKILL.md
+ M apps/maze-runner/package.json
+ M apps/maze-runner/src/PhaserGame.tsx
+ M apps/maze-runner/src/game/ai/Ambusher.ts
+ M apps/maze-runner/src/game/ai/Chaser.ts
+ M apps/maze-runner/src/game/ai/Timid.ts
+ M apps/maze-runner/src/game/ai/Wanderer.ts
+ M apps/maze-runner/src/game/objects/Collectible.ts
+ M apps/maze-runner/src/game/objects/Enemy.ts
+ M apps/maze-runner/src/game/objects/Player.ts
+ M apps/maze-runner/src/game/scenes/Boot.ts
+ M apps/maze-runner/src/game/scenes/Game.ts
+ M apps/maze-runner/src/game/scenes/GameOver.ts
+ M apps/maze-runner/src/game/scenes/Pause.ts
+ M apps/maze-runner/src/game/scenes/Title.ts
+ M apps/maze-runner/src/game/utils/MazeGenerator.ts
+ M apps/maze-runner/tests/helpers/createMockScene.ts
+ M apps/maze-runner/tests/objects/Collectible.spec.ts
+ M apps/maze-runner/tests/objects/Enemy.spec.ts
+ M apps/maze-runner/tests/objects/Player.spec.ts
+ M apps/maze-runner/tests/utils/MazeGenerator.spec.ts
+ M apps/maze-runner/tsconfig.lib.json
+ M apps/maze-runner/vite.config.mts
+ M bun.lock
+ M libs/shaders/src/shaders/CRTShader.ts
+ M libs/shaders/src/shaders/VectorShader.ts
+ M libs/typed-event-emitter/tsconfig.lib.json
+ M nx.json
+ D openspec/changes/add-unit-tests/.openspec.yaml
+ D openspec/changes/add-unit-tests/design.md
+ D openspec/changes/add-unit-tests/proposal.md
+ D openspec/changes/add-unit-tests/specs/collectibles/spec.md
+ D openspec/changes/add-unit-tests/specs/enemy-ai/spec.md
+ D openspec/changes/add-unit-tests/specs/event-bus/spec.md
+ D openspec/changes/add-unit-tests/specs/pathfinder/spec.md
+ D openspec/changes/add-unit-tests/specs/settings-utils/spec.md
+ D openspec/changes/add-unit-tests/tasks.md
+ D openspec/changes/archive/2026-05-24-add-comprehensive-animations/.openspec.yaml
+ D openspec/changes/archive/2026-05-24-add-comprehensive-animations/design.md
+ D openspec/changes/archive/2026-05-24-add-comprehensive-animations/proposal.md
+ D openspec/changes/archive/2026-05-24-add-comprehensive-animations/specs/ghost-animations/spec.md
+ D openspec/changes/archive/2026-05-24-add-comprehensive-animations/specs/pickup-effects/spec.md
+ D openspec/changes/archive/2026-05-24-add-comprehensive-animations/specs/player-animations/spec.md
+ D openspec/changes/archive/2026-05-24-add-comprehensive-animations/specs/power-pellet-effects/spec.md
+ D openspec/changes/archive/2026-05-24-add-comprehensive-animations/tasks.md
+ D openspec/changes/archive/2026-05-24-fenced-enemy-spawn/.openspec.yaml
+ D openspec/changes/archive/2026-05-24-fenced-enemy-spawn/design.md
+ D openspec/changes/archive/2026-05-24-fenced-enemy-spawn/proposal.md
+ D openspec/changes/archive/2026-05-24-fenced-enemy-spawn/specs/enemy-enclosure/spec.md
+ D openspec/changes/archive/2026-05-24-fenced-enemy-spawn/tasks.md
+ D openspec/changes/archive/2026-05-24-maze-runner-movement-tests/.openspec.yaml
+ D openspec/changes/archive/2026-05-24-maze-runner-movement-tests/design.md
+ D openspec/changes/archive/2026-05-24-maze-runner-movement-tests/proposal.md
+ D openspec/changes/archive/2026-05-24-maze-runner-movement-tests/specs/direction-utils-tests/spec.md
+ D openspec/changes/archive/2026-05-24-maze-runner-movement-tests/specs/enemy-movement-tests/spec.md
+ D openspec/changes/archive/2026-05-24-maze-runner-movement-tests/specs/maze-generator-tests/spec.md
+ D openspec/changes/archive/2026-05-24-maze-runner-movement-tests/specs/player-movement-tests/spec.md
+ D openspec/changes/archive/2026-05-24-maze-runner-movement-tests/tasks.md
+ D openspec/changes/grid-based-enemy-movement/.openspec.yaml
+ D openspec/changes/grid-based-enemy-movement/design.md
+ D openspec/changes/grid-based-enemy-movement/proposal.md
+ D openspec/changes/grid-based-enemy-movement/specs/enemy-ai/spec.md
+ D openspec/changes/grid-based-enemy-movement/specs/enemy-movement/spec.md
+ D openspec/changes/grid-based-enemy-movement/specs/pathfinding/spec.md
+ D openspec/changes/grid-based-enemy-movement/tasks.md
+ D openspec/changes/improve-maze-layout/.openspec.yaml
+ D openspec/changes/improve-maze-layout/design.md
+ D openspec/changes/improve-maze-layout/proposal.md
+ D openspec/changes/improve-maze-layout/specs/dead-end-reduction/spec.md
+ D openspec/changes/improve-maze-layout/specs/larger-maze-dimensions/spec.md
+ D openspec/changes/improve-maze-layout/specs/player-spawn-position/spec.md
+ D openspec/changes/improve-maze-layout/tasks.md
+ D openspec/changes/maze-runner/.openspec.yaml
+ D openspec/changes/maze-runner/design.md
+ D openspec/changes/maze-runner/proposal.md
+ D openspec/changes/maze-runner/specs/collectibles/spec.md
+ D openspec/changes/maze-runner/specs/enemy-ai/spec.md
+ D openspec/changes/maze-runner/specs/game-scenes/spec.md
+ D openspec/changes/maze-runner/specs/level-progression/spec.md
+ D openspec/changes/maze-runner/specs/maze-generation/spec.md
+ D openspec/changes/maze-runner/specs/pathfinding/spec.md
+ D openspec/changes/maze-runner/specs/player-movement/spec.md
+ D openspec/changes/maze-runner/tasks.md
+ D openspec/config.yaml
+ M package.json
+ M tsconfig.json
+?? .github/
+?? .ocr/skills/references/reviewers/game-dev.md
+?? .omo/
+?? .opencode/agents/art-director.md
+?? .opencode/agents/illustrator.md
+?? .opencode/agents/sandbox-engineer.md
+?? .opencode/skills/browser-test-debug/
+?? .opencode/skills/phaser-e2e-test/
+?? .opencode/skills/phaser-integration-test/
+?? .opencode/skills/phaser-test-harness/
+?? .opencode/skills/phaser-unit-test/
+?? .opencode/skills/vector-sprite-pipeline/
+?? .pi/
+?? apps/maze-runner/.omo/
+?? apps/maze-runner/.pi-lens/
+?? apps/maze-runner/cucumber.cjs
+?? apps/maze-runner/debug-timing.cjs
+?? apps/maze-runner/features/
+?? apps/maze-runner/output=test-results/
+?? apps/maze-runner/playwright.config.ts
+?? apps/maze-runner/public/
+?? apps/maze-runner/report.json
+?? apps/maze-runner/src/game/config/
+?? apps/maze-runner/src/game/utils/DepthLayer.ts
+?? apps/maze-runner/src/game/utils/env.ts
+?? apps/maze-runner/src/game/utils/gridGeometry.ts
+?? apps/maze-runner/src/game/utils/harnessSnapshot.ts
+?? apps/maze-runner/src/game/utils/highScore.ts
+?? apps/maze-runner/src/game/utils/sceneTransitions.ts
+?? apps/maze-runner/step-definitions/
+?? apps/maze-runner/support/
+?? apps/maze-runner/test-results/
+?? apps/maze-runner/tests/TESTING_MATURITY_ROADMAP.md
+?? apps/maze-runner/tests/game/
+?? apps/maze-runner/tests/scenes/
+?? apps/maze-runner/tests/utils/DepthLayer.spec.ts
+?? apps/maze-runner/tests/utils/env.spec.ts
+?? apps/maze-runner/tests/utils/gridGeometry.spec.ts
+?? apps/maze-runner/tests/utils/harnessSnapshot.spec.ts
+?? apps/maze-runner/tests/utils/highScore.spec.ts
+?? apps/maze-runner/tests/utils/sceneTransitions.spec.ts
+?? apps/vector-studio/
+?? libs/browser-test-runner/
+?? libs/phaser-debug-bridge/
+?? libs/phaser-test-harness/
+?? libs/sprite-tools/

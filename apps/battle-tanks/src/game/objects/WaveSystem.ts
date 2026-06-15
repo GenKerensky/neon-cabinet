@@ -1,5 +1,7 @@
 import { Vector3D } from "../engine/Vector3D";
 import { EnemyManager, DifficultyConfig } from "./EnemyManager";
+import { Obstacle } from "./Obstacle";
+import { SpawnPlanner } from "./SpawnPlanner";
 
 export type WaveState = "active" | "complete" | "starting" | "transition";
 
@@ -25,14 +27,17 @@ export class WaveSystem {
   /**
    * Start a new wave immediately (called after transition completes)
    */
-  startWave(playerPosition: Vector3D): void {
+  startWave(
+    playerPosition: Vector3D,
+    obstacles: readonly Obstacle[] = [],
+  ): void {
     this.waveNumber++;
 
     // Apply difficulty scaling
     this.applyDifficulty();
 
     // Spawn enemies
-    this.spawnWaveEnemies(playerPosition);
+    this.spawnWaveEnemies(playerPosition, obstacles);
     this.state = "active";
   }
 
@@ -98,21 +103,33 @@ export class WaveSystem {
   /**
    * Spawn enemies for the current wave
    */
-  private spawnWaveEnemies(playerPos: Vector3D): void {
+  private spawnWaveEnemies(
+    playerPos: Vector3D,
+    obstacles: readonly Obstacle[],
+  ): void {
     const { turrets, tanks } = this.getWaveConfig();
+    const spawnPlanner = new SpawnPlanner({
+      minDistance: this.minSpawnDistance,
+      maxDistance: this.maxSpawnDistance,
+      minSpacing: 180,
+      obstacles,
+    });
+    const occupiedPositions: Vector3D[] = [];
 
     // Spawn turrets
     for (let i = 0; i < turrets; i++) {
-      const pos = this.getRandomSpawnPosition(playerPos);
+      const pos = spawnPlanner.planEnemySpawn(playerPos, occupiedPositions);
       const rotation = Math.random() * Math.PI * 2;
       this.enemyManager.spawnTurret(pos, rotation);
+      occupiedPositions.push(pos);
     }
 
     // Spawn tanks
     for (let i = 0; i < tanks; i++) {
-      const pos = this.getRandomSpawnPosition(playerPos);
+      const pos = spawnPlanner.planEnemySpawn(playerPos, occupiedPositions);
       const rotation = Math.random() * Math.PI * 2;
       this.enemyManager.spawnTank(pos, rotation);
+      occupiedPositions.push(pos);
     }
   }
 
@@ -144,22 +161,6 @@ export class WaveSystem {
         return { turrets: baseTurrets, tanks: baseTanks };
       }
     }
-  }
-
-  /**
-   * Get a random spawn position in a ring around the player
-   */
-  private getRandomSpawnPosition(playerPos: Vector3D): Vector3D {
-    const angle = Math.random() * Math.PI * 2;
-    const distance =
-      this.minSpawnDistance +
-      Math.random() * (this.maxSpawnDistance - this.minSpawnDistance);
-
-    return new Vector3D(
-      playerPos.x + Math.cos(angle) * distance,
-      0,
-      playerPos.z + Math.sin(angle) * distance,
-    );
   }
 
   /**
@@ -197,6 +198,10 @@ export class WaveSystem {
    */
   getWaveNumber(): number {
     return this.waveNumber;
+  }
+
+  getNextWaveNumber(): number {
+    return this.waveNumber + 1;
   }
 
   /**

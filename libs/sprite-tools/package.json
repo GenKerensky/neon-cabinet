@@ -1,0 +1,25 @@
+{
+  "name": "@neon-cabinet/sprite-tools",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@types/sharp": "^0.32.0",
+    "phaser": "catalog:",
+    "vitest-canvas-mock": "^1.1.4"
+  }
+}

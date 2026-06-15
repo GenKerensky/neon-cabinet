@@ -2,6 +2,9 @@ import { Math as PhaserMath, Scene } from "phaser";
 import type { GameObjects } from "phaser";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
+import { SpaceDefenderAudio } from "../audio/SpaceDefenderAudio";
+import { createVectorPuppet } from "../objects/VectorEffects";
+import type { VectorPuppet } from "@neon-cabinet/sprite-tools";
 
 export class Title extends Scene {
   private stars: { sprite: GameObjects.Arc; speed: number }[] = [];
@@ -9,8 +12,10 @@ export class Title extends Scene {
   private subtitleText!: GameObjects.Text;
   private startText!: GameObjects.Text;
   private floatingAsteroids: GameObjects.Image[] = [];
-  private shipPreview!: GameObjects.Image;
+  private shipPreview!: VectorPuppet;
+  private shipThrust!: VectorPuppet;
   private particles!: GameObjects.Particles.ParticleEmitter;
+  private audio!: SpaceDefenderAudio;
 
   constructor() {
     super("Title");
@@ -19,6 +24,11 @@ export class Title extends Scene {
   create(): void {
     const { width, height } = this.cameras.main;
     const font = getFontFamily(this);
+    this.audio = new SpaceDefenderAudio();
+    this.audio.playTitlePlaceholder();
+    this.events.once("destroy", () => {
+      this.audio.destroy();
+    });
 
     // Apply CRT shader
     // Color mode will be set automatically in onPreRender from registry
@@ -136,10 +146,25 @@ export class Title extends Scene {
       });
     }
 
-    this.shipPreview = this.add.image(width / 2, height * 0.46, "ship");
+    this.shipPreview = createVectorPuppet(
+      this,
+      "ship",
+      width / 2,
+      height * 0.46,
+    );
     this.shipPreview.setScale(2);
     this.shipPreview.setDepth(10);
     this.shipPreview.setRotation(0);
+
+    this.shipThrust = createVectorPuppet(
+      this,
+      "thrusterFlame",
+      width / 2,
+      height * 0.46 + 72,
+    );
+    this.shipThrust.setScale(2);
+    this.shipThrust.setRotation(Math.PI / 2);
+    this.shipThrust.setDepth(8);
 
     // Animate ship moving up and down the screen (smaller range, higher position)
     this.tweens.add({
@@ -150,23 +175,14 @@ export class Title extends Scene {
       repeat: -1,
       ease: "Sine.easeInOut",
     });
-
-    // Ship engine particles - offset to engine location (ship is 80px tall, engine at ~y=76)
-    // With scale 2, engine is 72px below center (36 * 2)
-    const engineParticles = this.add.particles(0, 0, "flame", {
-      color: [0xffffff, 0xaaddff, 0x33aaff, 0x0066ff, 0x003388],
-      colorEase: "quad.out",
-      speed: { min: 80, max: 140 },
-      scale: { start: 1.2, end: 0, ease: "sine.out" },
-      lifespan: 400,
-      blendMode: "ADD",
-      frequency: 12,
-      quantity: 2,
-      angle: { min: 82, max: 98 },
-      follow: this.shipPreview,
-      followOffset: { x: 0, y: 72 },
+    this.tweens.add({
+      targets: this.shipThrust,
+      y: { from: height * 0.42 + 72, to: height * 0.52 + 72 },
+      duration: 3000,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
     });
-    engineParticles.setDepth(8);
 
     const controlsY = height * 0.72;
     const controlsText = [
@@ -219,6 +235,7 @@ export class Title extends Scene {
 
     // Click to start
     this.input.once("pointerdown", () => {
+      this.audio.playGameStart();
       this.cameras.main.fade(500, 0, 0, 0);
       this.time.delayedCall(500, () => {
         this.scene.start("Game");
@@ -333,6 +350,9 @@ export class Title extends Scene {
   update(_time: number, delta: number): void {
     const { width, height } = this.cameras.main;
     const dt = delta / 1000;
+
+    this.shipPreview?.update(this.time.now, delta);
+    this.shipThrust?.update(this.time.now, delta);
 
     // Scroll stars downward
     this.stars.forEach(({ sprite, speed }) => {

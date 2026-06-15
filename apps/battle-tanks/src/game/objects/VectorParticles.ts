@@ -68,6 +68,7 @@ export class VectorParticleSystem {
   private graphics: GameObjects.Graphics;
   private camera!: Camera3D;
   private maxParticles: number;
+  private readonly scratchLineEnd = Vector3D.zero();
 
   constructor(scene: Scene, maxParticles = 500) {
     this.graphics = scene.add.graphics();
@@ -195,9 +196,24 @@ export class VectorParticleSystem {
       const screenPos = this.camera.worldToScreen(p.position, screenW, screenH);
       if (!screenPos) continue;
 
-      const velocityNorm = p.velocity.normalize();
-      const lineEnd = p.position.add(velocityNorm.scale(p.lineLength));
-      const screenEnd = this.camera.worldToScreen(lineEnd, screenW, screenH);
+      const speed = p.velocity.length();
+      if (speed > 0) {
+        this.scratchLineEnd.x =
+          p.position.x + (p.velocity.x / speed) * p.lineLength;
+        this.scratchLineEnd.y =
+          p.position.y + (p.velocity.y / speed) * p.lineLength;
+        this.scratchLineEnd.z =
+          p.position.z + (p.velocity.z / speed) * p.lineLength;
+      } else {
+        this.scratchLineEnd.x = p.position.x;
+        this.scratchLineEnd.y = p.position.y;
+        this.scratchLineEnd.z = p.position.z;
+      }
+      const screenEnd = this.camera.worldToScreen(
+        this.scratchLineEnd,
+        screenW,
+        screenH,
+      );
 
       let alpha = 1;
       if (p.fadeOut) {

@@ -1,6 +1,7 @@
 import { GameObjects, Input, Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { Camera3D } from "../engine/Camera3D";
+import { segmentCircleIntersectionXZ } from "../engine/CollisionMath";
 import { Vector3D } from "../engine/Vector3D";
 import { WireframeRenderer } from "../engine/WireframeRenderer";
 import { PlayerTank } from "../objects/PlayerTank";
@@ -23,6 +24,7 @@ import { ObstacleInfo } from "../objects/EnemyTank";
 import { PickupManager } from "../objects/PickupManager";
 import { LaserBeam } from "../objects/LaserBeam";
 import { LaserWeapon } from "../objects/weapons/LaserWeapon";
+import { BattleAudio } from "../audio/BattleAudio";
 
 type GameState = "playing" | "wave_transition" | "player_death" | "game_over";
 
@@ -38,6 +40,7 @@ export class Game extends Scene {
 
   private particles!: VectorParticleSystem;
   private screenShake!: ScreenShake;
+  private audio?: BattleAudio;
 
   private hud!: HUD;
 
@@ -86,6 +89,7 @@ export class Game extends Scene {
     this.particles = new VectorParticleSystem(this);
     this.particles.setCamera(this.camera3d);
     this.screenShake = new ScreenShake(this);
+    this.audio = new BattleAudio(this);
 
     this.hud = new HUD(this);
     this.hud.draw();
@@ -104,8 +108,11 @@ export class Game extends Scene {
     // Start first wave with transition
     this.gameState = "wave_transition";
     this.waveTransition.startFirstWave(() => {
-      this.waveSystem.startWave(this.tank.getPosition());
-      this.generateTerrain();
+      this.generateTerrain(this.waveSystem.getNextWaveNumber());
+      this.waveSystem.startWave(
+        this.tank.getPosition(),
+        this.terrainManager.getObstacles(),
+      );
       this.generatePickups();
       this.gameState = "playing";
     });
@@ -158,6 +165,10 @@ export class Game extends Scene {
     const fireResult = this.tank.fire();
     if (!fireResult) return;
 
+    this.audio?.playWeaponFire(
+      fireResult.type === "laser" ? "laser" : "autocannon",
+    );
+
     if (fireResult.type === "projectile") {
       // Autocannon - spawn projectile
       const projectile = new Projectile(
@@ -195,60 +206,42 @@ export class Game extends Scene {
     let hitDistance = maxRange;
     let hitEnemy: (typeof enemies)[0] | null = null;
 
-    // Check terrain first (find closest intersection)
-    // Simple raycast - check collision at intervals
-    const steps = 40;
-    for (let i = 1; i <= steps; i++) {
-      const t = (i / steps) * maxRange;
-      const checkPos = new Vector3D(
-        startPos.x + direction.x * t,
-        startPos.y,
-        startPos.z + direction.z * t,
-      );
-
-      const obstacle = this.terrainManager.checkPointCollision(checkPos, 5);
-      if (obstacle) {
-        hitDistance = t;
-        endPos = checkPos;
-        break;
-      }
+    const terrainHit = this.terrainManager.raycast(startPos, endPos, 5);
+    if (terrainHit) {
+      hitDistance = terrainHit.distance;
+      endPos = terrainHit.point;
     }
 
     // Check enemies (within hit distance)
     for (const enemy of enemies) {
       if (!enemy.isAlive()) continue;
 
-      const enemyPos = enemy.getCollisionCenter();
-
-      // Calculate closest point on ray to enemy
-      const dx = enemyPos.x - startPos.x;
-      const dz = enemyPos.z - startPos.z;
-      const t = Math.max(
-        0,
-        Math.min(hitDistance, dx * direction.x + dz * direction.z),
+      const hit = segmentCircleIntersectionXZ(
+        startPos,
+        endPos,
+        enemy.getCollisionCenter(),
+        enemy.collisionRadius,
       );
 
-      const closestX = startPos.x + direction.x * t;
-      const closestZ = startPos.z + direction.z * t;
-
-      const distToEnemy = Math.sqrt(
-        (closestX - enemyPos.x) ** 2 + (closestZ - enemyPos.z) ** 2,
-      );
-
-      if (distToEnemy < enemy.collisionRadius && t < hitDistance) {
-        hitDistance = t;
+      if (hit && hit.distance < hitDistance) {
+        hitDistance = hit.distance;
         hitEnemy = enemy;
-        endPos = new Vector3D(closestX, startPos.y, closestZ);
+        endPos = hit.point;
       }
     }
 
     // Apply damage if hit enemy
     if (hitEnemy) {
       hitEnemy.takeDamage();
+      this.audio?.playEnemyDamaged(hitEnemy.position, this.tank.getPosition());
       this.particles.emit(endPos.clone(), 5, PARTICLE_PRESETS.sparks);
 
       if (hitEnemy.isDead()) {
         this.tank.addScore(hitEnemy.points);
+        this.audio?.playEnemyDestroyed(
+          hitEnemy.position,
+          this.tank.getPosition(),
+        );
         this.particles.emitRing(
           hitEnemy.position.clone(),
           15,
@@ -273,8 +266,7 @@ export class Game extends Scene {
   /**
    * Generate terrain obstacles for current wave
    */
-  private generateTerrain(): void {
-    const waveNum = this.waveSystem.getWaveNumber();
+  private generateTerrain(waveNum = this.waveSystem.getWaveNumber()): void {
     // More obstacles in later waves, base 8 + 2 per wave, max 20
     const count = Math.min(8 + waveNum * 2, 20);
     const enemyPositions = this.enemyManager.getEnemyPositions();
@@ -347,51 +339,59 @@ export class Game extends Scene {
     for (const projectile of this.projectiles) {
       if (!projectile.isAlive()) continue;
 
-      // Check terrain collision first
-      const hitObstacle = this.terrainManager.checkPointCollision(
+      const terrainHit = this.terrainManager.raycast(
+        projectile.previousPosition,
         projectile.position,
         projectile.radius,
       );
-      if (hitObstacle) {
-        projectile.destroy();
-        this.particles.emit(
-          projectile.position.clone(),
-          3,
-          PARTICLE_PRESETS.sparks,
-        );
-        continue;
-      }
+      let nearestHit: {
+        enemy: (typeof enemies)[0];
+        point: Vector3D;
+        distance: number;
+      } | null = null;
 
       for (const enemy of enemies) {
         if (!enemy.isAlive()) continue;
 
-        const dist = projectile.distanceTo(enemy.getCollisionCenter());
-        if (dist < enemy.collisionRadius + projectile.radius) {
-          enemy.takeDamage();
-          projectile.destroy();
-
-          this.particles.emit(
-            enemy.position.clone(),
-            5,
-            PARTICLE_PRESETS.sparks,
-          );
-
-          if (enemy.isDead()) {
-            this.tank.addScore(enemy.points);
-            this.particles.emitRing(
-              enemy.position.clone(),
-              15,
-              PARTICLE_PRESETS.explosion,
-            );
-            this.particles.emit(
-              enemy.position.clone(),
-              8,
-              PARTICLE_PRESETS.debris,
-            );
-            this.screenShake.fire();
-          }
-          break;
+        const hit = segmentCircleIntersectionXZ(
+          projectile.previousPosition,
+          projectile.position,
+          enemy.getCollisionCenter(),
+          enemy.collisionRadius + projectile.radius,
+        );
+        if (hit && (!nearestHit || hit.distance < nearestHit.distance)) {
+          nearestHit = { enemy, point: hit.point, distance: hit.distance };
         }
+      }
+
+      if (
+        terrainHit &&
+        (!nearestHit || terrainHit.distance < nearestHit.distance)
+      ) {
+        projectile.destroy();
+        this.particles.emit(terrainHit.point, 3, PARTICLE_PRESETS.sparks);
+        continue;
+      }
+
+      if (!nearestHit) continue;
+
+      const { enemy, point } = nearestHit;
+      enemy.takeDamage();
+      this.audio?.playEnemyDamaged(enemy.position, this.tank.getPosition());
+      projectile.destroy();
+
+      this.particles.emit(point, 5, PARTICLE_PRESETS.sparks);
+
+      if (enemy.isDead()) {
+        this.tank.addScore(enemy.points);
+        this.audio?.playEnemyDestroyed(enemy.position, this.tank.getPosition());
+        this.particles.emitRing(
+          enemy.position.clone(),
+          15,
+          PARTICLE_PRESETS.explosion,
+        );
+        this.particles.emit(enemy.position.clone(), 8, PARTICLE_PRESETS.debris);
+        this.screenShake.fire();
       }
     }
   }
@@ -403,28 +403,30 @@ export class Game extends Scene {
     for (const projectile of enemyProjectiles) {
       if (!projectile.isAlive()) continue;
 
-      // Check terrain collision first
-      const hitObstacle = this.terrainManager.checkPointCollision(
+      const terrainHit = this.terrainManager.raycast(
+        projectile.previousPosition,
         projectile.position,
         projectile.radius,
       );
-      if (hitObstacle) {
+      const hit = segmentCircleIntersectionXZ(
+        projectile.previousPosition,
+        projectile.position,
+        playerPos,
+        this.tank.collisionRadius + projectile.radius,
+      );
+      if (terrainHit && (!hit || terrainHit.distance < hit.distance)) {
         projectile.destroy();
-        this.particles.emit(
-          projectile.position.clone(),
-          3,
-          PARTICLE_PRESETS.sparks,
-        );
+        this.particles.emit(terrainHit.point, 3, PARTICLE_PRESETS.sparks);
         continue;
       }
 
-      const dist = projectile.distanceTo(playerPos);
-      if (dist < this.tank.collisionRadius + projectile.radius) {
+      if (hit) {
         // Player hit!
-        this.tank.takeDamageFromPosition(projectile.position);
+        this.tank.takeDamageFromPosition(hit.point);
+        this.audio?.playPlayerDamaged();
         projectile.destroy();
         this.screenShake.hit();
-        this.particles.emit(playerPos, 8, PARTICLE_PRESETS.sparks);
+        this.particles.emit(hit.point, 8, PARTICLE_PRESETS.sparks);
 
         // Check if armor section destroyed
         if (this.tank.isDead()) {
@@ -447,6 +449,7 @@ export class Game extends Scene {
     const { width, height } = this.cameras.main;
     this.hud.drawCrackedWindshield(width / 2, height / 2);
     this.screenShake.death();
+    this.audio?.playPlayerDestroyed();
 
     // Delay before game over screen
     this.time.delayedCall(this.deathDelay, () => {
@@ -496,6 +499,7 @@ export class Game extends Scene {
 
     // Normal gameplay
     this.tank.update(delta);
+    this.audio?.updatePlayerRumble(this.tank.getVelocity());
 
     // Resolve player collisions
     this.tank.resolveCollisions(this.enemyManager.getEnemies());
@@ -522,10 +526,18 @@ export class Game extends Scene {
     this.checkPickupCollection();
 
     // Update enemies with player position and obstacle info for AI
-    this.enemyManager.update(
+    const enemyFireEvents = this.enemyManager.update(
       delta,
       this.tank.getPosition(),
       this.getObstacleInfo(),
+    );
+    for (const event of enemyFireEvents) {
+      this.audio?.playEnemyFire(event.position, this.tank.getPosition());
+    }
+    this.audio?.updateEnemyTanks(
+      this.enemyManager.getEnemies(),
+      this.tank.getPosition(),
+      this.tank.getRotation(),
     );
 
     // Check collisions
@@ -546,8 +558,11 @@ export class Game extends Scene {
         this.waveSystem.getWaveNumber(),
         () => {
           this.tank.resetArmor(); // Reset armor between waves
-          this.waveSystem.startWave(this.tank.getPosition());
-          this.generateTerrain(); // Regenerate terrain each wave
+          this.generateTerrain(this.waveSystem.getNextWaveNumber()); // Regenerate terrain each wave
+          this.waveSystem.startWave(
+            this.tank.getPosition(),
+            this.terrainManager.getObstacles(),
+          );
           this.generatePickups(); // Generate new pickups
           this.gameState = "playing";
         },
@@ -637,5 +652,6 @@ export class Game extends Scene {
     this.waveTransition?.destroy();
     this.laserGraphics?.destroy();
     this.pickupManager?.clear();
+    this.audio?.destroy();
   }
 }

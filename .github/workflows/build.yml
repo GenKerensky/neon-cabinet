@@ -1,0 +1,51 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build maze-runner (production)
+        run: pnpm nx build maze-runner --configuration=production
+
+      - name: Guard — ensure __TEST__ is absent from production bundle
+        run: |
+          echo "Checking production bundle for __TEST__..."
+          if grep -r "__TEST__" apps/maze-runner/dist/ 2>/dev/null; then
+            echo "ERROR: __TEST__ found in production bundle!"
+            echo "The test harness must be stripped from production builds."
+            exit 1
+          fi
+          echo "OK: __TEST__ not found in production bundle."

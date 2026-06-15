@@ -8,6 +8,7 @@ import { PROJECTILE } from "../models";
  */
 export class Projectile {
   position: Vector3D;
+  previousPosition: Vector3D;
   private velocity: Vector3D;
   private alive = true;
   private lifetime: number;
@@ -18,6 +19,7 @@ export class Projectile {
 
   constructor(position: Vector3D, direction: Vector3D) {
     this.position = position.clone();
+    this.previousPosition = this.position.clone();
     this.velocity = direction.normalize().scale(this.speed);
     this.lifetime = 0;
   }
@@ -28,6 +30,7 @@ export class Projectile {
     const dt = delta / 1000;
 
     // Move projectile
+    this.previousPosition = this.position.clone();
     this.position = this.position.add(this.velocity.scale(dt));
 
     // Update lifetime

@@ -1,13 +1,40 @@
 import { Input, Math as PhaserMath, Physics } from "phaser";
 import type { GameObjects, Scene, Types } from "phaser";
+import {
+  SVGParser,
+  VectorPuppet,
+  type SVGPuppetMetadata,
+} from "@neon-cabinet/sprite-tools";
 
-export class Lander extends Physics.Arcade.Sprite {
+export type LandingGearState =
+  | "stowed"
+  | "deploying"
+  | "deployed"
+  | "compressing"
+  | "settled";
+
+const GEAR_LAYER_IDS = [
+  "gear_left",
+  "gear_right",
+  "foot_left",
+  "foot_right",
+] as const;
+const THRUSTER_PARTICLE_ORIGIN_OFFSET = 14;
+
+type GearLayer = GameObjects.Container | GameObjects.Graphics;
+
+export class Lander extends VectorPuppet {
   private fuel = 100;
   private maxFuel = 100;
   private fuelConsumption = 15; // per second when thrusting
   private thrustPower = 250;
   private rotationSpeed = 150; // degrees per second
   private thrustEmitter: GameObjects.Particles.ParticleEmitter;
+  private landingGearState: LandingGearState = "stowed";
+  private thrusting = false;
+  private gearDeployQueued = false;
+
+  declare public body: Physics.Arcade.Body;
 
   // Input keys
   private cursors!: Types.Input.Keyboard.CursorKeys;
@@ -19,13 +46,14 @@ export class Lander extends Physics.Arcade.Sprite {
   };
 
   constructor(scene: Scene, x: number, y: number) {
-    super(scene, x, y, "lander");
+    super(scene, x, y, createLanderPuppetMetadata(scene));
 
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
+    if (!this.body) {
+      scene.physics.add.existing(this);
+    }
 
     // Physics setup
-    const body = this.body as Physics.Arcade.Body;
+    const body = this.body;
     body.setCollideWorldBounds(false);
     body.setMaxVelocity(300, 400);
     body.setDrag(0); // No air drag in space
@@ -33,7 +61,9 @@ export class Lander extends Physics.Arcade.Sprite {
 
     // Set up hitbox (smaller than sprite for fair collision)
     body.setSize(40, 80);
-    body.setOffset(20, 20);
+    body.setOffset(-20, -40);
+
+    this.resetLandingGear();
 
     // Create thrust particle emitter
     this.thrustEmitter = scene.add.particles(0, 0, "flame", {
@@ -61,10 +91,16 @@ export class Lander extends Physics.Arcade.Sprite {
     }
   }
 
-  update(delta: number): void {
+  update(delta: number, altitude = Number.POSITIVE_INFINITY): void {
     if (!this.active) return;
 
+    super.update(this.scene.time.now, delta);
+
     const deltaSeconds = delta / 1000;
+
+    if (altitude < 150 && this.getVerticalSpeed() > 20) {
+      this.deployLandingGear();
+    }
 
     // Handle rotation
     if (this.cursors?.left.isDown || this.wasd?.A.isDown) {
@@ -82,11 +118,90 @@ export class Lander extends Physics.Arcade.Sprite {
     if (thrustPressed && this.fuel > 0) {
       this.applyThrust(deltaSeconds);
     } else {
-      this.thrustEmitter.stop();
+      this.stopThrust();
     }
 
     // Update thruster particle position
     this.updateThrusterPosition();
+  }
+
+  setAngularVelocity(value: number): this {
+    this.body.setAngularVelocity(value);
+    return this;
+  }
+
+  deployLandingGear(): void {
+    if (this.landingGearState !== "stowed") return;
+
+    this.landingGearState = "deploying";
+    this.gearDeployQueued = true;
+    this.scene.tweens.add({
+      targets: this.getGearLayers(),
+      scaleY: 1,
+      y: 0,
+      duration: 340,
+      ease: "Back.easeOut",
+      onComplete: () => {
+        if (this.landingGearState === "deploying") {
+          this.landingGearState = "deployed";
+        }
+      },
+    });
+  }
+
+  playTouchdownCompression(): void {
+    if (
+      this.landingGearState === "compressing" ||
+      this.landingGearState === "settled"
+    ) {
+      return;
+    }
+
+    if (this.landingGearState === "stowed") {
+      this.deployLandingGear();
+    }
+
+    this.landingGearState = "compressing";
+    this.scene.tweens.add({
+      targets: this.getGearLayers(),
+      scaleY: 0.86,
+      y: 10,
+      duration: 110,
+      ease: "Quad.easeOut",
+      yoyo: true,
+      hold: 45,
+      onComplete: () => {
+        this.landingGearState = "settled";
+        this.getGearLayers().forEach((layer) => {
+          layer.scaleY = 0.96;
+          layer.y = 2;
+        });
+      },
+    });
+  }
+
+  resetLandingGear(): void {
+    this.scene.tweens.killTweensOf(this.getGearLayers());
+    this.landingGearState = "stowed";
+    this.gearDeployQueued = false;
+    this.getGearLayers().forEach((layer) => {
+      layer.scaleY = 0.72;
+      layer.y = 22;
+    });
+  }
+
+  consumeGearDeployEvent(): boolean {
+    const queued = this.gearDeployQueued;
+    this.gearDeployQueued = false;
+    return queued;
+  }
+
+  getLandingGearState(): LandingGearState {
+    return this.landingGearState;
+  }
+
+  isThrusting(): boolean {
+    return this.thrusting;
   }
 
   private applyThrust(deltaSeconds: number): void {
@@ -101,28 +216,36 @@ export class Lander extends Physics.Arcade.Sprite {
     const thrustY = Math.sin(angleRad) * this.thrustPower * deltaSeconds;
 
     // Apply thrust as velocity change (gravity continues to act via physics world)
-    const body = this.body as Physics.Arcade.Body;
-    body.velocity.x += thrustX;
-    body.velocity.y += thrustY;
+    this.body.velocity.x += thrustX;
+    this.body.velocity.y += thrustY;
 
     // Start thrust particles
     this.thrustEmitter.start();
+    this.thrusting = true;
   }
 
   private updateThrusterPosition(): void {
-    // Position emitter at bottom of lander, accounting for rotation
-    const angleRad = PhaserMath.DegToRad(this.angle + 90);
-    const offsetDistance = 60; // Distance from center to thruster
-    const emitterX = this.x + Math.cos(angleRad) * offsetDistance;
-    const emitterY = this.y + Math.sin(angleRad) * offsetDistance;
+    const thrusterSocket = this.getSocketWorldPosition("thruster");
 
-    this.thrustEmitter.setPosition(emitterX, emitterY);
-
-    // Update particle emission angle based on lander rotation
     const particleAngle = this.angle + 90;
+    const particleAngleRad = PhaserMath.DegToRad(particleAngle);
+    this.thrustEmitter.setPosition(
+      thrusterSocket.x +
+        Math.cos(particleAngleRad) * THRUSTER_PARTICLE_ORIGIN_OFFSET,
+      thrusterSocket.y +
+        Math.sin(particleAngleRad) * THRUSTER_PARTICLE_ORIGIN_OFFSET,
+    );
+
+    // Update particle emission angle based on lander rotation.
     this.thrustEmitter.ops.angle.loadConfig({
       angle: { min: particleAngle - 15, max: particleAngle + 15 },
     });
+  }
+
+  private getGearLayers(): GearLayer[] {
+    return GEAR_LAYER_IDS.map((id) => this.getLayer(id)).filter(
+      (layer): layer is GearLayer => layer !== undefined,
+    );
   }
 
   getFuel(): number {
@@ -134,13 +257,11 @@ export class Lander extends Physics.Arcade.Sprite {
   }
 
   getHorizontalSpeed(): number {
-    const body = this.body as Physics.Arcade.Body;
-    return Math.abs(body.velocity.x);
+    return Math.abs(this.body.velocity.x);
   }
 
   getVerticalSpeed(): number {
-    const body = this.body as Physics.Arcade.Body;
-    return body.velocity.y;
+    return this.body.velocity.y;
   }
 
   getRotationAngle(): number {
@@ -171,6 +292,7 @@ export class Lander extends Physics.Arcade.Sprite {
 
   stopThrust(): void {
     this.thrustEmitter.stop();
+    this.thrusting = false;
   }
 
   resetFuel(): void {
@@ -181,4 +303,17 @@ export class Lander extends Physics.Arcade.Sprite {
     this.thrustEmitter.destroy();
     super.destroy(fromScene);
   }
+}
+
+export function createLanderPuppetMetadata(scene: Scene): SVGPuppetMetadata {
+  const landerSvg = scene.cache.text.get("lander_svg") as string | undefined;
+  if (landerSvg) {
+    return new SVGParser().parse(landerSvg);
+  }
+
+  return {
+    viewBox: { x: 0, y: 0, width: 80, height: 120 },
+    layers: [],
+    sockets: [{ id: "thruster", x: 40, y: 104, type: "effect" }],
+  };
 }

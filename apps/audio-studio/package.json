@@ -1,0 +1,19 @@
+{
+  "name": "@neon-cabinet/audio-studio",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@neon-cabinet/audio-tools": "workspace:*",
+    "@neon-cabinet/ui": "workspace:*",
+    "@tailwindcss/vite": "^4",
+    "lucide-react": "^1.17.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "rxdb": "^16.20.0",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "^6.2.5"
+  }
+}

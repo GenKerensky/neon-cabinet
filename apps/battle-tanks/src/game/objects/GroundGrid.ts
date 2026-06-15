@@ -17,6 +17,8 @@ export class GroundGrid {
   private groundY: number;
   private screenW: number;
   private screenH: number;
+  private readonly scratchP1 = Vector3D.zero();
+  private readonly scratchP2 = Vector3D.zero();
 
   constructor(
     scene: Scene,
@@ -107,22 +109,24 @@ export class GroundGrid {
 
     // Lines parallel to Z axis
     for (let x = startX; x <= endX; x += this.gridSize) {
-      this.drawGridLine(
-        new Vector3D(x, this.groundY, startZ),
-        new Vector3D(x, this.groundY, endZ),
-        screenW,
-        screenH,
-      );
+      this.scratchP1.x = x;
+      this.scratchP1.y = this.groundY;
+      this.scratchP1.z = startZ;
+      this.scratchP2.x = x;
+      this.scratchP2.y = this.groundY;
+      this.scratchP2.z = endZ;
+      this.drawGridLine(this.scratchP1, this.scratchP2, screenW, screenH);
     }
 
     // Lines parallel to X axis
     for (let z = startZ; z <= endZ; z += this.gridSize) {
-      this.drawGridLine(
-        new Vector3D(startX, this.groundY, z),
-        new Vector3D(endX, this.groundY, z),
-        screenW,
-        screenH,
-      );
+      this.scratchP1.x = startX;
+      this.scratchP1.y = this.groundY;
+      this.scratchP1.z = z;
+      this.scratchP2.x = endX;
+      this.scratchP2.y = this.groundY;
+      this.scratchP2.z = z;
+      this.drawGridLine(this.scratchP1, this.scratchP2, screenW, screenH);
     }
   }
 

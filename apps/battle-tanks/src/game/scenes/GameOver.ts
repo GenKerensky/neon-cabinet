@@ -1,10 +1,12 @@
 import { Display, Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../../utils/font";
+import { BattleAudio } from "../audio/BattleAudio";
 
 export class GameOver extends Scene {
   private score = 0;
   private wave = 1;
+  private audio!: BattleAudio;
 
   constructor() {
     super("GameOver");
@@ -20,6 +22,8 @@ export class GameOver extends Scene {
     const font = getFontFamily(this);
 
     this.cameras.main.setPostPipeline("VectorShader");
+    this.audio = new BattleAudio(this);
+    this.audio.playGameOverTaps();
 
     this.createBackground();
 
@@ -125,6 +129,10 @@ export class GameOver extends Scene {
     });
 
     EventBus.emit("current-scene-ready", this);
+  }
+
+  shutdown(): void {
+    this.audio?.destroy();
   }
 
   private createBackground(): void {

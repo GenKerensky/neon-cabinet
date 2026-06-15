@@ -11,6 +11,7 @@ import { ENEMY_TANK } from "../models";
 import { TURRET_MODEL } from "../objects/Turret";
 import { Vector3D } from "../engine/Vector3D";
 import { WireframeModel } from "../engine/WireframeModel";
+import { BattleAudio } from "../audio/BattleAudio";
 
 interface PassingObject {
   position: Vector3D;
@@ -25,6 +26,7 @@ export class Title extends Scene {
   private mountains!: Mountains;
   private starfield!: Starfield;
   private atmosphere!: Atmosphere;
+  private audio!: BattleAudio;
 
   private cameraZ = 0;
   private readonly moveSpeed = 150;
@@ -41,6 +43,8 @@ export class Title extends Scene {
 
     this.cameras.main.setBackgroundColor(0x000000);
     this.cameras.main.setPostPipeline("VectorShader");
+    this.audio = new BattleAudio(this);
+    this.audio.playTitleMusic();
 
     // Initialize 3D camera (stationary rotation, moving forward)
     this.camera3d = new Camera3D(400);
@@ -146,10 +150,12 @@ export class Title extends Scene {
       .setDepth(100);
 
     this.input.keyboard?.once("keydown-SPACE", () => {
+      this.audio.stopTitleMusic();
       this.scene.start("Game");
     });
 
     this.input.once("pointerdown", () => {
+      this.audio.stopTitleMusic();
       this.scene.start("Game");
     });
 
@@ -220,6 +226,7 @@ export class Title extends Scene {
   }
 
   shutdown(): void {
+    this.audio?.destroy();
     this.starfield?.destroy();
     this.atmosphere?.destroy();
     this.groundGrid?.destroy();

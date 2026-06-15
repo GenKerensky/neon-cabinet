@@ -1,0 +1,35 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "outDir": "./out-tsc/lib",
+    "declarationMap": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@neon-cabinet/sprite-tools": ["../../libs/sprite-tools/src/index"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "support/helpers/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
+  "references": [
+    {
+      "path": "../../libs/browser-test-runner/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/sprite-tools/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/typed-event-emitter/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shaders/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/phaser-test-harness/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/phaser-debug-bridge/tsconfig.lib.json"
+    }
+  ]
+}

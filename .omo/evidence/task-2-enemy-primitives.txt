@@ -1,0 +1,28 @@
+Task: Enemy primitives for additive vulnerability and wall-ignoring DEAD return
+Date: 2026-05-29
+
+Changed files:
+- apps/maze-runner/src/game/objects/Enemy.ts
+- apps/maze-runner/tests/objects/Enemy.spec.ts
+
+Verification command requested:
+- bun nx test maze-runner
+
+Result:
+- FAILED before maze-runner tests executed due unrelated dependency task:
+  - typed-event-emitter:build
+  - TS5101 in libs/typed-event-emitter/tsconfig.lib.json
+  - "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0"
+
+Direct maze-runner target verification:
+- Command: bun nx run maze-runner:test --excludeTaskDependencies
+- Result: PASS
+- Summary:
+  - Test Files: 12 passed
+  - Tests: 190 passed
+  - Includes: tests/objects/Enemy.spec.ts (41 tests) passed
+
+New Enemy behavior covered by tests:
+- activateFrightened adds duration while already FRIGHTENED
+- activateFrightened is no-op in DEAD state
+- DEAD return movement ignores walls and snaps to return target, then transitions to CHASE

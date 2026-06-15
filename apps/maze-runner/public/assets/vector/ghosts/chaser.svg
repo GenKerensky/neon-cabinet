@@ -1,0 +1,56 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Aura / Glow -->
+  <g id="aura">
+    <path d="M 4 31 L 4 14 A 12 12 0 0 1 28 14 L 28 31 L 24 23 L 20 31 L 16 23 L 12 31 L 8 23 Z"
+      fill="none" stroke="#ff3300" stroke-width="4" opacity="0.5"
+      data-slide-range="1.5"
+      data-direction-bend='{"amount": 5.0, "pivotY": 30}'
+      data-anim-wave='{"frequency": 24, "amplitude": 4.5, "points": 20, "yStart": 24, "yEnd": 12}' />
+  </g>
+
+  <!-- Ghost Body -->
+  <path id="body" d="M 4 31 L 4 14 A 12 12 0 0 1 28 14 L 28 31 L 24 23 L 20 31 L 16 23 L 12 31 L 8 23 Z"
+    fill="#ff0000" stroke="#ff9999" stroke-width="1.5" opacity="0.3"
+    data-slide-range="1.5"
+    data-direction-bend='{"amount": 5.0, "pivotY": 30}'
+    data-anim-wave='{"frequency": 24, "amplitude": 4.5, "points": 20, "yStart": 24, "yEnd": 12}' />
+
+  <!-- Frightened State Overlay -->
+  <g id="frightened_overlay" display="none">
+    <path d="M 4 31 L 4 14 A 12 12 0 0 1 28 14 L 28 31 L 24 23 L 20 31 L 16 23 L 12 31 L 8 23 Z"
+      fill="#005599" stroke="#00ffff" stroke-width="1.5"
+      data-slide-range="1.5"
+      data-direction-bend='{"amount": 5.0, "pivotY": 30}'
+      data-anim-wave='{"frequency": 24, "amplitude": 4.5, "points": 20, "yStart": 24, "yEnd": 12}' />
+  </g>
+
+  <!-- Eyes Container -->
+  <g id="eyes" data-slide-range="5">
+    <!-- Left Eye Shield -->
+    <circle cx="11.5" cy="14" r="5.0" fill="#000000" opacity="0.8" />
+    <!-- Right Eye Shield -->
+    <circle cx="20.5" cy="14" r="5.0" fill="#000000" opacity="0.8" />
+
+    <!-- Left Eye Sclera -->
+    <circle cx="11.5" cy="14" r="3.6" fill="#ffcccc" opacity="0.9" />
+    <!-- Left Eye Pupil -->
+    <circle cx="11.5" cy="14" r="2.0" fill="#660000" />
+    <circle cx="12.1" cy="13.4" r="0.75" fill="#ff6666" opacity="0.65" />
+
+    <!-- Right Eye Sclera -->
+    <circle cx="20.5" cy="14" r="3.6" fill="#ffcccc" opacity="0.9" />
+    <!-- Right Eye Pupil -->
+    <circle cx="20.5" cy="14" r="2.0" fill="#660000" />
+    <circle cx="21.1" cy="13.4" r="0.75" fill="#ff6666" opacity="0.65" />
+
+    <!-- Angry Eyebrows -->
+    <path d="M 6 10 L 15 13" stroke="#330000" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 26 10 L 17 13" stroke="#330000" stroke-width="2.5" stroke-linecap="round" />
+  </g>
+
+  <!-- Dead State Eyes -->
+  <g id="dead_eyes" display="none" data-slide-range="5">
+    <path d="M 8.5 11 L 14.5 17 M 14.5 11 L 8.5 17" stroke="#ffffff" stroke-width="1.8" />
+    <path d="M 17.5 11 L 23.5 17 M 23.5 11 L 17.5 17" stroke="#ffffff" stroke-width="1.8" />
+  </g>
+</svg>

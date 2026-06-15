@@ -1,4 +1,4 @@
-import { Game, Renderer } from "phaser";
+import { Renderer, Game } from "phaser";
 import fragShaderSource from "./crt.frag?raw";
 
 const fragShader = fragShaderSource;

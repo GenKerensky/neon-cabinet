@@ -4,11 +4,13 @@ import { Lander } from "../objects/Lander";
 import { Terrain } from "../objects/Terrain";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
+import { MarsLanderAudio } from "../audio/MarsLanderAudio";
 
 export class Game extends Scene {
   private lander!: Lander;
   private terrain!: Terrain;
   private particles!: GameObjects.Particles.ParticleEmitter;
+  private audio!: MarsLanderAudio;
 
   private score = 0;
   private level = 1;
@@ -55,6 +57,8 @@ export class Game extends Scene {
 
     // Create lander at top center
     this.lander = new Lander(this, this.cameras.main.width / 2, 100);
+    this.audio = new MarsLanderAudio(this);
+    this.events.once("shutdown", () => this.audio.destroy());
 
     // Apply gravity
     this.physics.world.gravity.y = this.gravity;
@@ -76,6 +80,8 @@ export class Game extends Scene {
     // Input for pause
     this.input.keyboard?.addKey(Input.Keyboard.KeyCodes.ESC).on("down", () => {
       if (!this.scene.isPaused("Game")) {
+        this.audio.stopThrustLoop();
+        this.audio.playPause();
         this.scene.pause("Game");
         this.scene.launch("Pause");
       }
@@ -327,12 +333,7 @@ export class Game extends Scene {
     const { width } = this.cameras.main;
     const margin = 30;
 
-    // Calculate altitude (distance from terrain)
-    const terrainHeight = this.terrain.getTerrainHeightAt(this.lander.x);
-    const altitude = Math.max(
-      0,
-      Math.floor(terrainHeight - (this.lander.y + 60)),
-    );
+    const altitude = this.getLanderAltitude();
 
     // Update text
     this.altitudeText.setText(`${altitude}m`);
@@ -385,6 +386,11 @@ export class Game extends Scene {
     this.levelText.setText(`LEVEL: ${this.level}`);
   }
 
+  private getLanderAltitude(): number {
+    const terrainHeight = this.terrain.getTerrainHeightAt(this.lander.x);
+    return Math.max(0, Math.floor(terrainHeight - (this.lander.y + 60)));
+  }
+
   private checkLanding(): void {
     // Check collision with terrain
     const result = this.terrain.checkCollision(
@@ -403,6 +409,7 @@ export class Game extends Scene {
       // Immediately deactivate lander to prevent multiple collision detections
       this.lander.setActive(false);
       this.lander.stopThrust();
+      this.audio.stopThrustLoop();
       const body = this.lander.body as Physics.Arcade.Body;
       body.setVelocity(0, 0);
       body.setAcceleration(0, 0);
@@ -435,6 +442,9 @@ export class Game extends Scene {
     const landingScore = (baseScore + fuelBonus) * multiplier;
 
     this.score += landingScore;
+    this.lander.playTouchdownCompression();
+    this.audio.playTouchdown();
+    this.audio.playLevelCleared();
 
     this.statusText.setText(
       `PERFECT LANDING!\n+${landingScore} POINTS\n(x${multiplier} MULTIPLIER)`,
@@ -449,6 +459,9 @@ export class Game extends Scene {
   }
 
   private handleCrash(reason: string): void {
+    this.audio.stopThrustLoop();
+    this.audio.playCrashExplosion();
+
     // Explosion effect
     this.particles.explode(40, this.lander.x, this.lander.y);
 
@@ -502,6 +515,8 @@ export class Game extends Scene {
       this.lander.setAngle(0);
       this.lander.setAngularVelocity(0);
       this.lander.resetFuel(); // Refill fuel for next level
+      this.lander.resetLandingGear();
+      this.audio.resetLowFuelWarning();
       this.lander.setActive(true);
       this.lander.setVisible(true);
 
@@ -537,7 +552,19 @@ export class Game extends Scene {
 
   update(_time: number, delta: number): void {
     if (this.lander.active) {
-      this.lander.update(delta);
+      this.lander.update(delta, this.getLanderAltitude());
+      if (this.lander.consumeGearDeployEvent()) {
+        this.audio.playGearDeploy();
+      }
+      this.audio.updateThrust({
+        active: this.lander.isThrusting(),
+        fuelPercent: this.lander.getFuelPercent(),
+        x: this.lander.x,
+        worldWidth: this.cameras.main.width,
+      });
+      if (this.lander.getFuelPercent() <= 20) {
+        this.audio.playLowFuel();
+      }
       this.checkLanding();
     }
 

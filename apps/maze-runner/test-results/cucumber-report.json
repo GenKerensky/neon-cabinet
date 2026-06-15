@@ -1,0 +1,286 @@
+[
+  {
+    "description": "  As a developer, I want browser evidence for title attract, HUD, and movement/pen snapshot.",
+    "elements": [
+      {
+        "description": "",
+        "id": "task-6-observability-evidence;capture-title-attract-screenshot-before-starting-game",
+        "keyword": "Scenario",
+        "line": 5,
+        "name": "Capture title attract screenshot before starting game",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 102263052
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "I open the title scene with seed 42",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 660746796
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 7,
+            "name": "I save bridge screenshot as \"task-6-title-attract.png\"",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:51"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 53189276
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 45321627
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@debug",
+            "line": 1
+          },
+          {
+            "name": "@task6",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "task-6-observability-evidence;capture-game-hud-screenshot-after-starting-game",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "Capture game HUD screenshot after starting game",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 82902110
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 10,
+            "name": "I open the title scene with seed 42",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 666354576
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 11,
+            "name": "I start the game scene through bridge",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:25"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3516164
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "I wait for bridge scene \"Game\"",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 436935728
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "I save bridge screenshot as \"task-6-game-hud.png\"",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:51"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 46165478
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 39325752
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@debug",
+            "line": 1
+          },
+          {
+            "name": "@task6",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "task-6-observability-evidence;capture-movement-and-pen-observability-snapshot",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Capture movement and pen observability snapshot",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 84312697
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 16,
+            "name": "I open the title scene with seed 42",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 655028954
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 17,
+            "name": "I start the game scene through bridge",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:25"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3938878
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "I wait for bridge scene \"Game\"",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 425844501
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "I move player right through scene control",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:62"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 263360822
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "I collect movement and pen state from bridge",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:72"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5702830
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 21,
+            "name": "I save movement and pen evidence files",
+            "match": {
+              "location": "step-definitions/task6-observability.steps.ts:82"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 549175
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 45956626
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@debug",
+            "line": 1
+          },
+          {
+            "name": "@task6",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "task-6-observability-evidence",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Task 6 observability evidence",
+    "tags": [
+      {
+        "name": "@debug",
+        "line": 1
+      },
+      {
+        "name": "@task6",
+        "line": 1
+      }
+    ],
+    "uri": "features/debug/task-6-observability.feature"
+  }
+]

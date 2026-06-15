@@ -1,0 +1,11 @@
+export enum DepthLayer {
+  FLOOR_GRID = 0,
+  SHADOWS = 1,
+  WALLS = 2,
+  COLLECTIBLES = 5,
+  CHARACTERS = 10,
+  PARTICLES = 15,
+  HUD = 100,
+  OVERLAY = 999,
+  SCREEN_FLASH = 1000,
+}

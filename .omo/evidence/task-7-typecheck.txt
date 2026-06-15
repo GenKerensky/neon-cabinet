@@ -1,0 +1,36 @@
+
+ NX   Running target typecheck for project maze-runner and 6 tasks it depends on:
+
+
+
+> nx run phaser-test-harness:typecheck  [local cache]
+
+
+> nx run @neon-cabinet/shaders:typecheck  [local cache]
+
+
+> nx run typed-event-emitter:typecheck  [local cache]
+
+
+> nx run @neon-cabinet/sprite-tools:typecheck  [local cache]
+
+
+> nx run browser-test-runner:typecheck  [local cache]
+
+
+> nx run phaser-debug-bridge:typecheck  [local cache]
+
+
+> nx run maze-runner:typecheck
+
+> tsc --build --emitDeclarationOnly
+
+
+
+
+ NX   Successfully ran target typecheck for project maze-runner and 6 tasks it depends on
+
+Nx read the output from the cache instead of running the command for 6 out of 7 tasks.
+
+View logs and investigate cache misses at https://cloud.nx.app/runs/ITYyFZJsrk
+

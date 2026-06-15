@@ -1,0 +1,3012 @@
+{
+  "state": {
+    "title": "Neon Cabinet - Retro Arcade",
+    "canvasCount": 1,
+    "canvasSize": {
+      "width": 1600,
+      "height": 1200
+    },
+    "canvasPrefix": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABkAAAASwCAYAAACjAYaXAAAQAElEQVR4Ae",
+    "marsAssets": [],
+    "oldAssetLoads": [
+      "/games/assets/audio/crash-explosion.wav",
+      "/games/assets/audio/crash-explosion.wav",
+      "/games/assets/audio/game-over.wav",
+      "/games/assets/audio/game-over.wav",
+      "/games/assets/audio/gear-deploy.wav",
+      "/games/assets/audio/gear-deploy.wav",
+      "/games/assets/audio/level-cleared.wav",
+      "/games/assets/audio/level-cleared.wav",
+      "/games/assets/audio/low-fuel.wav",
+      "/games/assets/audio/low-fuel.wav",
+      "/games/assets/audio/pause.wav",
+      "/games/assets/audio/pause.wav",
+      "/games/assets/audio/resume.wav",
+      "/games/assets/audio/resume.wav",
+      "/games/assets/audio/start.wav",
+      "/games/assets/audio/start.wav",
+      "/games/assets/audio/title-placeholder.wav",
+      "/games/assets/audio/title-placeholder.wav",
+      "/games/assets/audio/touchdown.wav",
+      "/games/assets/audio/touchdown.wav",
+      "/games/assets/vector/flame.svg",
+      "/games/assets/vector/flame.svg",
+      "/games/assets/vector/lander.svg",
+      "/games/assets/vector/lander.svg",
+      "/games/assets/vector/landing-pad.svg",
+      "/games/assets/vector/landing-pad.svg",
+      "/games/assets/vector/particle.svg",
+      "/games/assets/vector/particle.svg",
+      "/games/assets/vector/star.svg",
+      "/games/assets/vector/star.svg"
+    ],
+    "text": "LOGIN\nSHOW CABINET"
+  },
+  "consoleMessages": [
+    {
+      "type": "info",
+      "args": [
+        {
+          "type": "string",
+          "value": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools"
+        },
+        {
+          "type": "string",
+          "value": "font-weight:bold"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382742630.343,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "info",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 16461,
+            "columnNumber": 53
+          },
+          {
+            "functionName": "module evaluation",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 16498,
+            "columnNumber": 1
+          },
+          {
+            "functionName": "",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 878,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "runModuleExecutionHooks",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 903,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "instantiateModule",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 876,
+            "columnNumber": 8
+          },
+          {
+            "functionName": "getOrInstantiateModuleFromParent",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 829,
+            "columnNumber": 11
+          },
+          {
+            "functionName": "commonJsRequire",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 258,
+            "columnNumber": 11
+          },
+          {
+            "functionName": "module evaluation",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 16531,
+            "columnNumber": 43
+          },
+          {
+            "functionName": "",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 878,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "runModuleExecutionHooks",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 903,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "instantiateModule",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 876,
+            "columnNumber": 8
+          },
+          {
+            "functionName": "getOrInstantiateModuleFromParent",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 829,
+            "columnNumber": 11
+          },
+          {
+            "functionName": "commonJsRequire",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 258,
+            "columnNumber": 11
+          },
+          {
+            "functionName": "module evaluation",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 12440,
+            "columnNumber": 79
+          },
+          {
+            "functionName": "",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 878,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "runModuleExecutionHooks",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 903,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "instantiateModule",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 876,
+            "columnNumber": 8
+          },
+          {
+            "functionName": "getOrInstantiateModuleFromParent",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 829,
+            "columnNumber": 11
+          },
+          {
+            "functionName": "commonJsRequire",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 258,
+            "columnNumber": 11
+          },
+          {
+            "functionName": "",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 12702,
+            "columnNumber": 46
+          },
+          {
+            "functionName": "",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 176,
+            "columnNumber": 8
+          },
+          {
+            "functionName": "loadScriptsInSequence",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 140,
+            "columnNumber": 15
+          },
+          {
+            "functionName": "appBootstrap",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 169,
+            "columnNumber": 4
+          },
+          {
+            "functionName": "module evaluation",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 12701,
+            "columnNumber": 31
+          },
+          {
+            "functionName": "",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 878,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "runModuleExecutionHooks",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 903,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "instantiateModule",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 876,
+            "columnNumber": 8
+          },
+          {
+            "functionName": "getOrInstantiateRuntimeModule",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 807,
+            "columnNumber": 11
+          },
+          {
+            "functionName": "registerChunk",
+            "scriptId": "25",
+            "url": "http://localhost:3000/_next/static/chunks/turbopack-apps_frontend_9f93ea1e._.js",
+            "lineNumber": 1625,
+            "columnNumber": 20
+          }
+        ]
+      }
+    },
+    {
+      "type": "log",
+      "args": [
+        {
+          "type": "string",
+          "value": "[HMR] connected"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382742716.347,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "log",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "handleOnline",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 10883,
+            "columnNumber": 27
+          }
+        ]
+      }
+    },
+    {
+      "type": "log",
+      "args": [
+        {
+          "type": "string",
+          "value": "%c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390"
+        },
+        {
+          "type": "string",
+          "value": "background: #ff0000"
+        },
+        {
+          "type": "string",
+          "value": "background: #ffff00"
+        },
+        {
+          "type": "string",
+          "value": "background: #00ff00"
+        },
+        {
+          "type": "string",
+          "value": "background: #00ffff"
+        },
+        {
+          "type": "string",
+          "value": "color: #ffffff; background: #000000"
+        },
+        {
+          "type": "string",
+          "value": "background: transparent"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382743041.628,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "log",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "DebugHeader",
+            "scriptId": "48",
+            "url": "http://localhost:3000/_next/static/chunks/17417_phaser_dist_phaser_06b98bb8.js",
+            "lineNumber": 12695,
+            "columnNumber": 36
+          },
+          {
+            "functionName": "boot",
+            "scriptId": "48",
+            "url": "http://localhost:3000/_next/static/chunks/17417_phaser_dist_phaser_06b98bb8.js",
+            "lineNumber": 13004,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "DOMContentLoaded",
+            "scriptId": "48",
+            "url": "http://localhost:3000/_next/static/chunks/17417_phaser_dist_phaser_06b98bb8.js",
+            "lineNumber": 23716,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "Game",
+            "scriptId": "48",
+            "url": "http://localhost:3000/_next/static/chunks/17417_phaser_dist_phaser_06b98bb8.js",
+            "lineNumber": 12982,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "",
+            "scriptId": "47",
+            "url": "http://localhost:3000/_next/static/chunks/apps_mars-lander_dist_index_5dee730d.js",
+            "lineNumber": 4010,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "react_stack_bottom_frame",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 14875,
+            "columnNumber": 21
+          },
+          {
+            "functionName": "runWithFiberInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 964,
+            "columnNumber": 73
+          },
+          {
+            "functionName": "commitHookEffectListMount",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7265,
+            "columnNumber": 166
+          },
+          {
+            "functionName": "commitHookLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7253,
+            "columnNumber": 59
+          },
+          {
+            "functionName": "reappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8591,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseReappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8665,
+            "columnNumber": 67
+          },
+          {
+            "functionName": "reappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8590,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseReappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8665,
+            "columnNumber": 67
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7941,
+            "columnNumber": 95
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7930,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7896,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7896,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7896,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7896,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7896,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7860,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7856,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7954,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8536,
+            "columnNumber": 104
+          },
+          {
+            "functionName": "commitLayoutEffectOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7873,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "flushLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 9830,
+            "columnNumber": 125
+          },
+          {
+            "functionName": "commitRoot",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 9719,
+            "columnNumber": 409
+          },
+          {
+            "functionName": "commitRootWhenReady",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 9193,
+            "columnNumber": 8
+          },
+          {
+            "functionName": "performWorkOnRoot",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 9165,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "performWorkOnRootViaSchedulerTask",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10229,
+            "columnNumber": 8
+          },
+          {
+            "functionName": "performWorkUntilDeadline",
+            "scriptId": "16",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_0d72d206._.js",
+            "lineNumber": 2646,
+            "columnNumber": 63
+          }
+        ]
+      }
+    },
+    {
+      "type": "log",
+      "args": [
+        {
+          "type": "string",
+          "value": "%c %c %c %c %c Phaser v3.90.0 (WebGL | Web Audio) %c https://phaser.io/v390"
+        },
+        {
+          "type": "string",
+          "value": "background: #ff0000"
+        },
+        {
+          "type": "string",
+          "value": "background: #ffff00"
+        },
+        {
+          "type": "string",
+          "value": "background: #00ff00"
+        },
+        {
+          "type": "string",
+          "value": "background: #00ffff"
+        },
+        {
+          "type": "string",
+          "value": "color: #ffffff; background: #000000"
+        },
+        {
+          "type": "string",
+          "value": "background: transparent"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382743126.87,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "log",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "DebugHeader",
+            "scriptId": "48",
+            "url": "http://localhost:3000/_next/static/chunks/17417_phaser_dist_phaser_06b98bb8.js",
+            "lineNumber": 12695,
+            "columnNumber": 36
+          },
+          {
+            "functionName": "boot",
+            "scriptId": "48",
+            "url": "http://localhost:3000/_next/static/chunks/17417_phaser_dist_phaser_06b98bb8.js",
+            "lineNumber": 13004,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "DOMContentLoaded",
+            "scriptId": "48",
+            "url": "http://localhost:3000/_next/static/chunks/17417_phaser_dist_phaser_06b98bb8.js",
+            "lineNumber": 23716,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "Game",
+            "scriptId": "48",
+            "url": "http://localhost:3000/_next/static/chunks/17417_phaser_dist_phaser_06b98bb8.js",
+            "lineNumber": 12982,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "",
+            "scriptId": "47",
+            "url": "http://localhost:3000/_next/static/chunks/apps_mars-lander_dist_index_5dee730d.js",
+            "lineNumber": 4010,
+            "columnNumber": 24
+          },
+          {
+            "functionName": "react_stack_bottom_frame",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 14875,
+            "columnNumber": 21
+          },
+          {
+            "functionName": "runWithFiberInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 964,
+            "columnNumber": 73
+          },
+          {
+            "functionName": "commitHookEffectListMount",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7265,
+            "columnNumber": 166
+          },
+          {
+            "functionName": "commitHookLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 7253,
+            "columnNumber": 59
+          },
+          {
+            "functionName": "reappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8591,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseReappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8665,
+            "columnNumber": 67
+          },
+          {
+            "functionName": "reappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8590,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "recursivelyTraverseReappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8665,
+            "columnNumber": 67
+          },
+          {
+            "functionName": "reappearLayoutEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 8644,
+            "columnNumber": 55
+          },
+          {
+            "functionName": "doubleInvokeEffectsOnFiber",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10091,
+            "columnNumber": 75
+          },
+          {
+            "functionName": "runWithFiberInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 964,
+            "columnNumber": 130
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 302
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10084,
+            "columnNumber": 146
+          },
+          {
+            "functionName": "commitDoubleInvokeEffectsInDEV",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 10099,
+            "columnNumber": 8
+          },
+          {
+            "functionName": "flushPassiveEffects",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 9975,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "",
+            "scriptId": "19",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_react-dom_00618631._.js",
+            "lineNumber": 9696,
+            "columnNumber": 16
+          },
+          {
+            "functionName": "performWorkUntilDeadline",
+            "scriptId": "16",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_compiled_0d72d206._.js",
+            "lineNumber": 2646,
+            "columnNumber": 63
+          }
+        ]
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743244.419,
+        "url": "http://localhost:3000/games/assets/vector/lander.svg",
+        "networkRequestId": "3114.85"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743288.555,
+        "url": "http://localhost:3000/games/assets/vector/flame.svg",
+        "networkRequestId": "3114.86"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743293.437,
+        "url": "http://localhost:3000/games/assets/vector/particle.svg",
+        "networkRequestId": "3114.87"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743294.471,
+        "url": "http://localhost:3000/games/assets/vector/star.svg",
+        "networkRequestId": "3114.88"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743295.396,
+        "url": "http://localhost:3000/games/assets/vector/landing-pad.svg",
+        "networkRequestId": "3114.89"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743296.175,
+        "url": "http://localhost:3000/games/assets/audio/gear-deploy.wav",
+        "networkRequestId": "3114.90"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743399.264,
+        "url": "http://localhost:3000/games/assets/audio/touchdown.wav",
+        "networkRequestId": "3114.91"
+      }
+    },
+    {
+      "type": "log",
+      "args": [
+        {
+          "type": "string",
+          "value": "[Fast Refresh] rebuilding"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382743411.713,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "log",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "#runDeferredReportHmrStart",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11134,
+            "columnNumber": 20
+          },
+          {
+            "functionName": "",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11148,
+            "columnNumber": 87
+          }
+        ]
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743436.171,
+        "url": "http://localhost:3000/games/assets/audio/level-cleared.wav",
+        "networkRequestId": "3114.92"
+      }
+    },
+    {
+      "type": "log",
+      "args": [
+        {
+          "type": "string",
+          "value": "[Fast Refresh] done in 146ms"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382743457.464,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "log",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "reportHmrLatency",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11072,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "handleHotUpdate",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11491,
+            "columnNumber": 46
+          },
+          {
+            "functionName": "processMessage",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11572,
+            "columnNumber": 20
+          },
+          {
+            "functionName": "handleMessage",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 10913,
+            "columnNumber": 51
+          }
+        ]
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743460.357,
+        "url": "http://localhost:3000/games/assets/audio/crash-explosion.wav",
+        "networkRequestId": "3114.93"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743473.293,
+        "url": "http://localhost:3000/games/assets/audio/game-over.wav",
+        "networkRequestId": "3114.94"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743474.127,
+        "url": "http://localhost:3000/games/assets/audio/start.wav",
+        "networkRequestId": "3114.95"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743479.389,
+        "url": "http://localhost:3000/games/assets/audio/pause.wav",
+        "networkRequestId": "3114.96"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743570.144,
+        "url": "http://localhost:3000/games/assets/audio/resume.wav",
+        "networkRequestId": "3114.97"
+      }
+    },
+    {
+      "type": "log",
+      "args": [
+        {
+          "type": "string",
+          "value": "[Fast Refresh] rebuilding"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382743590.198,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "log",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "#runDeferredReportHmrStart",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11134,
+            "columnNumber": 20
+          },
+          {
+            "functionName": "",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11148,
+            "columnNumber": 87
+          }
+        ]
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743598.762,
+        "url": "http://localhost:3000/games/assets/audio/low-fuel.wav",
+        "networkRequestId": "3114.98"
+      }
+    },
+    {
+      "type": "log",
+      "args": [
+        {
+          "type": "string",
+          "value": "[Fast Refresh] done in 135ms"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382743625.094,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "log",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "reportHmrLatency",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11072,
+            "columnNumber": 12
+          },
+          {
+            "functionName": "handleHotUpdate",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11491,
+            "columnNumber": 46
+          },
+          {
+            "functionName": "processMessage",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 11572,
+            "columnNumber": 20
+          },
+          {
+            "functionName": "handleMessage",
+            "scriptId": "17",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_client_0edfb401._.js",
+            "lineNumber": 10913,
+            "columnNumber": 51
+          }
+        ]
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743630.544,
+        "url": "http://localhost:3000/games/assets/audio/title-placeholder.wav",
+        "networkRequestId": "3114.99"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743651.133,
+        "url": "http://localhost:3000/games/assets/vector/lander.svg",
+        "networkRequestId": "3114.103"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743656.106,
+        "url": "http://localhost:3000/games/assets/vector/flame.svg",
+        "networkRequestId": "3114.104"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743657.335,
+        "url": "http://localhost:3000/games/assets/vector/particle.svg",
+        "networkRequestId": "3114.105"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743730.435,
+        "url": "http://localhost:3000/games/assets/vector/star.svg",
+        "networkRequestId": "3114.106"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743731.391,
+        "url": "http://localhost:3000/games/assets/vector/landing-pad.svg",
+        "networkRequestId": "3114.107"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743810.153,
+        "url": "http://localhost:3000/games/assets/audio/gear-deploy.wav",
+        "networkRequestId": "3114.108"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743827.518,
+        "url": "http://localhost:3000/games/assets/audio/touchdown.wav",
+        "networkRequestId": "3114.109"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743832.517,
+        "url": "http://localhost:3000/games/assets/audio/level-cleared.wav",
+        "networkRequestId": "3114.110"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743833.982,
+        "url": "http://localhost:3000/games/assets/audio/crash-explosion.wav",
+        "networkRequestId": "3114.111"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743922.555,
+        "url": "http://localhost:3000/games/assets/audio/game-over.wav",
+        "networkRequestId": "3114.112"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382743923.425,
+        "url": "http://localhost:3000/games/assets/audio/start.wav",
+        "networkRequestId": "3114.113"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382744004.651,
+        "url": "http://localhost:3000/games/assets/audio/pause.wav",
+        "networkRequestId": "3114.114"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382744020.943,
+        "url": "http://localhost:3000/games/assets/audio/resume.wav",
+        "networkRequestId": "3114.115"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382744024.259,
+        "url": "http://localhost:3000/games/assets/audio/low-fuel.wav",
+        "networkRequestId": "3114.116"
+      }
+    },
+    {
+      "entry": {
+        "source": "network",
+        "level": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "timestamp": 1780382744024.997,
+        "url": "http://localhost:3000/games/assets/audio/title-placeholder.wav",
+        "networkRequestId": "3114.117"
+      }
+    },
+    {
+      "type": "warning",
+      "args": [
+        {
+          "type": "string",
+          "value": "Image with src \"/assets/neon-cabinet-logo-small.png\" was detected as the Largest Contentful Paint (LCP). Please add the `loading=\"eager\"` property if this image is above the fold.\nRead more: https://nextjs.org/docs/app/api-reference/components/image#loading"
+        }
+      ],
+      "executionContextId": 2,
+      "timestamp": 1780382748603.925,
+      "stackTrace": {
+        "callFrames": [
+          {
+            "functionName": "warn",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 2297,
+            "columnNumber": 27
+          },
+          {
+            "functionName": "warnOnce",
+            "scriptId": "18",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_dist_cbca13cc._.js",
+            "lineNumber": 1199,
+            "columnNumber": 20
+          },
+          {
+            "functionName": "",
+            "scriptId": "28",
+            "url": "http://localhost:3000/_next/static/chunks/f2238_next_c88490e7._.js",
+            "lineNumber": 1736,
+            "columnNumber": 47
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+Maze Runner static checks
+
+Command: bunx nx lint maze-runner
+Final result: PASS
+- 0 errors
+- 197 warnings (pre-existing style warnings only)
+
+Command: bunx nx typecheck maze-runner
+Final result: PASS
+
+Notes:
+- Lint initially failed on an empty `catch` in `apps/maze-runner/src/game/utils/highScore.ts`; fixed by adding a no-op statement.

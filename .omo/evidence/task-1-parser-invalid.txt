@@ -1,0 +1,10 @@
+
+ RUN  v2.1.9 /var/home/falco/code/neon-cabinet/libs/sprite-tools
+
+ ✓ |@neon-cabinet/sprite-tools| src/lib/svg-parser.spec.ts (13 tests) 25ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  00:55:41
+   Duration  841ms (transform 70ms, setup 39ms, collect 28ms, tests 25ms, environment 311ms, prepare 95ms)
+

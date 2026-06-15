@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vector Sprite Pipeline"
+  short_description: "Studio workflow for SVG game sprites"
+  default_prompt: "Use $vector-sprite-pipeline to create or revise a Neon Cabinet SVG sprite asset."

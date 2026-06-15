@@ -1,8 +1,13 @@
 import { Physics } from "phaser";
 import type { GameObjects, Scene } from "phaser";
 import { Asteroid } from "./Asteroid";
+import {
+  getSpaceDefenderVectorMetadata,
+  createEmptyVectorMetadata,
+} from "../config/vectorAssets";
+import { VectorPhysicsPuppet } from "./VectorPhysicsPuppet";
 
-export class RayBeam extends Physics.Arcade.Sprite {
+export class RayBeam extends VectorPhysicsPuppet {
   private lifespan = 1000;
   private spawnTime = 0;
   private aimAngle = 0;
@@ -15,14 +20,24 @@ export class RayBeam extends Physics.Arcade.Sprite {
   private hitAsteroids: Set<Asteroid> = new Set();
 
   constructor(scene: Scene, x: number, y: number, aimAngle: number) {
-    super(scene, x, y, "bullet"); // Reuse bullet texture for physics
+    super(
+      scene,
+      x,
+      y,
+      getSpaceDefenderVectorMetadata(
+        scene,
+        "bullet",
+        createEmptyVectorMetadata(16, 6),
+      ),
+      14,
+      4,
+    );
 
     this.aimAngle = aimAngle;
     this.startX = x;
     this.startY = y;
 
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
+    this.setBodySize(14, 4);
 
     // Create graphics for drawing the beam
     this.beamGraphics = scene.add.graphics();
@@ -315,6 +330,8 @@ export class RayBeam extends Physics.Arcade.Sprite {
   }
 
   update(): void {
+    super.update(this.scene.time.now, this.scene.game.loop.delta);
+
     // Safety check - ensure scene exists and object is active
     if (
       !this.active ||

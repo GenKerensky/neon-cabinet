@@ -1,4 +1,11 @@
 import { Vector3D } from "../engine/Vector3D";
+import {
+  AabbXZ,
+  circleAabbCollisionXZ,
+  expandAabbXZ,
+  SegmentHit,
+  segmentAabbIntersectionXZ,
+} from "../engine/CollisionMath";
 import { WireframeModel, createEdges } from "../engine/WireframeModel";
 import { WireframeRenderer } from "../engine/WireframeRenderer";
 import { COLORS } from "../models";
@@ -103,8 +110,9 @@ export class Obstacle {
     this.type = type;
     this.dimensions = dimensions;
 
-    // Collision radius based on largest horizontal dimension
-    this.collisionRadius = Math.max(dimensions.width, dimensions.depth) * 1.2;
+    this.collisionRadius = Math.sqrt(
+      dimensions.width * dimensions.width + dimensions.depth * dimensions.depth,
+    );
 
     // Generate model based on type
     if (type === "cube") {
@@ -141,9 +149,13 @@ export class Obstacle {
    * Check if a point is inside this obstacle's collision area
    */
   containsPoint(point: Vector3D): boolean {
-    const dx = point.x - this.position.x;
-    const dz = point.z - this.position.z;
-    return Math.sqrt(dx * dx + dz * dz) < this.collisionRadius;
+    const bounds = this.getBounds();
+    return (
+      point.x >= bounds.minX &&
+      point.x <= bounds.maxX &&
+      point.z >= bounds.minZ &&
+      point.z <= bounds.maxZ
+    );
   }
 
   /**
@@ -162,48 +174,30 @@ export class Obstacle {
     entityPos: Vector3D,
     entityRadius: number,
   ): { collides: boolean; pushX: number; pushZ: number } {
-    const dx = entityPos.x - this.position.x;
-    const dz = entityPos.z - this.position.z;
-    const dist = Math.sqrt(dx * dx + dz * dz);
-    const minDist = this.collisionRadius + entityRadius;
-
-    if (dist < minDist && dist > 0) {
-      // Calculate push direction (away from obstacle center)
-      const overlap = minDist - dist;
-      const nx = dx / dist;
-      const nz = dz / dist;
-      return {
-        collides: true,
-        pushX: nx * overlap,
-        pushZ: nz * overlap,
-      };
-    }
-
-    return { collides: false, pushX: 0, pushZ: 0 };
+    return circleAabbCollisionXZ(entityPos, entityRadius, this.getBounds());
   }
 
   /**
    * Check if a line segment intersects this obstacle (for projectiles)
    */
-  checkLineIntersection(start: Vector3D, end: Vector3D): boolean {
-    // Simple circle-line intersection for 2D (XZ plane)
-    const dx = end.x - start.x;
-    const dz = end.z - start.z;
-    const fx = start.x - this.position.x;
-    const fz = start.z - this.position.z;
+  checkLineIntersection(start: Vector3D, end: Vector3D, radius = 0): boolean {
+    return this.raycast(start, end, radius) !== null;
+  }
 
-    const a = dx * dx + dz * dz;
-    const b = 2 * (fx * dx + fz * dz);
-    const c = fx * fx + fz * fz - this.collisionRadius * this.collisionRadius;
+  raycast(start: Vector3D, end: Vector3D, radius = 0): SegmentHit | null {
+    return segmentAabbIntersectionXZ(
+      start,
+      end,
+      expandAabbXZ(this.getBounds(), radius),
+    );
+  }
 
-    const discriminant = b * b - 4 * a * c;
-    if (discriminant < 0) return false;
-
-    const sqrtDisc = Math.sqrt(discriminant);
-    const t1 = (-b - sqrtDisc) / (2 * a);
-    const t2 = (-b + sqrtDisc) / (2 * a);
-
-    // Check if intersection is within segment
-    return (t1 >= 0 && t1 <= 1) || (t2 >= 0 && t2 <= 1);
+  getBounds(): AabbXZ {
+    return {
+      minX: this.position.x - this.dimensions.width,
+      maxX: this.position.x + this.dimensions.width,
+      minZ: this.position.z - this.dimensions.depth,
+      maxZ: this.position.z + this.dimensions.depth,
+    };
   }
 }

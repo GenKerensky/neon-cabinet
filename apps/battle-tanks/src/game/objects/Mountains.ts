@@ -1,11 +1,17 @@
 import type { GameObjects, Scene } from "phaser";
-import { Vector3D } from "../engine/Vector3D";
 import { Camera3D, ScreenPoint } from "../engine/Camera3D";
 import { COLORS } from "../models";
 
 interface MountainPeak {
   angle: number;
+  sin: number;
+  cos: number;
   height: number;
+}
+
+interface VisibleMountainPeak {
+  screenPoint: ScreenPoint;
+  peak: MountainPeak;
 }
 
 /**
@@ -17,6 +23,9 @@ export class Mountains {
   private mountainDistance: number;
   private baseHeight: number;
   private color: number;
+  private visiblePeaks: VisibleMountainPeak[] = [];
+  private visiblePeakPool: VisibleMountainPeak[] = [];
+  private readonly groundScreen: ScreenPoint = { x: 0, y: 0, z: 0 };
 
   constructor(scene: Scene, mountainDistance = 4000) {
     this.graphics = scene.add.graphics();
@@ -46,7 +55,12 @@ export class Mountains {
         height = 150 + Math.random() * 350;
       }
 
-      this.peaks.push({ angle, height });
+      this.peaks.push({
+        angle,
+        sin: Math.sin(angle),
+        cos: Math.cos(angle),
+        height,
+      });
     }
 
     this.peaks.sort((a, b) => a.angle - b.angle);
@@ -55,26 +69,29 @@ export class Mountains {
   render(camera: Camera3D, screenW: number, screenH: number): void {
     this.graphics.clear();
 
-    const visiblePeaks: { screenPoint: ScreenPoint; peak: MountainPeak }[] = [];
+    this.visiblePeaks.length = 0;
 
     for (const peak of this.peaks) {
-      const worldX =
-        camera.position.x + Math.sin(peak.angle) * this.mountainDistance;
-      const worldZ =
-        camera.position.z + Math.cos(peak.angle) * this.mountainDistance;
       const worldY = this.baseHeight + peak.height;
+      const visiblePeak = this.nextVisiblePeak(peak);
 
-      const worldPos = new Vector3D(worldX, worldY, worldZ);
-      const screenPoint = camera.worldToScreen(worldPos, screenW, screenH);
-
-      if (screenPoint) {
-        visiblePeaks.push({ screenPoint, peak });
+      if (
+        this.projectPeakInto(
+          visiblePeak.screenPoint,
+          camera,
+          peak,
+          worldY,
+          screenW,
+          screenH,
+        )
+      ) {
+        this.visiblePeaks.push(visiblePeak);
       }
     }
 
-    if (visiblePeaks.length < 2) return;
+    if (this.visiblePeaks.length < 2) return;
 
-    visiblePeaks.sort((a, b) => a.screenPoint.x - b.screenPoint.x);
+    this.visiblePeaks.sort((a, b) => a.screenPoint.x - b.screenPoint.x);
 
     const horizonY = screenH / 2;
 
@@ -82,20 +99,20 @@ export class Mountains {
     this.graphics.fillStyle(0x000000, 1);
     this.graphics.beginPath();
 
-    const first = visiblePeaks[0];
+    const first = this.visiblePeaks[0];
     // Start at horizon on the left
     this.graphics.moveTo(first.screenPoint.x, horizonY);
     // Go up to first peak
     this.graphics.lineTo(first.screenPoint.x, first.screenPoint.y);
 
     // Draw along all peaks
-    for (let i = 1; i < visiblePeaks.length; i++) {
-      const current = visiblePeaks[i];
+    for (let i = 1; i < this.visiblePeaks.length; i++) {
+      const current = this.visiblePeaks[i];
       this.graphics.lineTo(current.screenPoint.x, current.screenPoint.y);
     }
 
     // Go down to horizon on the right
-    const last = visiblePeaks[visiblePeaks.length - 1];
+    const last = this.visiblePeaks[this.visiblePeaks.length - 1];
     this.graphics.lineTo(last.screenPoint.x, horizonY);
 
     // Close the path along the horizon
@@ -108,8 +125,8 @@ export class Mountains {
 
     this.graphics.moveTo(first.screenPoint.x, first.screenPoint.y);
 
-    for (let i = 1; i < visiblePeaks.length; i++) {
-      const current = visiblePeaks[i];
+    for (let i = 1; i < this.visiblePeaks.length; i++) {
+      const current = this.visiblePeaks[i];
       this.graphics.lineTo(current.screenPoint.x, current.screenPoint.y);
     }
 
@@ -118,7 +135,7 @@ export class Mountains {
     // Vertical lines from tall peaks
     this.graphics.lineStyle(1, this.color, 0.4);
 
-    for (const { screenPoint, peak } of visiblePeaks) {
+    for (const { screenPoint, peak } of this.visiblePeaks) {
       if (peak.height > 250) {
         this.graphics.beginPath();
         this.graphics.moveTo(screenPoint.x, screenPoint.y);
@@ -132,20 +149,22 @@ export class Mountains {
     this.graphics.beginPath();
 
     let firstGround = true;
-    for (const { peak } of visiblePeaks) {
-      const worldX =
-        camera.position.x + Math.sin(peak.angle) * this.mountainDistance;
-      const worldZ =
-        camera.position.z + Math.cos(peak.angle) * this.mountainDistance;
-      const groundPos = new Vector3D(worldX, this.baseHeight + 20, worldZ);
-      const groundScreen = camera.worldToScreen(groundPos, screenW, screenH);
-
-      if (groundScreen) {
+    for (const { peak } of this.visiblePeaks) {
+      if (
+        this.projectPeakInto(
+          this.groundScreen,
+          camera,
+          peak,
+          this.baseHeight + 20,
+          screenW,
+          screenH,
+        )
+      ) {
         if (firstGround) {
-          this.graphics.moveTo(groundScreen.x, groundScreen.y);
+          this.graphics.moveTo(this.groundScreen.x, this.groundScreen.y);
           firstGround = false;
         } else {
-          this.graphics.lineTo(groundScreen.x, groundScreen.y);
+          this.graphics.lineTo(this.groundScreen.x, this.groundScreen.y);
         }
       }
     }
@@ -155,5 +174,45 @@ export class Mountains {
 
   destroy(): void {
     this.graphics.destroy();
+  }
+
+  private nextVisiblePeak(peak: MountainPeak): VisibleMountainPeak {
+    const index = this.visiblePeaks.length;
+    let visiblePeak = this.visiblePeakPool[index];
+    if (!visiblePeak) {
+      visiblePeak = {
+        screenPoint: { x: 0, y: 0, z: 0 },
+        peak,
+      };
+      this.visiblePeakPool[index] = visiblePeak;
+    }
+    visiblePeak.peak = peak;
+    return visiblePeak;
+  }
+
+  private projectPeakInto(
+    target: ScreenPoint,
+    camera: Camera3D,
+    peak: MountainPeak,
+    worldY: number,
+    screenW: number,
+    screenH: number,
+  ): boolean {
+    const relX = peak.sin * this.mountainDistance;
+    const relY = worldY - camera.position.y;
+    const relZ = peak.cos * this.mountainDistance;
+    const cosCamera = Math.cos(camera.rotation);
+    const sinCamera = Math.sin(camera.rotation);
+    const cameraX = relX * cosCamera - relZ * sinCamera;
+    const cameraZ = relX * sinCamera + relZ * cosCamera;
+
+    if (cameraZ <= camera.nearClip || cameraZ > camera.farClip) {
+      return false;
+    }
+
+    target.x = (cameraX / cameraZ) * camera.focalLength + screenW / 2;
+    target.y = screenH / 2 - (relY / cameraZ) * camera.focalLength;
+    target.z = cameraZ;
+    return true;
   }
 }

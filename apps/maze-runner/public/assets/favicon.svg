@@ -1,0 +1,12 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Maze Runner icon">
+  <rect width="64" height="64" rx="10" fill="#060512" />
+  <path d="M11 15h25M48 15h5M11 32h8M32 32h21M11 49h25M48 49h5" fill="none" stroke="#273dff" stroke-linecap="round" stroke-width="5" />
+  <path d="M21 11v10M45 11v18M21 38v11M45 43v10" fill="none" stroke="#273dff" stroke-linecap="round" stroke-width="5" />
+  <path d="M48 32A16 16 0 1 1 21.7 19.8L34 32Z" fill="#ffff00" stroke="#ffaa00" stroke-linejoin="round" stroke-width="4" />
+  <circle cx="35" cy="23" r="3" fill="#050505" />
+  <g fill="#ffffff">
+    <circle cx="11" cy="32" r="2" />
+    <circle cx="53" cy="32" r="2" />
+    <circle cx="39" cy="49" r="2" />
+  </g>
+</svg>

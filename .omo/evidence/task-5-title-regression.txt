@@ -1,0 +1,133 @@
+
+ NX   Running target test for project maze-runner and 5 tasks it depends on:
+
+
+
+> nx run phaser-test-harness:build  [local cache]
+
+
+> nx run typed-event-emitter:build  [local cache]
+
+
+> nx run @neon-cabinet/sprite-tools:build  [local cache]
+
+
+> nx run browser-test-runner:build  [local cache]
+
+
+> nx run phaser-debug-bridge:build  [local cache]
+
+
+> nx run maze-runner:test
+
+> vitest run
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/var/home/falco/code/neon-cabinet/apps/maze-runner[39m
+
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/sceneTransitions.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/game/ghostDefinitions.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/highScore.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/game/GameOver.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/Pathfinder.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/harnessSnapshot.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/DirectionUtils.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/objects/Collectible.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[90m 13[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/scenes/Pause.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 13[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/gridGeometry.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 13[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/scenes/Title.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[90m 113[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/objects/Player.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[90m 70[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/scenes/Game.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[90m 52[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/objects/Enemy.spec.ts [2m([22m[2m45 tests[22m[2m)[22m[90m 172[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/DepthLayer.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/settings.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/scenes/Boot.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/EventBus.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/env.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/font.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m [34m|maze-runner|[39m tests/utils/MazeGenerator.spec.ts [2m([22m[2m80 tests[22m[2m)[22m[33m 31881[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mgrid dimensions[2m > [22mdifficulty 1 creates 21x17 grid [33m683[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mgrid dimensions[2m > [22mdifficulty 2 creates 23x19 grid [33m503[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mgrid dimensions[2m > [22mdifficulty 3 creates 25x21 grid [33m684[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mgrid dimensions[2m > [22mdifficulty 4 creates 27x23 grid [33m668[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mgrid dimensions[2m > [22mdifficulty 5 creates 29x25 grid [33m626[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mborder cells[2m > [22mtop row is all walls [33m363[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mborder cells[2m > [22mbottom row is all walls [33m331[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mborder cells[2m > [22mleft column is all walls [33m432[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mborder cells[2m > [22mright column is all walls [33m301[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22minterior cell types[2m > [22minterior has both WALL and PASSAGE cells [33m437[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mpassage connectivity[2m > [22mall passages are reachable via BFS from center [33m390[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22menemy enclosure[2m > [22menclosure ring has no adjacent dead ends [33m413[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22menemy enclosure[2m > [22menclosure ring is reachable from player spawn [33m506[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22menemy enclosure[2m > [22mhas no single-entry pocket violations around protected structures [33m344[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=1 seed=1 preserves structural invariants [33m405[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=1 seed=42 preserves structural invariants [33m410[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=1 seed=1337 preserves structural invariants [33m325[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=1 seed=2026 preserves structural invariants [33m301[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=2 seed=1 preserves structural invariants [33m396[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=2 seed=42 preserves structural invariants [33m413[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=2 seed=1337 preserves structural invariants [33m325[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=2 seed=2026 preserves structural invariants [33m304[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=3 seed=1 preserves structural invariants [33m397[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=3 seed=42 preserves structural invariants [33m410[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=3 seed=1337 preserves structural invariants [33m323[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=3 seed=2026 preserves structural invariants [33m302[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=5 seed=1 preserves structural invariants [33m399[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=5 seed=42 preserves structural invariants [33m411[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=5 seed=1337 preserves structural invariants [33m326[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=1 stage=5 seed=2026 preserves structural invariants [33m301[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=1 seed=1 preserves structural invariants [33m347[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=1 seed=17 preserves structural invariants [33m527[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=1 seed=42 preserves structural invariants [33m344[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=1 seed=1337 preserves structural invariants [33m467[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=1 seed=2026 preserves structural invariants [33m408[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=2 seed=1 preserves structural invariants [33m350[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=2 seed=17 preserves structural invariants [33m525[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=2 seed=42 preserves structural invariants [33m342[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=2 seed=1337 preserves structural invariants [33m466[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=2 seed=2026 preserves structural invariants [33m405[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=3 seed=1 preserves structural invariants [33m345[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=3 seed=17 preserves structural invariants [33m525[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=3 seed=42 preserves structural invariants [33m341[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=3 seed=1337 preserves structural invariants [33m460[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=3 seed=2026 preserves structural invariants [33m402[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=5 seed=1 preserves structural invariants [33m341[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=5 seed=17 preserves structural invariants [33m529[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=5 seed=42 preserves structural invariants [33m341[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=5 seed=1337 preserves structural invariants [33m461[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=2 stage=5 seed=2026 preserves structural invariants [33m403[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=1 seed=1 preserves structural invariants [33m425[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=1 seed=17 preserves structural invariants [33m523[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=1 seed=42 preserves structural invariants [33m703[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=1 seed=1337 preserves structural invariants [33m469[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=1 seed=2026 preserves structural invariants [33m371[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=2 seed=1 preserves structural invariants [33m424[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=2 seed=17 preserves structural invariants [33m520[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=2 seed=42 preserves structural invariants [33m714[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=2 seed=1337 preserves structural invariants [33m471[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=2 seed=2026 preserves structural invariants [33m373[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=3 seed=1 preserves structural invariants [33m424[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=3 seed=17 preserves structural invariants [33m523[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=3 seed=42 preserves structural invariants [33m700[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=3 seed=1337 preserves structural invariants [33m463[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=3 seed=2026 preserves structural invariants [33m369[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=5 seed=1 preserves structural invariants [33m426[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=5 seed=17 preserves structural invariants [33m519[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=5 seed=42 preserves structural invariants [33m700[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=5 seed=1337 preserves structural invariants [33m467[2mms[22m[39m
+   [33m[2m✓[22m[39m MazeGenerator[2m > [22mdeterministic topology invariants[2m > [22mdifficulty=3 stage=5 seed=2026 preserves structural invariants [33m370[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m      Tests [22m [1m[32m267 passed[39m[22m[90m (267)[39m
+[2m   Start at [22m 00:05:59
+[2m   Duration [22m 33.14s[2m (transform 1.82s, setup 501ms, collect 3.44s, tests 32.41s, environment 10.53s, prepare 2.59s)[22m
+
+
+
+
+ NX   Successfully ran target test for project maze-runner and 5 tasks it depends on
+
+Nx read the output from the cache instead of running the command for 5 out of 6 tasks.
+
+View logs and investigate cache misses at https://cloud.nx.app/runs/UQrjF6ATn7
+

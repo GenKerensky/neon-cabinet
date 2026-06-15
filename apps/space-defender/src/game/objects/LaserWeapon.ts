@@ -3,12 +3,13 @@ import type { GameObjects, Scene } from "phaser";
 import { Weapon } from "./Weapon";
 import { Ship } from "./Ship";
 import { Asteroid } from "./Asteroid";
+import { spawnMuzzleFlash } from "./VectorEffects";
 
 export class LaserWeapon implements Weapon {
   name = "LASER";
   cooldown = 500;
   unlockScore = 1000;
-  textureKey = "laser_icon";
+  textureKey = "laserIcon";
 
   private asteroidGroup: Physics.Arcade.Group | null = null;
   private beamGraphics: GameObjects.Graphics | null = null;
@@ -25,10 +26,13 @@ export class LaserWeapon implements Weapon {
     targetY: number,
     onHitAsteroid?: (x: number, y: number) => void,
   ): void {
-    const startX = ship.x;
-    const startY = ship.y;
+    const muzzle = ship.getMuzzleWorldPosition();
+    const startX = muzzle.x;
+    const startY = muzzle.y;
     const endX = targetX;
     const endY = targetY;
+
+    spawnMuzzleFlash(scene, startX, startY, ship.getAimAngle());
 
     // Draw laser beam
     this.drawBeam(scene, startX, startY, endX, endY);

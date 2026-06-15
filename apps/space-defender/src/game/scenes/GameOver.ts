@@ -1,10 +1,12 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { getFontFamily } from "../utils/font";
+import { SpaceDefenderAudio } from "../audio/SpaceDefenderAudio";
 
 export class GameOver extends Scene {
   private score = 0;
   private isNewHighScore = false;
+  private audio!: SpaceDefenderAudio;
 
   constructor() {
     super("GameOver");
@@ -34,6 +36,11 @@ export class GameOver extends Scene {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
     const font = getFontFamily(this);
+    this.audio = new SpaceDefenderAudio();
+    this.audio.playGameOver();
+    this.events.once("destroy", () => {
+      this.audio.destroy();
+    });
 
     const title = this.add.text(centerX, centerY - 100, "GAME OVER", {
       fontFamily: font,

@@ -57,7 +57,7 @@ export default defineConfig(() => ({
     name: "mars-lander",
     watch: false,
     globals: true,
-    environment: "jsdom",
+    environment: "happy-dom",
     include: ["{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     reporters: ["default"],
     coverage: {

@@ -2,12 +2,13 @@ import { Physics, Scene } from "phaser";
 import { Weapon } from "./Weapon";
 import { Ship } from "./Ship";
 import { Missile } from "./Missile";
+import { spawnMuzzleFlash } from "./VectorEffects";
 
 export class MissileWeapon implements Weapon {
   name = "MISSILE";
   cooldown = 800;
   unlockScore = 2000;
-  textureKey = "missile_icon";
+  textureKey = "missileIcon";
 
   private missiles: Physics.Arcade.Group | null = null;
   private onAutoDetonate?: (missile: Missile) => void;
@@ -23,7 +24,10 @@ export class MissileWeapon implements Weapon {
   fire(scene: Scene, ship: Ship, _targetX: number, _targetY: number): void {
     if (!this.missiles) return;
 
-    const missile = new Missile(scene, ship.x, ship.y, ship.getAimAngle());
+    const muzzle = ship.getMuzzleWorldPosition();
+    spawnMuzzleFlash(scene, muzzle.x, muzzle.y, ship.getAimAngle());
+
+    const missile = new Missile(scene, muzzle.x, muzzle.y, ship.getAimAngle());
     if (this.onAutoDetonate) {
       missile.setOnAutoDetonate(this.onAutoDetonate);
     }

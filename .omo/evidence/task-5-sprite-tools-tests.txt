@@ -1,0 +1,26 @@
+
+> nx run @neon-cabinet/sprite-tools:test
+
+> vitest run
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/var/home/falco/code/neon-cabinet/libs/sprite-tools[39m
+
+ [32m✓[39m [32m|@neon-cabinet/sprite-tools|[39m src/lib/svg-parser.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[90m 28[2mms[22m[39m
+ [32m✓[39m [32m|@neon-cabinet/sprite-tools|[39m src/lib/sprite-tools.spec.ts [2m([22m[2m1 test[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m [32m|@neon-cabinet/sprite-tools|[39m src/lib/path-tokenizer.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m [32m|@neon-cabinet/sprite-tools|[39m src/lib/vector-puppet.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m28 passed[39m[22m[90m (28)[39m
+[2m   Start at [22m 00:49:26
+[2m   Duration [22m 1.21s[2m (transform 170ms, setup 72ms, collect 157ms, tests 41ms, environment 1.61s, prepare 463ms)[22m
+
+
+
+
+ NX   Successfully ran target test for project @neon-cabinet/sprite-tools
+
+
+View logs and investigate cache misses at https://cloud.nx.app/runs/0aLW6ZwwUU
+

@@ -2,12 +2,13 @@ import { Physics, Scene } from "phaser";
 import { Weapon } from "./Weapon";
 import { Ship } from "./Ship";
 import { RayBeam } from "./RayBeam";
+import { spawnMuzzleFlash } from "./VectorEffects";
 
 export class RayGunWeapon implements Weapon {
   name = "RAY GUN";
   cooldown = 2000;
   unlockScore = 3000;
-  textureKey = "ray_gun_icon";
+  textureKey = "rayGunIcon";
 
   private bullets: Physics.Arcade.Group | null = null;
   private asteroidGroup: Physics.Arcade.Group | null = null;
@@ -29,7 +30,10 @@ export class RayGunWeapon implements Weapon {
   ): void {
     if (!this.bullets) return;
 
-    const beam = new RayBeam(scene, ship.x, ship.y, ship.getAimAngle());
+    const muzzle = ship.getMuzzleWorldPosition();
+    spawnMuzzleFlash(scene, muzzle.x, muzzle.y, ship.getAimAngle());
+
+    const beam = new RayBeam(scene, muzzle.x, muzzle.y, ship.getAimAngle());
     if (this.asteroidGroup) {
       beam.setAsteroidGroup(this.asteroidGroup);
     }

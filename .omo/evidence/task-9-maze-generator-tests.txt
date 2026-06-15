@@ -1,0 +1,52 @@
+
+ RUN  v2.1.9 /var/home/falco/code/neon-cabinet/apps/maze-runner
+
+ ✓ |maze-runner| tests/utils/MazeGenerator.spec.ts (80 tests) 23610ms
+   ✓ MazeGenerator > grid dimensions > difficulty 1 creates 21x17 grid 371ms
+   ✓ MazeGenerator > grid dimensions > difficulty 2 creates 23x19 grid 319ms
+   ✓ MazeGenerator > grid dimensions > difficulty 3 creates 25x21 grid 367ms
+   ✓ MazeGenerator > grid dimensions > difficulty 4 creates 27x23 grid 426ms
+   ✓ MazeGenerator > grid dimensions > difficulty 5 creates 29x25 grid 555ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=1 seed=1 preserves structural invariants 308ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=1 seed=17 preserves structural invariants 335ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=1 seed=42 preserves structural invariants 346ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=1 seed=2026 preserves structural invariants 329ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=2 seed=1 preserves structural invariants 303ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=2 seed=17 preserves structural invariants 330ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=2 seed=42 preserves structural invariants 329ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=2 seed=2026 preserves structural invariants 324ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=3 seed=1 preserves structural invariants 307ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=3 seed=17 preserves structural invariants 341ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=3 seed=42 preserves structural invariants 339ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=3 seed=1337 preserves structural invariants 424ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=3 seed=2026 preserves structural invariants 506ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=5 seed=1 preserves structural invariants 332ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=5 seed=17 preserves structural invariants 336ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=5 seed=42 preserves structural invariants 317ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=2 stage=5 seed=2026 preserves structural invariants 320ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=1 seed=1 preserves structural invariants 401ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=1 seed=17 preserves structural invariants 389ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=1 seed=42 preserves structural invariants 363ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=1 seed=1337 preserves structural invariants 372ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=1 seed=2026 preserves structural invariants 365ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=2 seed=1 preserves structural invariants 401ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=2 seed=17 preserves structural invariants 398ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=2 seed=42 preserves structural invariants 370ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=2 seed=1337 preserves structural invariants 370ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=2 seed=2026 preserves structural invariants 371ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=3 seed=1 preserves structural invariants 399ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=3 seed=17 preserves structural invariants 393ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=3 seed=42 preserves structural invariants 369ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=3 seed=1337 preserves structural invariants 367ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=3 seed=2026 preserves structural invariants 361ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=5 seed=1 preserves structural invariants 406ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=5 seed=17 preserves structural invariants 395ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=5 seed=42 preserves structural invariants 368ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=5 seed=1337 preserves structural invariants 371ms
+   ✓ MazeGenerator > deterministic topology invariants > difficulty=3 stage=5 seed=2026 preserves structural invariants 362ms
+
+ Test Files  1 passed (1)
+      Tests  80 passed (80)
+   Start at  00:58:45
+   Duration  24.42s (transform 78ms, setup 15ms, collect 66ms, tests 23.61s, environment 285ms, prepare 108ms)
+

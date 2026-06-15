@@ -1,0 +1,61 @@
+
+ NX   Running target build for project maze-runner and 5 tasks it depends on:
+
+
+
+> nx run phaser-test-harness:build  [local cache]
+
+
+> nx run typed-event-emitter:build  [local cache]
+
+
+> nx run @neon-cabinet/sprite-tools:build  [local cache]
+
+
+> nx run browser-test-runner:build  [local cache]
+
+
+> nx run phaser-debug-bridge:build  [local cache]
+
+
+> nx run maze-runner:build
+
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 40 modules transformed.
+rendering chunks...
+
+[vite:dts] Start generate declaration files...
+computing gzip size...
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/start.d.ts
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/position-player.d.ts
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/spawn-enemy-at.d.ts
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/clear-collectibles.d.ts
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/eat-power-pellet.d.ts
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/set-enemy-state.d.ts
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/set-enemy-at-grid.d.ts
+[2mdist/[22m[36mindex.js  [39m[1m[2m80.94 kB[22m[1m[22m[2m │ gzip: 22.78 kB[22m
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/start.d.ts.map
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/position-player.d.ts.map
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/spawn-enemy-at.d.ts.map
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/clear-collectibles.d.ts.map
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/eat-power-pellet.d.ts.map
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/set-enemy-state.d.ts.map
+[vite:dts] Outside emitted: /var/home/falco/code/neon-cabinet/apps/maze-runner/support/helpers/set-enemy-at-grid.d.ts.map
+[vite:dts] Start rollup declaration files...
+Analysis will use the bundled TypeScript version 5.8.2
+*** The target project appears to use TypeScript 6.0.3 which is newer than the bundled compiler engine; consider upgrading API Extractor.
+[vite:dts] Declaration files built in 2404ms.
+
+[32m✓ built in 3.20s[39m
+
+
+
+ NX   Successfully ran target build for project maze-runner and 5 tasks it depends on
+
+Nx read the output from the cache instead of running the command for 5 out of 6 tasks.
+
+View logs and investigate cache misses at https://cloud.nx.app/runs/wLQgfwIopA
+

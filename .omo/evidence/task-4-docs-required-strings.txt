@@ -1,0 +1,9 @@
+| `data-direction-rotation` | Direction-based layer rotation | `data-direction-rotation="true"` |
+## Directional Rotation (`data-direction-rotation`)
+- **Boolean**: `data-direction-rotation="true"`, `data-direction-rotation="1"`, or just `data-direction-rotation`. These use default angles in degrees: `RIGHT: 0`, `DOWN: 90`, `LEFT: 180`, `UP: -90`.
+- **JSON Map**: `data-direction-rotation='{"RIGHT": 45, "DOWN": 135}'`. You can provide custom angles in degrees. Partial maps merge with the defaults.
+- Transitions use the shortest angular path to prevent 360 degree flips.
+Layers using `data-anim-chomp` that are in a self-or-ancestor `data-direction-rotation` context keep a fixed base RIGHT-facing gap (0°). This prevents the mouth from rotating twice when the parent group rotates. Layers outside such a context preserve the legacy behavior where the gap center follows the `currentDirection`.
+<g data-direction-rotation="true">
+<circle cx="10" cy="10" r="5" data-direction-rotation='{"UP": -45, "LEFT": 225}' />
+player.setDirection('LEFT');

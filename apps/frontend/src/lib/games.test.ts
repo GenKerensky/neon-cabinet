@@ -50,6 +50,12 @@ describe("games", () => {
       expect(marsLander?.name).toBe("Mars Lander");
     });
 
+    it("should have maze-runner game", () => {
+      const mazeRunner = games.find((game) => game.id === "maze-runner");
+      expect(mazeRunner).toBeDefined();
+      expect(mazeRunner?.name).toBe("Maze Runner");
+    });
+
     it("should have comingSoon property for future games", () => {
       const comingSoonGames = games.filter((game) => game.comingSoon === true);
       expect(comingSoonGames.length).toBeGreaterThan(0);

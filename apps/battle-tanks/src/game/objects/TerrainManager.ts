@@ -1,6 +1,6 @@
 import { Vector3D } from "../engine/Vector3D";
 import { WireframeRenderer } from "../engine/WireframeRenderer";
-import { Obstacle, ObstacleType } from "./Obstacle";
+import { Obstacle, ObstacleDimensions, ObstacleType } from "./Obstacle";
 
 export interface TerrainConfig {
   // Width/depth range (horizontal footprint)
@@ -54,7 +54,7 @@ export class TerrainManager {
     ];
 
     for (let i = 0; i < count; i++) {
-      const obstacle = this.trySpawnObstacle(occupiedPositions);
+      const obstacle = this.trySpawnObstacle(playerPos, occupiedPositions);
       if (obstacle) {
         this.obstacles.push(obstacle);
         occupiedPositions.push(obstacle.position);
@@ -62,7 +62,10 @@ export class TerrainManager {
     }
   }
 
-  private trySpawnObstacle(occupiedPositions: Vector3D[]): Obstacle | null {
+  private trySpawnObstacle(
+    playerPos: Vector3D,
+    occupiedPositions: Vector3D[],
+  ): Obstacle | null {
     const maxAttempts = 50;
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -72,8 +75,8 @@ export class TerrainManager {
         this.config.minDistance +
         Math.random() * (this.config.maxDistance - this.config.minDistance);
 
-      const x = Math.cos(angle) * distance;
-      const z = Math.sin(angle) * distance;
+      const x = playerPos.x + Math.cos(angle) * distance;
+      const z = playerPos.z + Math.sin(angle) * distance;
       const position = new Vector3D(x, 0, z);
 
       // Check minimum spacing from all occupied positions
@@ -151,12 +154,7 @@ export class TerrainManager {
    * Check if a projectile path hits any obstacle
    */
   checkProjectileCollision(start: Vector3D, end: Vector3D): Obstacle | null {
-    for (const obstacle of this.obstacles) {
-      if (obstacle.checkLineIntersection(start, end)) {
-        return obstacle;
-      }
-    }
-    return null;
+    return this.raycast(start, end)?.obstacle ?? null;
   }
 
   /**
@@ -164,8 +162,7 @@ export class TerrainManager {
    */
   checkPointCollision(point: Vector3D, radius: number): Obstacle | null {
     for (const obstacle of this.obstacles) {
-      const dist = obstacle.distanceTo(point);
-      if (dist < obstacle.collisionRadius + radius) {
+      if (obstacle.checkCollision(point, radius).collides) {
         return obstacle;
       }
     }
@@ -205,12 +202,33 @@ export class TerrainManager {
    * Check if there's a clear line of sight between two points
    */
   hasLineOfSight(from: Vector3D, to: Vector3D): boolean {
+    return this.raycast(from, to) === null;
+  }
+
+  raycast(
+    start: Vector3D,
+    end: Vector3D,
+    radius = 0,
+  ): { obstacle: Obstacle; point: Vector3D; distance: number } | null {
+    let nearest: {
+      obstacle: Obstacle;
+      point: Vector3D;
+      distance: number;
+    } | null = null;
+
     for (const obstacle of this.obstacles) {
-      if (obstacle.checkLineIntersection(from, to)) {
-        return false;
+      const hit = obstacle.raycast(start, end, radius);
+      if (!hit) continue;
+      if (!nearest || hit.distance < nearest.distance) {
+        nearest = {
+          obstacle,
+          point: hit.point,
+          distance: hit.distance,
+        };
       }
     }
-    return true;
+
+    return nearest;
   }
 
   /**
@@ -257,5 +275,18 @@ export class TerrainManager {
 
   clear(): void {
     this.obstacles = [];
+  }
+
+  setObstaclesForTest(
+    obstacles: Array<{
+      position: Vector3D;
+      type: ObstacleType;
+      dimensions: ObstacleDimensions;
+    }>,
+  ): void {
+    this.obstacles = obstacles.map(
+      ({ position, type, dimensions }) =>
+        new Obstacle(position, type, dimensions),
+    );
   }
 }

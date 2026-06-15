@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 15">
+  <polygon id="ray-glow" points="1,7.5 10,2 28,7.5 10,13" fill="#00aa44" opacity="0.35" data-anim-pulse='{"frequency":4,"amplitude":0.3,"speed":1}'/>
+  <polyline id="ray-arc-top" points="2,7.5 11,3 26,7.5" fill="none" stroke="#44ff44" stroke-width="2"/>
+  <polyline id="ray-arc-bottom" points="2,7.5 11,12 26,7.5" fill="none" stroke="#88ff88" stroke-width="2"/>
+  <line id="ray-core" x1="2" y1="7.5" x2="29" y2="7.5" stroke="#ffffff" stroke-width="1"/>
+</svg>

@@ -6,6 +6,13 @@ export interface ScreenPoint {
   z: number; // Depth for sorting/clipping
 }
 
+export interface FrustumBounds {
+  minX: number;
+  maxX: number;
+  minY: number;
+  maxY: number;
+}
+
 /**
  * First-person camera with perspective projection
  */
@@ -36,16 +43,11 @@ export class Camera3D {
     // Transform to camera space (translate then rotate)
     const relative = point.subtract(this.position).rotateY(-this.rotation);
 
-    // Behind camera or too far? Don't render
     if (relative.z <= this.nearClip || relative.z > this.farClip) {
       return null;
     }
 
-    // Perspective projection
-    const screenX = (relative.x / relative.z) * this.focalLength + screenW / 2;
-    const screenY = screenH / 2 - (relative.y / relative.z) * this.focalLength;
-
-    return { x: screenX, y: screenY, z: relative.z };
+    return this.projectCameraPoint(relative, screenW, screenH);
   }
 
   /**
@@ -53,6 +55,44 @@ export class Camera3D {
    */
   worldToCameraSpace(point: Vector3D): Vector3D {
     return point.subtract(this.position).rotateY(-this.rotation);
+  }
+
+  getFrustumBounds(screenW: number, screenH: number, z: number): FrustumBounds {
+    const halfWidth = (screenW / 2 / this.focalLength) * z;
+    const halfHeight = (screenH / 2 / this.focalLength) * z;
+    return {
+      minX: -halfWidth,
+      maxX: halfWidth,
+      minY: -halfHeight,
+      maxY: halfHeight,
+    };
+  }
+
+  isCameraPointInFrustum(
+    point: Vector3D,
+    screenW: number,
+    screenH: number,
+  ): boolean {
+    if (point.z <= this.nearClip || point.z > this.farClip) return false;
+    const bounds = this.getFrustumBounds(screenW, screenH, point.z);
+    return (
+      point.x >= bounds.minX &&
+      point.x <= bounds.maxX &&
+      point.y >= bounds.minY &&
+      point.y <= bounds.maxY
+    );
+  }
+
+  projectCameraPoint(
+    point: Vector3D,
+    screenW: number,
+    screenH: number,
+  ): ScreenPoint {
+    return {
+      x: (point.x / point.z) * this.focalLength + screenW / 2,
+      y: screenH / 2 - (point.y / point.z) * this.focalLength,
+      z: point.z,
+    };
   }
 
   /**

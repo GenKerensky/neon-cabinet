@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { VectorMode } from "@neon-cabinet/shaders";
+import { BattleAudio } from "../audio/BattleAudio";
 
 export class Boot extends Scene {
   constructor() {
@@ -9,6 +10,7 @@ export class Boot extends Scene {
 
   preload(): void {
     this.createParticleTexture();
+    new BattleAudio(this).preload();
   }
 
   private createParticleTexture(): void {

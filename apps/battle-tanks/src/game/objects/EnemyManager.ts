@@ -6,6 +6,12 @@ import { EnemyProjectile } from "./EnemyProjectile";
 
 export type Enemy = Turret | EnemyTank;
 
+export interface EnemyFireEvent {
+  enemy: Enemy;
+  position: Vector3D;
+  direction: Vector3D;
+}
+
 export interface DifficultyConfig {
   fireRate: number;
   tankPatrolSpeed: number;
@@ -73,7 +79,11 @@ export class EnemyManager {
     delta: number,
     playerPos?: Vector3D,
     obstacleInfo?: ObstacleInfo,
-  ): void {
+  ): EnemyFireEvent[] {
+    const fireEvents: EnemyFireEvent[] = [];
+    const spawnedProjectiles: EnemyProjectile[] = [];
+    const existingProjectileCount = this.projectiles.length;
+
     // Update enemies and collect fire data
     for (const enemy of this.enemies) {
       let fireData: {
@@ -100,7 +110,12 @@ export class EnemyManager {
           fireData.direction,
           fireData.speed,
         );
-        this.projectiles.push(projectile);
+        spawnedProjectiles.push(projectile);
+        fireEvents.push({
+          enemy,
+          position: fireData.position.clone(),
+          direction: fireData.direction.clone(),
+        });
       }
     }
 
@@ -108,12 +123,17 @@ export class EnemyManager {
     this.enemies = this.enemies.filter((e) => e.isAlive());
 
     // Update projectiles
-    for (const projectile of this.projectiles) {
+    for (let i = 0; i < existingProjectileCount; i++) {
+      const projectile = this.projectiles[i];
       projectile.update(delta);
     }
 
+    this.projectiles.push(...spawnedProjectiles);
+
     // Remove dead projectiles
     this.projectiles = this.projectiles.filter((p) => p.isAlive());
+
+    return fireEvents;
   }
 
   /**
@@ -132,15 +152,15 @@ export class EnemyManager {
   /**
    * Get all enemies
    */
-  getEnemies(): Enemy[] {
-    return this.enemies;
+  getEnemies(): readonly Enemy[] {
+    return this.enemies.slice();
   }
 
   /**
    * Get all enemy projectiles
    */
-  getProjectiles(): EnemyProjectile[] {
-    return this.projectiles;
+  getProjectiles(): readonly EnemyProjectile[] {
+    return this.projectiles.slice();
   }
 
   /**
