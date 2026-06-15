@@ -1,5 +1,6 @@
 import type { GameObjects, Scene } from "phaser";
 import type { RadarDot } from "../hud/RadarProjection";
+import type { FlightPoint } from "./RailPlayer";
 
 const FRAME_BLUE = 0x23d9ff;
 const PANEL_BLUE = 0x0a5d8f;
@@ -16,14 +17,19 @@ export class CockpitHud {
     this.graphics.setDepth(1000);
   }
 
-  render(width: number, height: number, dots: RadarDot[]): void {
+  render(
+    width: number,
+    height: number,
+    dots: RadarDot[],
+    aimOffset: FlightPoint = { x: 0, y: 0 },
+  ): void {
     this.graphics.clear();
 
     this.drawCanopyFrame(width, height);
     this.drawSidePanels(width, height);
     this.drawNose(width, height);
     this.drawLaserCannons(width, height);
-    this.drawReticle(width, height);
+    this.drawReticle(width, height, aimOffset);
     this.drawRadar(width, height, dots);
   }
 
@@ -192,10 +198,23 @@ export class CockpitHud {
     this.graphics.strokePath();
   }
 
-  private drawReticle(width: number, height: number): void {
-    const centerX = width / 2;
-    const centerY = height * 0.48;
+  private drawReticle(
+    width: number,
+    height: number,
+    aimOffset: FlightPoint,
+  ): void {
+    const boxWidth = width * 0.46;
+    const boxHeight = height * 0.34;
+    const boxX = (width - boxWidth) / 2;
+    const boxY = height * 0.3;
+    const normalizedX = clamp(aimOffset.x / 310, -1, 1);
+    const normalizedY = clamp(aimOffset.y / 190, -1, 1);
+    const centerX = width / 2 + normalizedX * boxWidth * 0.5;
+    const centerY = height * 0.48 + normalizedY * boxHeight * 0.5;
     const radius = Math.min(width, height) * 0.045;
+
+    this.graphics.lineStyle(1, PANEL_BLUE, 0.45);
+    this.graphics.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
     this.graphics.lineStyle(2, GLASS_CYAN, 0.82);
     this.graphics.strokeCircle(centerX, centerY, radius);
@@ -274,4 +293,8 @@ export class CockpitHud {
   private colorToNumber(color: string): number {
     return Number.parseInt(color.replace("#", ""), 16);
   }
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }

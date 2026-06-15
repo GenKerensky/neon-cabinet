@@ -74,7 +74,7 @@ export class Game extends Scene {
       })),
     );
 
-    this.cockpitHud.render(width, height, dots);
+    this.cockpitHud.render(width, height, dots, this.player.position);
   }
 
   private fireLaserAtPlayerTarget(): void {

@@ -6,6 +6,7 @@ const nextConfig = {
     "space-defender",
     "mars-lander",
     "maze-runner",
+    "starfighter-assault",
   ],
   turbopack: {
     rules: {
