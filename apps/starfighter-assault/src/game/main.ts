@@ -5,6 +5,7 @@ import { Boot } from "./scenes/Boot";
 import { Title } from "./scenes/Title";
 import { OpeningCrawl } from "./scenes/OpeningCrawl";
 import { Game } from "./scenes/Game";
+import { UpgradeShop } from "./scenes/UpgradeShop";
 import { Pause } from "./scenes/Pause";
 import { GameOver } from "./scenes/GameOver";
 
@@ -32,6 +33,6 @@ export function initializeGame(): Phaser.Game {
         }
       },
     },
-    scene: [Boot, Title, OpeningCrawl, Game, Pause, GameOver],
+    scene: [Boot, Title, OpeningCrawl, Game, UpgradeShop, Pause, GameOver],
   });
 }

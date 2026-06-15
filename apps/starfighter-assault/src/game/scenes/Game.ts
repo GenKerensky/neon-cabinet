@@ -4,6 +4,12 @@ import { projectThreatsToRadar } from "../hud/RadarProjection";
 import { CockpitHud } from "../objects/CockpitHud";
 import { RailPlayer } from "../objects/RailPlayer";
 import {
+  createThreatWave,
+  getAliveThreats,
+  type Threat,
+} from "../objects/Threats";
+import { generateSortie } from "../rail/RouteGenerator";
+import {
   createWeaponsState,
   fireLaser,
   fireTorpedo,
@@ -14,6 +20,7 @@ export class Game extends Scene {
   private cockpitHud!: CockpitHud;
   private player!: RailPlayer;
   private weapons!: WeaponsState;
+  private threats: Threat[] = [];
 
   constructor() {
     super("Game");
@@ -25,6 +32,8 @@ export class Game extends Scene {
 
     this.player = new RailPlayer({ width: 620, height: 380 });
     this.weapons = createWeaponsState();
+    const sortie = generateSortie({ seed: Date.now(), difficulty: 1 });
+    this.threats = createThreatWave(sortie.segments[0].allowedThreats, 1);
 
     this.cockpitHud = new CockpitHud(this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -55,10 +64,15 @@ export class Game extends Scene {
     this.player.update(delta / 1000);
 
     const { width, height } = this.cameras.main;
-    const dots = projectThreatsToRadar([
-      { id: "alpha", x: -280, y: 40, z: 720, threat: 0.8 },
-      { id: "beta", x: 340, y: -10, z: 1_240, threat: 0.45 },
-    ]);
+    const dots = projectThreatsToRadar(
+      getAliveThreats(this.threats).map(({ id, x, y, z, threat }) => ({
+        id,
+        x,
+        y,
+        z,
+        threat,
+      })),
+    );
 
     this.cockpitHud.render(width, height, dots);
   }
