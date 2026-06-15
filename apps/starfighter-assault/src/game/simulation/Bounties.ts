@@ -41,6 +41,10 @@ export function createBountyState(): BountyState {
   };
 }
 
+export function getBaseBountyValue(targetKind: BountyTargetKind): number {
+  return BOUNTY_REWARDS[targetKind];
+}
+
 export function awardBounty(
   state: BountyState,
   targetKind: BountyTargetKind,

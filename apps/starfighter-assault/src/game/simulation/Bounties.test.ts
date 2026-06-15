@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { awardBounty, createBountyState } from "./Bounties";
+import { awardBounty, createBountyState, getBaseBountyValue } from "./Bounties";
 
 describe("bounties", () => {
   it("awards every target kind with capital subsystems above fighters", () => {
@@ -19,6 +19,12 @@ describe("bounties", () => {
     expect(shield.awarded).toBeGreaterThan(fighter.awarded);
     expect(subsystem.awarded).toBeGreaterThan(fighter.awarded);
     expect(cache.awarded).toBeGreaterThan(fighter.awarded);
+  });
+
+  it("exposes base bounty values without streak multipliers", () => {
+    expect(getBaseBountyValue("fighter")).toBe(20);
+    expect(getBaseBountyValue("elite-fighter")).toBe(45);
+    expect(getBaseBountyValue("turret")).toBe(40);
   });
 
   it("increases streak multiplier for fast awards and caps at 1.5", () => {
