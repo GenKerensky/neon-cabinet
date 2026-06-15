@@ -79,7 +79,7 @@ describe("upgrades", () => {
     expect(state.radarClarity).toBe(1.25);
   });
 
-  it("makes extra life rare and expensive", () => {
+  it("makes extra life cost at least 500 bounties", () => {
     const extraLife = getAvailableUpgrades().find(
       (upgrade) => upgrade.id === "extra-life",
     );

@@ -59,7 +59,10 @@ export function awardBounty(
     state: {
       total: state.total + awarded,
       streakMultiplier,
-      lastAwardAt: awardedAt,
+      lastAwardAt:
+        state.lastAwardAt === null
+          ? awardedAt
+          : Math.max(state.lastAwardAt, awardedAt),
     },
     awarded,
     multiplier: streakMultiplier,

@@ -46,4 +46,15 @@ describe("bounties", () => {
     expect(first.state.streakMultiplier).toBe(1);
     expect(second.state.streakMultiplier).toBe(1);
   });
+
+  it("keeps award timing monotonic after stale timestamps", () => {
+    const first = awardBounty(createBountyState(), "fighter", 10_000);
+    const stale = awardBounty(first.state, "fighter", 1_000);
+    const laterStale = awardBounty(stale.state, "fighter", 3_000);
+
+    expect(stale.state.lastAwardAt).toBe(10_000);
+    expect(stale.state.streakMultiplier).toBe(1);
+    expect(laterStale.state.lastAwardAt).toBe(10_000);
+    expect(laterStale.state.streakMultiplier).toBe(1);
+  });
 });
