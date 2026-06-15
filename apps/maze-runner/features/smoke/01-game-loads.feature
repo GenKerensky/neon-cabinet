@@ -8,7 +8,7 @@ Feature: Game Loads
   Scenario: Title screen is displayed
     Then the scene should be "Title"
 
-  Scenario: Debug overlay is available
+  Scenario: Debug harness state is available
     Then the state should contain "scene"
 
   Scenario: Start transitions to Game scene

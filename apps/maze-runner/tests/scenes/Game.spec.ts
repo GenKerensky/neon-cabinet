@@ -134,6 +134,7 @@ vi.mock("../../src/game/objects/Collectible", () => ({
     DOT: "dot",
     POWER_PELLET: "power_pellet",
     BONUS_ITEM: "bonus_item",
+    HACK_PICKUP: "hack_pickup",
   },
   CollectibleManager: class {
     createAll = vi.fn(() => []);
@@ -151,6 +152,10 @@ vi.mock("../../src/game/utils/sceneTransitions", () => mockSceneTransitions);
 import { Game } from "../../src/game/scenes/Game";
 import { CollectibleType } from "../../src/game/objects/Collectible";
 import { EnemyState } from "../../src/game/objects/Enemy";
+import { HackPickupId } from "../../src/game/config/hackDefinitions";
+import { Direction } from "../../src/game/utils/DirectionUtils";
+import { CellType, type MazeCell } from "../../src/game/utils/MazeGenerator";
+import { MAZE_RUNNER_ACHIEVEMENTS_KEY } from "../../src/game/utils/hackProgression";
 
 type MockEnemy = {
   getState: ReturnType<typeof vi.fn>;
@@ -178,6 +183,15 @@ function createMockEnemy(state: EnemyState): MockEnemy {
     x: 15,
     y: 15,
   };
+}
+
+function gridFromPattern(pattern: string[]): MazeCell[][] {
+  return pattern.map((row) =>
+    [...row].map((ch) => ({
+      type: ch === "." ? CellType.PASSAGE : CellType.WALL,
+      visited: false,
+    })),
+  );
 }
 
 function createGameHarness() {
@@ -281,6 +295,10 @@ describe("Game", () => {
         fillPath: vi.fn(),
         fillStyle: vi.fn(),
         fillCircle: vi.fn(),
+        lineStyle: vi.fn(),
+        fillRoundedRect: vi.fn(),
+        strokeRoundedRect: vi.fn(),
+        setDepth: vi.fn(),
         destroy: vi.fn(),
       })),
       rectangle: vi.fn(() => ({ setDepth: vi.fn() })),
@@ -288,9 +306,11 @@ describe("Game", () => {
         const textObj: {
           setOrigin: ReturnType<typeof vi.fn>;
           setText: ReturnType<typeof vi.fn>;
+          setDepth: ReturnType<typeof vi.fn>;
         } = {
           setOrigin: vi.fn(() => textObj),
           setText: vi.fn(),
+          setDepth: vi.fn(() => textObj),
         };
         return textObj;
       }),
@@ -336,6 +356,14 @@ describe("Game", () => {
     game.create();
 
     expect(mockSceneTransitions.fadeInScene).toHaveBeenCalledWith(game);
+    expect((game as any).input.keyboard.on).toHaveBeenCalledWith(
+      "keydown-Q",
+      expect.any(Function),
+    );
+    expect((game as any).input.keyboard.on).toHaveBeenCalledWith(
+      "keydown-E",
+      expect.any(Function),
+    );
     handlers["keydown-ESC"]();
     expect(mockSceneTransitions.launchSceneWithFade).toHaveBeenCalledWith(
       game,
@@ -356,6 +384,10 @@ describe("Game", () => {
       fillPath: vi.fn(),
       fillStyle: vi.fn(),
       fillCircle: vi.fn(),
+      lineStyle: vi.fn(),
+      fillRoundedRect: vi.fn(),
+      strokeRoundedRect: vi.fn(),
+      setDepth: vi.fn(),
       destroy: vi.fn(),
     };
 
@@ -374,6 +406,10 @@ describe("Game", () => {
         const icon = {
           fillStyle: vi.fn(),
           fillCircle: vi.fn(),
+          lineStyle: vi.fn(),
+          fillRoundedRect: vi.fn(),
+          strokeRoundedRect: vi.fn(),
+          setDepth: vi.fn(),
           beginPath: vi.fn(),
           moveTo: vi.fn(),
           lineTo: vi.fn(),
@@ -390,9 +426,11 @@ describe("Game", () => {
         const textObj: {
           setOrigin: ReturnType<typeof vi.fn>;
           setText: ReturnType<typeof vi.fn>;
+          setDepth: ReturnType<typeof vi.fn>;
         } = {
           setOrigin: vi.fn(() => textObj),
           setText: vi.fn(),
+          setDepth: vi.fn(() => textObj),
         };
         return textObj;
       }),
@@ -415,14 +453,23 @@ describe("Game", () => {
     expect(textCalls).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ x: 400, y: 20, value: "SCORE: 0" }),
-        expect.objectContaining({ x: 780, y: 20, value: "LEVEL: 1" }),
+        expect.objectContaining({ x: 728, y: 42, value: "LEVEL: 1" }),
         expect.objectContaining({ x: 400, y: 576, value: "HIGH: 000000" }),
       ]),
     );
 
-    expect(iconGraphics).toHaveLength(3);
-    for (const [index, icon] of iconGraphics.entries()) {
-      expect(icon.fillCircle).toHaveBeenCalledWith(24 + index * 28, 30, 8);
+    const lifeIcons = iconGraphics.filter(
+      (icon) => icon.fillCircle.mock.calls.length > 0,
+    );
+    const hackSlotBackgrounds = iconGraphics.filter(
+      (icon) => icon.fillRoundedRect.mock.calls.length > 0,
+    );
+    expect(lifeIcons).toHaveLength(3);
+    expect(hackSlotBackgrounds).toHaveLength(2);
+    for (const [index, icon] of lifeIcons.entries()) {
+      expect(icon.x).toBe(72 + index * 24);
+      expect(icon.y).toBe(70);
+      expect(icon.fillCircle).toHaveBeenCalledWith(0, 0, 11);
     }
   });
 
@@ -522,6 +569,39 @@ describe("Game", () => {
     expect(playSfx).toHaveBeenCalledWith("maze_runner_ghost_vulnerable", {
       volume: 0.45,
     });
+  });
+
+  it("leaves a hack pickup in the maze and shows FULL when its slot is occupied", () => {
+    const game = new Game();
+    const collectible = {
+      x: 50,
+      y: 60,
+      getType: vi.fn(() => CollectibleType.HACK_PICKUP),
+      getHackId: vi.fn(() => HackPickupId.SHIELD_RING),
+    };
+    (game as any).hackSystem = {
+      collectHack: vi.fn(() => ({
+        heldHack: HackPickupId.PHASE_CHIP,
+        slot: "def",
+        collected: false,
+        full: true,
+      })),
+    };
+    (game as any).collectibleManager = {
+      removeCollectible: vi.fn(),
+      shouldSpawnBonus: vi.fn(() => false),
+      isLevelComplete: vi.fn(() => false),
+    };
+    (game as any).refreshHackHud = vi.fn();
+    (game as any).showHackEffect = vi.fn();
+    (game as any).playSfx = vi.fn();
+
+    game.onCollectibleHit({}, collectible);
+
+    expect(
+      (game as any).collectibleManager.removeCollectible,
+    ).not.toHaveBeenCalled();
+    expect((game as any).showHackEffect).toHaveBeenCalledWith("FULL", 50, 60);
   });
 
   it("plays movement sound from player motion during update", () => {
@@ -678,6 +758,76 @@ describe("Game", () => {
       "maze_runner_ghost_eaten",
       { volume: 0.6 },
     );
+  });
+
+  it("defeats the first living ghost hit by Null Lance as though eaten", () => {
+    const game = new Game();
+    const target = createMockEnemy(EnemyState.CHASE);
+    target.x = 130;
+    target.y = 100;
+    (game as any).player = {
+      x: 100,
+      y: 100,
+      getCurrentDirection: vi.fn(() => Direction.RIGHT),
+    };
+    (game as any).enemies = [target];
+    (game as any).grid = gridFromPattern(["WWWWWWW", "W.....W", "WWWWWWW"]);
+    (game as any).gridWidth = 7;
+    (game as any).gridHeight = 3;
+    (game as any).tileSize = 30;
+    (game as any).offsetX = -5;
+    (game as any).offsetY = 55;
+    (game as any).addScore = vi.fn();
+    (game as any).showFloatingScore = vi.fn();
+    (game as any).playSfx = vi.fn();
+
+    expect((game as any).fireNullLance()).toBe(true);
+    expect((game as any).addScore).toHaveBeenCalledWith(200);
+    expect((game as any).showFloatingScore).toHaveBeenCalledWith(130, 100, 200);
+    expect((game as any).playSfx).toHaveBeenCalledWith(
+      "maze_runner_ghost_eaten",
+      { volume: 0.6 },
+    );
+    expect(target.setEnemyState).toHaveBeenCalledWith(EnemyState.DEAD);
+  });
+
+  it("does not count Null Lance defeats toward the power-window ghost streak", () => {
+    const stored: Record<string, string> = {
+      [MAZE_RUNNER_ACHIEVEMENTS_KEY]: "[]",
+    };
+    const storage = {
+      getItem: vi.fn((key: string) => stored[key] ?? null),
+      setItem: vi.fn((key: string, value: string) => {
+        stored[key] = value;
+      }),
+    };
+    vi.stubGlobal("localStorage", storage as unknown as Storage);
+    const game = new Game();
+    const target = createMockEnemy(EnemyState.CHASE);
+    target.x = 130;
+    target.y = 100;
+    (game as any).ghostsEatenInPowerWindow = 2;
+    (game as any).player = {
+      x: 100,
+      y: 100,
+      getCurrentDirection: vi.fn(() => Direction.RIGHT),
+    };
+    (game as any).enemies = [target];
+    (game as any).grid = gridFromPattern(["WWWWWWW", "W.....W", "WWWWWWW"]);
+    (game as any).gridWidth = 7;
+    (game as any).gridHeight = 3;
+    (game as any).tileSize = 30;
+    (game as any).offsetX = -5;
+    (game as any).offsetY = 55;
+    (game as any).addScore = vi.fn();
+    (game as any).showFloatingScore = vi.fn();
+    (game as any).playSfx = vi.fn();
+
+    expect((game as any).fireNullLance()).toBe(true);
+
+    expect((game as any).ghostsEatenInPowerWindow).toBe(2);
+    expect(stored[MAZE_RUNNER_ACHIEVEMENTS_KEY]).toBe("[]");
+    vi.unstubAllGlobals();
   });
 
   it("plays player death sound when a life is lost", () => {

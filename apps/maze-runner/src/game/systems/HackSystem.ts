@@ -1,6 +1,7 @@
 import {
   getHackPickupDefinition,
   HackPickupId,
+  type HackSlot,
 } from "../config/hackDefinitions";
 import type {
   HackAchievementId,
@@ -43,6 +44,7 @@ export interface HackSystemContext {
   addScore(points: number): void;
   setGateHackActive(active: boolean): void;
   showEffect(name: string, x: number, y: number): void;
+  fireNullLance(): boolean;
   completeAchievement(id: HackAchievementId): void;
 }
 
@@ -52,8 +54,9 @@ export interface HackSystemOptions {
 
 export interface HackCollectResult {
   heldHack: HackPickupId;
-  replaced: boolean;
-  replacementBonus: number;
+  slot: HackSlot;
+  collected: boolean;
+  full: boolean;
 }
 
 export interface ActiveHackEffect {
@@ -69,7 +72,10 @@ const NON_LIVING_STATES = new Set(["dead", "entering_pen"]);
 
 export class HackSystem {
   private context: HackSystemContext;
-  private heldHack: HackPickupId | null = null;
+  private heldHacks: Record<HackSlot, HackPickupId | null> = {
+    def: null,
+    atk: null,
+  };
   private activeEffects: ActiveHackEffect[] = [];
   private upgrades: Set<HackUpgradeId>;
 
@@ -82,8 +88,12 @@ export class HackSystem {
     this.context.enemies = enemies;
   }
 
-  getHeldHack(): HackPickupId | null {
-    return this.heldHack;
+  getHeldHack(slot: HackSlot): HackPickupId | null {
+    return this.heldHacks[slot];
+  }
+
+  getHeldHacks(): Record<HackSlot, HackPickupId | null> {
+    return { ...this.heldHacks };
   }
 
   getActiveEffects(): ActiveHackEffect[] {
@@ -100,24 +110,38 @@ export class HackSystem {
   }
 
   collectHack(id: HackPickupId): HackCollectResult {
-    const replaced = this.heldHack !== null;
-    const replacementBonus = replaced ? this.getReplacementBonus() : 0;
-    this.heldHack = id;
+    const definition = getHackPickupDefinition(id);
+    const heldHack = this.heldHacks[definition.slot];
 
-    if (replacementBonus > 0) {
-      this.context.addScore(replacementBonus);
+    if (heldHack) {
+      return {
+        heldHack,
+        slot: definition.slot,
+        collected: false,
+        full: true,
+      };
     }
 
-    return { heldHack: id, replaced, replacementBonus };
+    this.heldHacks[definition.slot] = id;
+    return {
+      heldHack: id,
+      slot: definition.slot,
+      collected: true,
+      full: false,
+    };
   }
 
-  activateHeldHack(options: HackActivationOptions = {}): boolean {
-    if (options.blocked || !this.heldHack) return false;
+  activateHeldHack(
+    slot: HackSlot,
+    options: HackActivationOptions = {},
+  ): boolean {
+    const heldHack = this.heldHacks[slot];
+    if (options.blocked || !heldHack) return false;
 
-    const id = this.heldHack;
+    const id = heldHack;
     const definition = getHackPickupDefinition(id);
     const durationMs = this.getDurationMs(definition.durationMs);
-    this.heldHack = null;
+    this.heldHacks[slot] = null;
     this.context.completeAchievement("first-hack-used");
     completeAchievement("first-hack-used");
     recordHackUse(id);
@@ -155,6 +179,15 @@ export class HackSystem {
         this.context.setGateHackActive(true);
         this.addEffect(id, durationMs);
         break;
+      case HackPickupId.NULL_LANCE: {
+        const hit = this.context.fireNullLance();
+        this.context.showEffect(
+          hit ? definition.shortName : "MISS",
+          this.context.player.x,
+          this.context.player.y,
+        );
+        return true;
+      }
     }
 
     this.context.showEffect(
@@ -181,7 +214,7 @@ export class HackSystem {
   }
 
   clearForDeath(): void {
-    this.heldHack = null;
+    this.heldHacks = { def: null, atk: null };
     this.activeEffects = [];
     this.context.player.clearHackEffects();
     this.context.setGateHackActive(false);
@@ -282,10 +315,6 @@ export class HackSystem {
 
   private isLivingEnemy(enemy: HackEnemyApi): boolean {
     return !NON_LIVING_STATES.has(enemy.getState());
-  }
-
-  private getReplacementBonus(): number {
-    return this.upgrades.has("replacement-bonus") ? 100 : 50;
   }
 
   private getDurationMs(baseDurationMs: number): number {

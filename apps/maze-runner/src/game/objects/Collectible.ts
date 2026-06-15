@@ -3,8 +3,8 @@ import { GameObjects, Scene } from "phaser";
 import {
   getHackPickupDefinition,
   HackPickupId,
-  hackPickupIds,
 } from "../config/hackDefinitions";
+import { selectHackPickupCells } from "../config/hackPlacement";
 import type { MazeCell } from "../utils/MazeGenerator";
 import { CellType } from "../utils/MazeGenerator";
 
@@ -24,8 +24,7 @@ export interface CollectibleData {
 }
 
 export interface CollectibleManagerOptions {
-  hackSpawnChance?: number;
-  hackPickupIds?: readonly HackPickupId[];
+  extraHackCount?: number;
   rng?: () => number;
 }
 
@@ -104,8 +103,7 @@ export class CollectibleManager {
   private totalDots: number;
   private offsetX: number;
   private offsetY: number;
-  private hackSpawnChance: number;
-  private availableHackIds: readonly HackPickupId[];
+  private extraHackCount: number;
   private rng: () => number;
 
   constructor(
@@ -130,11 +128,7 @@ export class CollectibleManager {
     this.level = level;
     this.dotsCollected = 0;
     this.totalDots = 0;
-    this.hackSpawnChance = options.hackSpawnChance ?? 0;
-    this.availableHackIds =
-      options.hackPickupIds && options.hackPickupIds.length > 0
-        ? options.hackPickupIds
-        : hackPickupIds;
+    this.extraHackCount = options.extraHackCount ?? 0;
     this.rng = options.rng ?? Math.random;
   }
 
@@ -142,6 +136,16 @@ export class CollectibleManager {
     this.collectibles = [];
     const powerPelletPositions = this.getPowerPelletPositions();
     const spawnArea = this.getSpawnArea();
+    const hackPlacements = new Map(
+      selectHackPickupCells({
+        grid: this.grid,
+        gridWidth: this.gridWidth,
+        gridHeight: this.gridHeight,
+        level: this.level,
+        extraCount: this.extraHackCount,
+        rng: this.rng,
+      }).map((placement) => [`${placement.gridX},${placement.gridY}`, placement]),
+    );
 
     for (let y = 0; y < this.gridHeight; y++) {
       for (let x = 0; x < this.gridWidth; x++) {
@@ -149,10 +153,13 @@ export class CollectibleManager {
         if (this.isInArray(spawnArea, { x, y })) continue;
         if (this.isInArray(powerPelletPositions, { x, y })) {
           this.createCollectible(x, y, CollectibleType.POWER_PELLET, 50);
-        } else if (this.shouldCreateHackPickup()) {
-          this.createHackCollectible(x, y);
         } else {
-          this.createCollectible(x, y, CollectibleType.DOT, 10);
+          const hackPlacement = hackPlacements.get(`${x},${y}`);
+          if (hackPlacement) {
+            this.createHackCollectible(x, y, hackPlacement.hackId);
+          } else {
+            this.createCollectible(x, y, CollectibleType.DOT, 10);
+          }
         }
       }
     }
@@ -253,11 +260,11 @@ export class CollectibleManager {
     return collectible;
   }
 
-  private createHackCollectible(gridX: number, gridY: number): Collectible {
-    const hackId =
-      this.availableHackIds[
-        Math.floor(this.rng() * this.availableHackIds.length)
-      ] ?? HackPickupId.PHASE_CHIP;
+  private createHackCollectible(
+    gridX: number,
+    gridY: number,
+    hackId: HackPickupId,
+  ): Collectible {
     const x = this.offsetX + gridX * this.tileSize + this.tileSize / 2;
     const y = this.offsetY + gridY * this.tileSize + this.tileSize / 2;
     const collectible = new Collectible(
@@ -272,10 +279,6 @@ export class CollectibleManager {
     );
     this.collectibles.push(collectible);
     return collectible;
-  }
-
-  private shouldCreateHackPickup(): boolean {
-    return this.hackSpawnChance > 0 && this.rng() < this.hackSpawnChance;
   }
 
   private isCompletionCollectible(collectible: Collectible): boolean {

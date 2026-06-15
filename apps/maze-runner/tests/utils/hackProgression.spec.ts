@@ -5,6 +5,7 @@ import {
   MAZE_RUNNER_UNLOCKS_KEY,
   awardBytesForRun,
   completeAchievement,
+  hackUpgradeDefinitions,
   hasAchievement,
   purchaseHackUpgrade,
   readHackProgression,
@@ -51,6 +52,20 @@ describe("hackProgression", () => {
     expect(readHackProgression().unlocks).toContain("longer-duration");
     expect(values[MAZE_RUNNER_UNLOCKS_KEY]).toContain("longer-duration");
     expect(purchaseHackUpgrade("stronger-shield")).toBe(false);
+  });
+
+  it("does not offer or preserve the retired replacement bonus unlock", () => {
+    stubLocalStorage({
+      [MAZE_RUNNER_UNLOCKS_KEY]: JSON.stringify([
+        "replacement-bonus",
+        "longer-duration",
+      ]),
+    });
+
+    expect(hackUpgradeDefinitions.map((upgrade) => upgrade.id)).not.toContain(
+      "replacement-bonus",
+    );
+    expect(readHackProgression().unlocks).toEqual(["longer-duration"]);
   });
 
   it("records achievements idempotently", () => {

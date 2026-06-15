@@ -18,6 +18,7 @@ import {
   getHackPickupDefinition,
   HackPickupId,
   hackPickupIds,
+  type HackSlot,
 } from "../config/hackDefinitions";
 import {
   Collectible,
@@ -28,6 +29,7 @@ import { HackSystem } from "../systems/HackSystem";
 import { fadeInScene, launchSceneWithFade } from "../utils/sceneTransitions";
 import { formatScore, readHighScore } from "../utils/highScore";
 import { getCellCenter, getPenGeometry } from "../utils/gridGeometry";
+import { findNullLanceTarget } from "../utils/nullLance";
 import {
   completeAchievement,
   readHackProgression,
@@ -36,6 +38,15 @@ import {
 const PLAYER_CHOMP_FREQUENCY = 15;
 const MOVEMENT_SFX_INTERVAL_MS = (Math.PI / PLAYER_CHOMP_FREQUENCY) * 1000;
 const MOVEMENT_SFX_VOLUME = 0.12;
+const HUD_SAFE_EDGE_X = 72;
+const HUD_TOP_Y = 42;
+const HACK_HUD_WIDTH = 240;
+const HACK_HUD_HEIGHT = 48;
+const HACK_HUD_BOTTOM_MARGIN = 86;
+const LIFE_ICON_START_X = 72;
+const LIFE_ICON_Y = 70;
+const LIFE_ICON_SPACING = 24;
+const LIFE_ICON_RADIUS = 11;
 
 export class Game extends Scene {
   private generator!: MazeGenerator;
@@ -51,7 +62,17 @@ export class Game extends Scene {
   private scoreText!: Phaser.GameObjects.Text;
   private highScoreText!: Phaser.GameObjects.Text;
   private levelText!: Phaser.GameObjects.Text;
-  private hackHudText!: Phaser.GameObjects.Text;
+  private hackHudTexts: Partial<
+    Record<
+      HackSlot,
+      {
+        label: Phaser.GameObjects.Text;
+        effect: Phaser.GameObjects.Text;
+        key: Phaser.GameObjects.Text;
+        background: Phaser.GameObjects.Graphics;
+      }
+    >
+  > = {};
   private lifeIcons: Phaser.GameObjects.Graphics[] = [];
   private scoreValue = 0;
   private livesValue = 3;
@@ -180,6 +201,7 @@ export class Game extends Scene {
         addScore: (points) => this.addScore(points),
         setGateHackActive: (active) => this.setGateHackActive(active),
         showEffect: (name, x, y) => this.showHackEffect(name, x, y),
+        fireNullLance: () => this.fireNullLance(),
         completeAchievement: (id) => completeAchievement(id),
       },
       { unlockedUpgrades: readHackProgression().unlocks },
@@ -194,7 +216,8 @@ export class Game extends Scene {
     this.input.keyboard?.on("keydown-A", () => setDir(Direction.LEFT));
     this.input.keyboard?.on("keydown-RIGHT", () => setDir(Direction.RIGHT));
     this.input.keyboard?.on("keydown-D", () => setDir(Direction.RIGHT));
-    this.input.keyboard?.on("keydown-E", () => this.activateHeldHack());
+    this.input.keyboard?.on("keydown-Q", () => this.activateHeldHack("def"));
+    this.input.keyboard?.on("keydown-E", () => this.activateHeldHack("atk"));
     this.input.keyboard?.on("keydown-ESC", () => {
       launchSceneWithFade(this, "Pause");
     });
@@ -218,7 +241,7 @@ export class Game extends Scene {
       .setOrigin(0.5, 0);
 
     this.levelText = this.add
-      .text(camW - 20, 20, `LEVEL: ${this.levelValue}`, {
+      .text(camW - HUD_SAFE_EDGE_X, HUD_TOP_Y, `LEVEL: ${this.levelValue}`, {
         fontFamily,
         fontSize: "16px",
         color: "#ffffff",
@@ -233,13 +256,12 @@ export class Game extends Scene {
       })
       .setOrigin(0.5, 1);
 
-    this.hackHudText = this.add
-      .text(20, camH - 24, "HACK: EMPTY", {
-        fontFamily,
-        fontSize: "14px",
-        color: "#00ff66",
-      })
-      .setOrigin(0, 1);
+    this.createHackHudSlot("def", HUD_SAFE_EDGE_X, camH - HACK_HUD_BOTTOM_MARGIN);
+    this.createHackHudSlot(
+      "atk",
+      camW - HUD_SAFE_EDGE_X - HACK_HUD_WIDTH,
+      camH - HACK_HUD_BOTTOM_MARGIN,
+    );
 
     this.renderLivesHud();
     this.refreshScoreHud();
@@ -264,20 +286,20 @@ export class Game extends Scene {
 
     for (let i = 0; i < this.livesValue; i++) {
       const icon = this.add.graphics();
-      const x = 24 + i * 28;
-      const y = 30;
-      const radius = 8;
+      const x = LIFE_ICON_START_X + i * LIFE_ICON_SPACING;
+      const y = LIFE_ICON_Y;
+      const radius = LIFE_ICON_RADIUS;
 
       icon.x = x;
       icon.y = y;
 
       icon.fillStyle(0xffff00, 1);
-      icon.fillCircle(x, y, radius);
+      icon.fillCircle(0, 0, radius);
       icon.fillStyle(0x000000, 1);
       icon.beginPath();
-      icon.moveTo(x, y);
-      icon.lineTo(x + radius, y - radius / 2);
-      icon.lineTo(x + radius, y + radius / 2);
+      icon.moveTo(0, 0);
+      icon.lineTo(radius, -radius / 2);
+      icon.lineTo(radius, radius / 2);
       icon.closePath();
       icon.fillPath();
 
@@ -287,9 +309,7 @@ export class Game extends Scene {
 
   private createCollectibleManager(): CollectibleManager {
     const progression = readHackProgression();
-    const hackSpawnChance = progression.unlocks.includes("spawn-chance")
-      ? 0.075
-      : 0.045;
+    const extraHackCount = progression.unlocks.includes("spawn-chance") ? 1 : 0;
     return new CollectibleManager(
       this,
       this.grid,
@@ -300,8 +320,7 @@ export class Game extends Scene {
       this.offsetY,
       this.levelValue,
       {
-        hackSpawnChance,
-        hackPickupIds,
+        extraHackCount,
       },
     );
   }
@@ -314,48 +333,90 @@ export class Game extends Scene {
     this.refreshScoreHud();
   }
 
-  private activateHeldHack(): void {
+  private activateHeldHack(slot: HackSlot): void {
     const blocked =
       this.countdownActive ||
       this.deathSequenceActive ||
       this.levelTransitionActive ||
       this.player.isDyingState() ||
       this.scene.isActive("Pause");
-    if (this.hackSystem?.activateHeldHack({ blocked })) {
+    if (this.hackSystem?.activateHeldHack(slot, { blocked })) {
       this.refreshHackHud();
     }
   }
 
   private refreshHackHud(): void {
-    if (!this.hackHudText || !this.hackSystem) return;
+    if (!this.hackSystem) return;
+    this.refreshHackHudSlot("def");
+    this.refreshHackHudSlot("atk");
+  }
 
-    const heldHack = this.hackSystem.getHeldHack();
-    const effects = this.hackSystem.getActiveEffects();
-    if (!heldHack && effects.length === 0) {
-      this.hackHudText.setText("HACK: EMPTY");
-      this.hackHudText.setColor?.("#00ff66");
+  private createHackHudSlot(slot: HackSlot, x: number, y: number): void {
+    const color = slot === "def" ? 0x58f7ff : 0xff9b42;
+    const fontFamily =
+      (this.registry.get("fontFamily") as string) ?? "Orbitron";
+    const background = this.add.graphics();
+    background.fillStyle(0x050812, 0.9);
+    background.lineStyle(1, color, 0.95);
+    background.fillRoundedRect(x, y, HACK_HUD_WIDTH, HACK_HUD_HEIGHT, 8);
+    background.strokeRoundedRect(x, y, HACK_HUD_WIDTH, HACK_HUD_HEIGHT, 8);
+    background.setDepth(100);
+
+    const label = this.add
+      .text(x + 10, y + 7, "", {
+        fontFamily,
+        fontSize: "11px",
+        color: slot === "def" ? "#58f7ff" : "#ff9b42",
+      })
+      .setDepth(101);
+    const effect = this.add
+      .text(x + 10, y + 25, "", {
+        fontFamily,
+        fontSize: "10px",
+        color: "#ffffff",
+      })
+      .setDepth(101);
+    const key = this.add
+      .text(x + 205, y + 12, slot === "def" ? "Q" : "E", {
+        fontFamily,
+        fontSize: "16px",
+        color: "#ffffff",
+      })
+      .setDepth(101);
+
+    this.hackHudTexts[slot] = { label, effect, key, background };
+  }
+
+  private refreshHackHudSlot(slot: HackSlot): void {
+    const hud = this.hackHudTexts[slot];
+    if (!hud) return;
+
+    const heldHack = this.hackSystem?.getHeldHack(slot) ?? null;
+    const active = this.hackSystem?.getActiveEffects().find((effect) => {
+      if (effect.id === "overclock-rebound") return slot === "atk";
+      return getHackPickupDefinition(effect.id).slot === slot;
+    });
+    const slotLabel = slot === "def" ? "DEF HACK" : "ATK HACK";
+
+    if (heldHack) {
+      const definition = getHackPickupDefinition(heldHack);
+      hud.label.setText(`${slotLabel}: ${definition.displayName}`);
+      hud.effect.setText(definition.hudDescription);
       return;
     }
 
-    const heldLabel = heldHack
-      ? getHackPickupDefinition(heldHack).shortName
-      : "EMPTY";
-    const activeLabel = effects
-      .map((effect) => {
-        if (effect.id === "overclock-rebound") {
-          return `SURGE ${Math.ceil(effect.remainingMs / 1000)}s`;
-        }
-        const definition = getHackPickupDefinition(effect.id);
-        return `${definition.shortName} ${Math.ceil(effect.remainingMs / 1000)}s`;
-      })
-      .join(" | ");
-    const color = heldHack
-      ? getHackPickupDefinition(heldHack).color
-      : "#00ff66";
-    this.hackHudText.setColor?.(color);
-    this.hackHudText.setText(
-      activeLabel ? `HACK: ${heldLabel}  ${activeLabel}` : `HACK: ${heldLabel}`,
-    );
+    if (active) {
+      const label =
+        active.id === "overclock-rebound"
+          ? "SURGE"
+          : getHackPickupDefinition(active.id).displayName;
+      hud.label.setText(`${slotLabel}: ${label}`);
+      hud.effect.setText(`${Math.ceil(active.remainingMs / 1000)}s`);
+      return;
+    }
+
+    hud.label.setText(`${slotLabel}: EMPTY`);
+    hud.effect.setText(slot === "def" ? "Q ready" : "E ready");
   }
 
   private updateScoreMagnet(delta: number): void {
@@ -591,12 +652,10 @@ export class Game extends Scene {
       const hackId = collectible.getHackId();
       if (hackId) {
         const result = this.hackSystem?.collectHack(hackId);
-        if (result?.replaced) {
-          this.showFloatingScore(
-            collectible.x,
-            collectible.y,
-            result.replacementBonus,
-          );
+        if (result?.full) {
+          this.showHackEffect("FULL", collectible.x, collectible.y);
+          this.playSfx("maze_runner_pellet", { volume: 0.25 });
+          return;
         }
         this.refreshHackHud();
       }
@@ -658,14 +717,7 @@ export class Game extends Scene {
 
   private resolveEnemyContact(enemy: Enemy): void {
     if (enemy.getState() === EnemyState.FRIGHTENED) {
-      this.addScore(200);
-      this.ghostsEatenInPowerWindow++;
-      if (this.ghostsEatenInPowerWindow >= 3) {
-        completeAchievement("eat-3-ghosts-power-window");
-      }
-      this.showFloatingScore(enemy.x, enemy.y, 200);
-      this.playSfx("maze_runner_ghost_eaten", { volume: 0.6 });
-      enemy.setEnemyState(EnemyState.DEAD);
+      this.defeatEnemyAsEaten(enemy, { countPowerWindow: true });
     } else if (
       enemy.getState() !== EnemyState.DEAD &&
       !this.player.isDyingState() &&
@@ -685,6 +737,44 @@ export class Game extends Scene {
         killerIndex >= 0 ? this.activeGhostDefinitions[killerIndex] : undefined;
       this.loseLife(killerDefinition);
     }
+  }
+
+  private fireNullLance(): boolean {
+    const target = findNullLanceTarget({
+      grid: this.grid,
+      gridWidth: this.gridWidth,
+      gridHeight: this.gridHeight,
+      tileSize: this.tileSize,
+      offsetX: this.offsetX,
+      offsetY: this.offsetY,
+      player: {
+        x: this.player.x,
+        y: this.player.y,
+        direction: this.player.getCurrentDirection(),
+      },
+      enemies: this.enemies,
+    });
+
+    if (!target) return false;
+
+    this.defeatEnemyAsEaten(target);
+    return true;
+  }
+
+  private defeatEnemyAsEaten(
+    enemy: Enemy,
+    options: { countPowerWindow?: boolean } = {},
+  ): void {
+    this.addScore(200);
+    if (options.countPowerWindow) {
+      this.ghostsEatenInPowerWindow++;
+      if (this.ghostsEatenInPowerWindow >= 3) {
+        completeAchievement("eat-3-ghosts-power-window");
+      }
+    }
+    this.showFloatingScore(enemy.x, enemy.y, 200);
+    this.playSfx("maze_runner_ghost_eaten", { volume: 0.6 });
+    enemy.setEnemyState(EnemyState.DEAD);
   }
 
   private isEnemyOverlappingPlayerTile(enemy: Enemy): boolean {
@@ -793,7 +883,8 @@ export class Game extends Scene {
   private beginLevelCompleteSequence(): void {
     if (this.levelTransitionActive) return;
 
-    if (this.hackSystem?.getHeldHack()) {
+    const heldHacks = this.hackSystem?.getHeldHacks();
+    if (heldHacks?.def || heldHacks?.atk) {
       completeAchievement("clear-level-holding-hack");
     }
     if (!this.lostLifeThisLevel) {
@@ -1163,8 +1254,10 @@ export class Game extends Scene {
     }
   }
 
-  activateHeldHackForDebug(): void {
-    this.activateHeldHack();
+  activateHeldHackForDebug(slot?: HackSlot): void {
+    const heldHacks = this.hackSystem?.getHeldHacks();
+    const targetSlot = slot ?? (heldHacks?.def ? "def" : "atk");
+    this.activateHeldHack(targetSlot);
   }
 
   spawnEnemyAtForDebug(gridX: number, gridY: number, aiType: string): void {

@@ -8,6 +8,7 @@ interface CreateTestHarnessOptions<TState, TCommands> {
   state: () => TState;
   commands: TCommands;
   deterministicMode?: DeterministicMode;
+  debugOverlay?: boolean;
 }
 
 export function createTestHarness<TState, TCommands>(
@@ -45,15 +46,18 @@ export function createTestHarness<TState, TCommands>(
 
   (window as unknown as Record<string, unknown>).__TEST__ = harness;
 
-  const overlay = new DebugOverlay({
-    getState: () => harness.state,
-    getScene: () => harness.scene,
-    getSeed: () => harness.seed,
-  });
+  const overlay =
+    options.debugOverlay === false
+      ? null
+      : new DebugOverlay({
+          getState: () => harness.state,
+          getScene: () => harness.scene,
+          getSeed: () => harness.seed,
+        });
 
-  if (timeController) {
+  if (timeController && overlay) {
     timeController.onAfterFrame(() => overlay.update());
-  } else {
+  } else if (overlay) {
     const updateOverlay = () => {
       if ((window as unknown as Record<string, unknown>).__TEST__ === harness) {
         overlay.update();

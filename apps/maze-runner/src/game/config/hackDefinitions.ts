@@ -7,7 +7,10 @@ export enum HackPickupId {
   SCORE_MAGNET = "score-magnet",
   GHOST_JAMMER = "ghost-jammer",
   GATE_KEY = "gate-key",
+  NULL_LANCE = "null-lance",
 }
+
+export type HackSlot = "def" | "atk";
 
 export interface HackPickupDefinition {
   id: HackPickupId;
@@ -17,7 +20,9 @@ export interface HackPickupDefinition {
   shortName: string;
   durationMs: number;
   color: string;
+  slot: HackSlot;
   description: string;
+  hudDescription: string;
 }
 
 export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
@@ -29,7 +34,9 @@ export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
     shortName: "PHASE",
     durationMs: 4000,
     color: "#58f7ff",
+    slot: "def",
     description: "Breach one wall in your current direction.",
+    hudDescription: "Breach one wall in your direction.",
   },
   {
     id: HackPickupId.DECOY_SPARK,
@@ -39,7 +46,9 @@ export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
     shortName: "DECOY",
     durationMs: 5000,
     color: "#ff66dd",
+    slot: "def",
     description: "Drop a fake player signal that confuses ghosts.",
+    hudDescription: "Drop a fake signal that draws ghosts.",
   },
   {
     id: HackPickupId.REVERSE_PULSE,
@@ -49,7 +58,9 @@ export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
     shortName: "REV",
     durationMs: 2000,
     color: "#fff266",
+    slot: "atk",
     description: "Reverse nearby ghosts and scatter their routes.",
+    hudDescription: "Reverse nearby ghosts.",
   },
   {
     id: HackPickupId.OVERCLOCK_PELLET,
@@ -59,7 +70,9 @@ export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
     shortName: "CLOCK",
     durationMs: 5000,
     color: "#ff9b42",
+    slot: "atk",
     description: "Boost player speed, then provoke a ghost surge.",
+    hudDescription: "Boost speed, then trigger a ghost surge.",
   },
   {
     id: HackPickupId.SHIELD_RING,
@@ -69,7 +82,9 @@ export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
     shortName: "SHIELD",
     durationMs: 10000,
     color: "#76ff7a",
+    slot: "def",
     description: "Absorb one lethal hit and stun nearby ghosts.",
+    hudDescription: "Absorb 1 lethal hit.",
   },
   {
     id: HackPickupId.SCORE_MAGNET,
@@ -79,7 +94,9 @@ export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
     shortName: "MAGNET",
     durationMs: 6000,
     color: "#ffffff",
+    slot: "def",
     description: "Pull nearby score dots and pellets toward you.",
+    hudDescription: "Pull nearby dots and pellets.",
   },
   {
     id: HackPickupId.GHOST_JAMMER,
@@ -89,7 +106,9 @@ export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
     shortName: "JAM",
     durationMs: 5000,
     color: "#9f7cff",
+    slot: "atk",
     description: "Scramble living ghost targeting.",
+    hudDescription: "Scramble ghost targeting.",
   },
   {
     id: HackPickupId.GATE_KEY,
@@ -99,7 +118,21 @@ export const hackPickupDefinitions: readonly HackPickupDefinition[] = [
     shortName: "GATE",
     durationMs: 5000,
     color: "#5cff9d",
+    slot: "atk",
     description: "Toggle the ghost pen gate for a short window.",
+    hudDescription: "Locks the ghost gate for 5s.",
+  },
+  {
+    id: HackPickupId.NULL_LANCE,
+    svgCacheKey: "hack_null_lance_svg",
+    assetPath: "assets/vector/hacks/null-lance.svg",
+    displayName: "Null Lance",
+    shortName: "NULL",
+    durationMs: 0,
+    color: "#ff5a3d",
+    slot: "atk",
+    description: "Beam the first ghost in your line.",
+    hudDescription: "Beam the first ghost in your line.",
   },
 ] as const;
 
