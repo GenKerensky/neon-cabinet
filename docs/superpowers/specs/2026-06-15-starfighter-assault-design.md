@@ -21,6 +21,22 @@ The first playable MVP should deliver one complete arcade run: three procedural 
 - No large hand-authored campaign or story mode.
 - No large boss roster beyond the first capital ship finale.
 
+## Opening Narrative Crawl
+
+Each run begins with a short, skippable space-opera text crawl inspired by the original arcade cabinet's theatrical setup. The crawl should last about 10 to 15 seconds, use the game's purple, blue, and laser-pink palette, and transition directly into the cockpit without a long menu sequence.
+
+The story premise: the player is a feared bounty hunter who has tracked an enemy capital ship across the frontier. The ship carries a hidden command core, raids free colonies, and erases witnesses before jumping away. The bounty is enormous, but the hunter's motive is also personal: the flagship destroyed a neutral outpost that once sheltered them. The run is the final intercept window before the capital ship disappears into deep space.
+
+Draft crawl text:
+
+> On the edge of charted space, the dread carrier `OBSIDIAN CROWN` burns colonies from the void and vanishes before justice can answer.
+>
+> A bounty has crossed every outlaw channel: destroy the flagship, claim the fortune, end the terror.
+>
+> One hunter has followed its ion trail through dead systems and shattered moons. The last jump window is closing. The assault begins now.
+
+The crawl is flavor, not a separate story system. It can be skipped instantly and should not block repeat play.
+
 ## Core Loop
 
 Each run starts with:
@@ -243,6 +259,7 @@ The MVP should include focused tests for:
 
 Browser playtesting should verify:
 
+- opening crawl readability, duration, and skip behavior,
 - cockpit readability,
 - mouse steering feel,
 - visible laser origins from side cannon protrusions,
