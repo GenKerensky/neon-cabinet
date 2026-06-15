@@ -118,6 +118,7 @@
         "react": "catalog:",
         "react-dom": "catalog:",
         "space-defender": "workspace:*",
+        "starfighter-assault": "workspace:*",
         "tailwind-merge": "^2.6.0",
       },
     },
@@ -155,6 +156,17 @@
         "@neon-cabinet/audio-tools": "workspace:*",
         "@neon-cabinet/shaders": "workspace:*",
         "@neon-cabinet/sprite-tools": "workspace:*",
+        "@neon-cabinet/typed-event-emitter": "workspace:*",
+        "phaser": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+      },
+    },
+    "apps/starfighter-assault": {
+      "name": "starfighter-assault",
+      "version": "0.0.1",
+      "dependencies": {
+        "@neon-cabinet/shaders": "workspace:*",
         "@neon-cabinet/typed-event-emitter": "workspace:*",
         "phaser": "catalog:",
         "react": "catalog:",
@@ -3754,6 +3766,8 @@
     "stackback": ["stackback@0.0.2", "", {}, "sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw=="],
 
     "stackframe": ["stackframe@1.3.4", "", {}, "sha512-oeVtt7eWQS+Na6F//S4kJ2K2VbRlS9D43mAlMyVpVWovy9o+jfgH8O9agzANzaiLjclA0oYzUXEM4PurhSUChw=="],
+
+    "starfighter-assault": ["starfighter-assault@workspace:apps/starfighter-assault"],
 
     "statuses": ["statuses@2.0.2", "", {}, "sha512-DvEy55V3DB7uknRo+4iOGT5fP1slR8wQohVdknigZPMpMstaKJQWhwiYBACJE3Ul2pTnATihhBYnRhZQHGBiRw=="],
 

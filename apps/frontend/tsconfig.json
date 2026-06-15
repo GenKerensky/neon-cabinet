@@ -64,6 +64,9 @@
     },
     {
       "path": "../battle-tanks"
+    },
+    {
+      "path": "../starfighter-assault"
     }
   ]
 }

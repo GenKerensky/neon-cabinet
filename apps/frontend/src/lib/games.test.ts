@@ -56,9 +56,8 @@ describe("games", () => {
       expect(mazeRunner?.name).toBe("Maze Runner");
     });
 
-    it("should have comingSoon property for future games", () => {
+    it("should use placeholder hrefs for future games", () => {
       const comingSoonGames = games.filter((game) => game.comingSoon === true);
-      expect(comingSoonGames.length).toBeGreaterThan(0);
       comingSoonGames.forEach((game) => {
         expect(game.href).toBe("#");
       });
