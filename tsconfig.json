@@ -55,6 +55,9 @@
     },
     {
       "path": "./libs/studio-registry"
+    },
+    {
+      "path": "./apps/wireframe-studio"
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "name": "@neon-cabinet/wireframe-studio",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@neon-cabinet/shaders": "workspace:*",
+    "@neon-cabinet/studio-registry": "workspace:*",
+    "phaser": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}

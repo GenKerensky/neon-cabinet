@@ -195,6 +195,18 @@
         "fake-indexeddb": "^6.2.5",
       },
     },
+    "apps/wireframe-studio": {
+      "name": "@neon-cabinet/wireframe-studio",
+      "version": "0.0.1",
+      "dependencies": {
+        "@neon-cabinet/shaders": "workspace:*",
+        "@neon-cabinet/studio-registry": "workspace:*",
+        "@neon-cabinet/ui": "workspace:*",
+        "phaser": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+      },
+    },
     "libs/audio-tools": {
       "name": "@neon-cabinet/audio-tools",
       "version": "0.0.1",
@@ -999,6 +1011,8 @@
     "@neon-cabinet/ui": ["@neon-cabinet/ui@workspace:libs/ui"],
 
     "@neon-cabinet/vector-studio": ["@neon-cabinet/vector-studio@workspace:apps/vector-studio"],
+
+    "@neon-cabinet/wireframe-studio": ["@neon-cabinet/wireframe-studio@workspace:apps/wireframe-studio"],
 
     "@next/env": ["@next/env@16.0.11", "", {}, "sha512-hULMheQaOhFK1vAoFPigXca42LguwyLILtJKPRzpY1d+og6jk0YNAQVwLGNYYhWEMd2zj4gcIWSf1yC5PffqqA=="],
 
