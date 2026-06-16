@@ -1,13 +1,19 @@
 import Phaser, { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { projectThreatsToRadar } from "../hud/RadarProjection";
+import { Camera3D } from "../engine/Camera3D";
+import { Vector3D } from "../engine/Vector3D";
+import { WireframeRenderer } from "../engine/WireframeRenderer";
 import { CockpitHud, type CockpitHudStatus } from "../objects/CockpitHud";
+import { renderPlayerShipWireframe } from "../objects/PlayerShipWireframe";
 import { RailPlayer } from "../objects/RailPlayer";
+import { StarField } from "../objects/StarField";
 import {
   createThreatWave,
   getAliveThreats,
   type Threat,
 } from "../objects/Threats";
+import { renderThreatWireframes } from "../objects/ThreatWireframes";
 import { generateSortie } from "../rail/RouteGenerator";
 import type { GeneratedSortie, ThreatKind } from "../rail/SegmentTypes";
 import {
@@ -50,6 +56,11 @@ export class Game extends Scene {
   private sortie!: GeneratedSortie;
   private bountyState!: BountyState;
   private threats: Threat[] = [];
+  private threatCamera!: Camera3D;
+  private threatRenderer!: WireframeRenderer;
+  private playerShipCamera!: Camera3D;
+  private playerShipRenderer!: WireframeRenderer;
+  private starField!: StarField;
 
   constructor() {
     super("Game");
@@ -67,15 +78,38 @@ export class Game extends Scene {
     this.weapons = data.weapons ?? createWeaponsState();
     this.player = this.createPlayerForCurrentEncounter();
     this.threats = this.createCurrentThreatWave();
+    this.starField = new StarField(this, {
+      seed: this.runState.seed,
+      count: 120,
+    });
+    this.threatCamera = new Camera3D(430);
+    this.threatCamera.position = new Vector3D(0, 0, 0);
+    this.threatRenderer = new WireframeRenderer(this, this.threatCamera, 2);
+    this.playerShipCamera = new Camera3D(430);
+    this.playerShipCamera.position = new Vector3D(0, 0, 0);
+    this.playerShipCamera.nearClip = 4;
+    this.playerShipCamera.farClip = 900;
+    this.playerShipRenderer = new WireframeRenderer(
+      this,
+      this.playerShipCamera,
+      2,
+    );
+    this.playerShipRenderer.getGraphics().setDepth(30);
 
     this.cockpitHud = new CockpitHud(this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.starField.destroy();
+      this.threatRenderer.destroy();
+      this.playerShipRenderer.destroy();
       this.cockpitHud.destroy();
     });
 
     this.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
       const { width, height } = this.cameras.main;
-      this.player.setPointerTarget(pointer.x - width / 2, pointer.y - height / 2);
+      this.player.setPointerTarget(
+        pointer.x - width / 2,
+        pointer.y - height / 2,
+      );
     });
 
     this.input.on("pointerdown", () => {
@@ -102,6 +136,15 @@ export class Game extends Scene {
 
     const { width, height } = this.cameras.main;
     const aliveThreats = getAliveThreats(this.threats);
+    this.starField.render(width, height, this.player.position);
+    renderThreatWireframes(
+      this.threatRenderer,
+      this.threats,
+      this.player.position,
+      width,
+      height,
+    );
+    renderPlayerShipWireframe(this.playerShipRenderer, width, height);
     const dots = projectThreatsToRadar(
       aliveThreats.map(({ id, x, y, z, threat }) => ({
         id,

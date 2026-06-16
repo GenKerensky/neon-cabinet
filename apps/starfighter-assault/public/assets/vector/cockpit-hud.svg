@@ -32,22 +32,6 @@
     </g>
   </g>
 
-  <polygon id="ship_nose_fill" points="420,600 580,600 500,432" fill="#23d9ff" opacity="0.06" data-hud-role="ship-nose" />
-  <polyline id="ship_nose_lines" points="420,600 500,432 580,600" fill="none" stroke="#23d9ff" stroke-width="2" opacity="0.22" data-hud-role="ship-nose" />
-
-  <g id="left_cannon" data-hud-role="laser-cannon">
-    <polygon points="0,363 160,396 0,429" fill="#8e44ff" opacity="0.16" />
-    <polyline points="0,363 160,396 0,429" fill="none" stroke="#ff43d6" stroke-width="9" opacity="0.12" />
-    <polyline points="0,363 160,396 0,429" fill="none" stroke="#ff43d6" stroke-width="3" opacity="0.85" />
-    <line x1="0" y1="396" x2="160" y2="396" stroke="#7be8ff" stroke-width="2" opacity="0.8" />
-  </g>
-  <g id="right_cannon" data-hud-role="laser-cannon">
-    <polygon points="1000,363 840,396 1000,429" fill="#8e44ff" opacity="0.16" />
-    <polyline points="1000,363 840,396 1000,429" fill="none" stroke="#ff43d6" stroke-width="9" opacity="0.12" />
-    <polyline points="1000,363 840,396 1000,429" fill="none" stroke="#ff43d6" stroke-width="3" opacity="0.85" />
-    <line x1="1000" y1="396" x2="840" y2="396" stroke="#7be8ff" stroke-width="2" opacity="0.8" />
-  </g>
-
   <rect id="reticle_bounds" x="270" y="180" width="460" height="204" fill="none" stroke="#0a5d8f" stroke-width="1" opacity="0.45" vector-effect="non-scaling-stroke" data-hud-role="reticle-bounds" data-hud-bind="reticle" />
 
   <g id="radar_static" data-hud-role="radar-static">

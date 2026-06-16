@@ -2,12 +2,10 @@ import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { describe, expect, it } from "vitest";
 
+const assetPath = getCockpitHudAssetPath();
+
 describe("cockpit HUD vector asset", () => {
   it("exposes HUD sockets, editable ellipses, and state-driven layers", () => {
-    const assetPath = join(
-      process.cwd(),
-      "public/assets/vector/cockpit-hud.svg",
-    );
     expect(existsSync(assetPath)).toBe(true);
 
     const doc = new DOMParser().parseFromString(
@@ -62,4 +60,25 @@ describe("cockpit HUD vector asset", () => {
       opacity: 0.42,
     });
   });
+
+  it("leaves physical ship nose and laser cannon geometry to the wireframe renderer", () => {
+    const doc = new DOMParser().parseFromString(
+      readFileSync(assetPath, "utf8"),
+      "image/svg+xml",
+    );
+
+    expect(doc.querySelector('[data-hud-role="ship-nose"]')).toBeNull();
+    expect(doc.querySelector('[data-hud-role="laser-cannon"]')).toBeNull();
+  });
 });
+
+function getCockpitHudAssetPath(): string {
+  const candidates = [
+    join(process.cwd(), "public/assets/vector/cockpit-hud.svg"),
+    join(
+      process.cwd(),
+      "apps/starfighter-assault/public/assets/vector/cockpit-hud.svg",
+    ),
+  ];
+  return candidates.find((candidate) => existsSync(candidate)) ?? candidates[0];
+}
