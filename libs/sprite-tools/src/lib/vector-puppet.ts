@@ -5,6 +5,7 @@ import {
   MaterialMetadata,
   DirectionRotationMetadata,
   AnimationMetadata,
+  SocketMetadata,
 } from "./types.js";
 import { PathTokenizer } from "./path-tokenizer.js";
 
@@ -12,6 +13,7 @@ type LayerGameObject =
   | Phaser.GameObjects.Container
   | Phaser.GameObjects.Graphics;
 type PointTransform = (x: number, y: number) => { x: number; y: number };
+type StrokeStyle = { color: number; width: number } | undefined;
 export type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 
 export class VectorPuppet extends Phaser.GameObjects.Container {
@@ -23,7 +25,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
     Phaser.GameObjects.Container
   > = new Map();
   protected layersMetadata: Map<string, LayerMetadata> = new Map();
-  protected sockets: Map<string, { x: number; y: number }> = new Map();
+  protected sockets: Map<string, SocketMetadata> = new Map();
   protected directionRotationContext: Map<string, boolean> = new Map();
   protected content: Phaser.GameObjects.Container;
   protected directionBendX = 0;
@@ -71,6 +73,12 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
     id: string,
   ): Phaser.GameObjects.Container | undefined {
     return this.directionRotationTargets.get(id);
+  }
+
+  public override setScale(x?: number, y?: number): this {
+    super.setScale(x, y);
+    this.redrawScreenPolicyLayers();
+    return this;
   }
 
   private setupLayers(
@@ -149,7 +157,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
     });
   }
 
-  private drawLayer(
+  protected drawLayer(
     layer: LayerMetadata,
     graphics: Phaser.GameObjects.Graphics,
     fillOverride?: string,
@@ -158,12 +166,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
     const stroke = strokeOverride ?? layer.stroke;
     const fill = fillOverride ?? layer.fill;
 
-    if (stroke && stroke !== "none") {
-      graphics.lineStyle(
-        layer.strokeWidth || 1,
-        Phaser.Display.Color.HexStringToColor(stroke).color,
-      );
-    }
+    const strokeStyle = this.applyStrokeStyle(graphics, layer, stroke);
     if (fill && fill !== "none") {
       graphics.fillStyle(Phaser.Display.Color.HexStringToColor(fill).color);
     }
@@ -182,12 +185,27 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
       });
 
       if (fill && fill !== "none") graphics.fillPath();
-      if (stroke && stroke !== "none") graphics.strokePath();
+      if (strokeStyle) graphics.strokePath();
     } else if (layer.type === "circle") {
-      if (stroke && stroke !== "none")
+      if (strokeStyle)
         graphics.strokeCircle(layer.cx || 0, layer.cy || 0, layer.r || 0);
       if (fill && fill !== "none")
         graphics.fillCircle(layer.cx || 0, layer.cy || 0, layer.r || 0);
+    } else if (layer.type === "ellipse") {
+      if (strokeStyle)
+        graphics.strokeEllipse(
+          layer.cx || 0,
+          layer.cy || 0,
+          (layer.rx || 0) * 2,
+          (layer.ry || 0) * 2,
+        );
+      if (fill && fill !== "none")
+        graphics.fillEllipse(
+          layer.cx || 0,
+          layer.cy || 0,
+          (layer.rx || 0) * 2,
+          (layer.ry || 0) * 2,
+        );
     } else if (layer.type === "rect") {
       const rx = layer.rx || 0;
       const ry = layer.ry || 0;
@@ -202,7 +220,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
             layer.height || 0,
             corner,
           );
-        if (stroke && stroke !== "none")
+        if (strokeStyle)
           graphics.strokeRoundedRect(
             layer.x || 0,
             layer.y || 0,
@@ -218,7 +236,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
             layer.width || 0,
             layer.height || 0,
           );
-        if (stroke && stroke !== "none")
+        if (strokeStyle)
           graphics.strokeRect(
             layer.x || 0,
             layer.y || 0,
@@ -230,7 +248,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
       graphics.beginPath();
       graphics.moveTo(layer.x1 || 0, layer.y1 || 0);
       graphics.lineTo(layer.x2 || 0, layer.y2 || 0);
-      if (stroke && stroke !== "none") graphics.strokePath();
+      if (strokeStyle) graphics.strokePath();
     } else if (layer.type === "polyline" || layer.type === "polygon") {
       const points = layer.points || [];
       if (points.length > 0) {
@@ -243,9 +261,62 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
           graphics.closePath();
         }
         if (fill && fill !== "none") graphics.fillPath();
-        if (stroke && stroke !== "none") graphics.strokePath();
+        if (strokeStyle) graphics.strokePath();
       }
     }
+  }
+
+  private applyStrokeStyle(
+    graphics: Phaser.GameObjects.Graphics,
+    layer: LayerMetadata,
+    strokeOverride?: string,
+  ): StrokeStyle {
+    const stroke = strokeOverride ?? layer.stroke;
+    const strokeStyle = this.getStrokeStyle(layer, stroke);
+    if (!strokeStyle) return undefined;
+
+    graphics.lineStyle(strokeStyle.width, strokeStyle.color);
+    return strokeStyle;
+  }
+
+  private getStrokeStyle(
+    layer: LayerMetadata,
+    stroke: string | undefined,
+  ): StrokeStyle {
+    if (!stroke || stroke === "none" || layer.strokePolicy === "ignore") {
+      return undefined;
+    }
+
+    const baseWidth = layer.strokeWidth || 1;
+    const width =
+      layer.strokePolicy === "screen"
+        ? baseWidth / this.getCurrentStrokeScale()
+        : baseWidth;
+
+    return {
+      width,
+      color: Phaser.Display.Color.HexStringToColor(stroke).color,
+    };
+  }
+
+  private getCurrentStrokeScale(): number {
+    const scaleState = this as unknown as {
+      scale?: number;
+      scaleX?: number;
+      scaleY?: number;
+    };
+    const scaleX = Math.abs(scaleState.scaleX ?? scaleState.scale ?? 1);
+    const scaleY = Math.abs(scaleState.scaleY ?? scaleState.scale ?? scaleX);
+
+    return Math.max(0.001, Math.max(scaleX, scaleY));
+  }
+
+  private redrawScreenPolicyLayers(): void {
+    this.layersMetadata.forEach((layer, layerId) => {
+      if (layer.strokePolicy === "screen") {
+        this.redrawLayer(layerId);
+      }
+    });
   }
 
   private executeCommand(
@@ -481,7 +552,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
 
   private setupSockets() {
     this.metadata.sockets.forEach((socket) => {
-      this.sockets.set(socket.id, { x: socket.x, y: socket.y });
+      this.sockets.set(socket.id, socket);
     });
   }
 
@@ -528,6 +599,35 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
 
   public getLayerMaterial(layerId: string): MaterialMetadata | undefined {
     return this.layersMetadata.get(layerId)?.material;
+  }
+
+  protected getLayerMetadata(layerId: string): LayerMetadata | undefined {
+    return this.layersMetadata.get(layerId);
+  }
+
+  protected getSocketMetadata(id: string) {
+    return this.sockets.get(id);
+  }
+
+  protected getAllSocketMetadata() {
+    return Array.from(this.sockets.values());
+  }
+
+  protected redrawLayer(layerId: string): void {
+    const layer = this.layersMetadata.get(layerId);
+    const gameObject = this.layerDrawables.get(layerId);
+    if (!layer || !gameObject) return;
+
+    if (gameObject instanceof Phaser.GameObjects.Graphics) {
+      gameObject.clear();
+      this.drawLayer(layer, gameObject);
+    }
+    if (layer.opacity !== undefined) {
+      gameObject.alpha = layer.opacity;
+    }
+    if (layer.visible !== undefined) {
+      gameObject.visible = layer.visible;
+    }
   }
 
   public setLayerVisibility(layerId: string, visible: boolean) {
@@ -681,12 +781,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
     time: number,
   ) {
     graphics.clear();
-    if (layer.stroke && layer.stroke !== "none") {
-      graphics.lineStyle(
-        layer.strokeWidth || 1,
-        Phaser.Display.Color.HexStringToColor(layer.stroke).color,
-      );
-    }
+    const strokeStyle = this.applyStrokeStyle(graphics, layer);
     if (layer.fill && layer.fill !== "none") {
       graphics.fillStyle(
         Phaser.Display.Color.HexStringToColor(layer.fill).color,
@@ -797,7 +892,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
       });
 
       if (layer.fill && layer.fill !== "none") graphics.fillPath();
-      if (layer.stroke && layer.stroke !== "none") graphics.strokePath();
+      if (strokeStyle) graphics.strokePath();
     }
   }
 
@@ -832,12 +927,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
     time: number,
   ) {
     graphics.clear();
-    if (layer.stroke && layer.stroke !== "none") {
-      graphics.lineStyle(
-        layer.strokeWidth || 1,
-        Phaser.Display.Color.HexStringToColor(layer.stroke).color,
-      );
-    }
+    const strokeStyle = this.applyStrokeStyle(graphics, layer);
     if (layer.fill && layer.fill !== "none") {
       graphics.fillStyle(
         Phaser.Display.Color.HexStringToColor(layer.fill).color,
@@ -869,7 +959,7 @@ export class VectorPuppet extends Phaser.GameObjects.Container {
       graphics.closePath();
 
       if (layer.fill && layer.fill !== "none") graphics.fillPath();
-      if (layer.stroke && layer.stroke !== "none") graphics.strokePath();
+      if (strokeStyle) graphics.strokePath();
     }
   }
 

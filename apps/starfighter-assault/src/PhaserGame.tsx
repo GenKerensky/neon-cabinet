@@ -9,16 +9,17 @@ export interface IRefPhaserGame {
 }
 
 interface IProps {
+  assetBaseUrl?: string;
   currentActiveScene?: (scene: Scene) => void;
 }
 
 export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
-  function PhaserGame({ currentActiveScene }, ref) {
+  function PhaserGame({ assetBaseUrl, currentActiveScene }, ref) {
     const game = useRef<Game | undefined>(undefined);
 
     useLayoutEffect(() => {
       if (game.current === undefined) {
-        const phaserGame = initializeGame();
+        const phaserGame = initializeGame({ assetBaseUrl });
         game.current = phaserGame;
 
         if (typeof ref === "function") {
@@ -34,7 +35,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           game.current = undefined;
         }
       };
-    }, [ref]);
+    }, [assetBaseUrl, ref]);
 
     useEffect(() => {
       const handleSceneReady = (sceneInstance: Scene) => {

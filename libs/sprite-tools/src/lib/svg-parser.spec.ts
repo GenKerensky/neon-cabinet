@@ -96,6 +96,116 @@ describe("SVGParser", () => {
     });
   });
 
+  it("should parse ellipse layers for HUD radar bezels", () => {
+    const svg = `
+      <svg width="100" height="100">
+        <ellipse id="radar_bezel" cx="50" cy="72" rx="34" ry="12" fill="#020107" stroke="#23d9ff" stroke-width="2" />
+      </svg>
+    `;
+    const metadata = parser.parse(svg);
+
+    expect(metadata.layers[0]).toMatchObject({
+      id: "radar_bezel",
+      type: "ellipse",
+      cx: 50,
+      cy: 72,
+      rx: 34,
+      ry: 12,
+      fill: "#020107",
+      stroke: "#23d9ff",
+      strokeWidth: 2,
+    });
+  });
+
+  it("should parse stroke scaling policy metadata", () => {
+    const svg = `
+      <svg width="100" height="100">
+        <line id="screen_line" x1="0" y1="0" x2="100" y2="0" stroke="#7be8ff" stroke-width="2" vector-effect="non-scaling-stroke" />
+        <line id="ignored_line" x1="0" y1="10" x2="100" y2="10" stroke="#ff43d6" stroke-width="4" data-stroke-policy="ignore" />
+        <line id="scaled_line" x1="0" y1="20" x2="100" y2="20" stroke="#ffffff" stroke-width="6" data-stroke-policy="scale" vector-effect="non-scaling-stroke" />
+      </svg>
+    `;
+    const metadata = parser.parse(svg);
+
+    expect(metadata.layers[0]).toMatchObject({
+      id: "screen_line",
+      strokeWidth: 2,
+      strokePolicy: "screen",
+    });
+    expect(metadata.layers[1]).toMatchObject({
+      id: "ignored_line",
+      strokeWidth: 4,
+      strokePolicy: "ignore",
+    });
+    expect(metadata.layers[2]).toMatchObject({
+      id: "scaled_line",
+      strokeWidth: 6,
+      strokePolicy: "scale",
+    });
+  });
+
+  it("should clamp imported stroke widths to a reasonable vector range", () => {
+    const svg = `
+      <svg width="100" height="100">
+        <line id="heavy_line" x1="0" y1="0" x2="100" y2="0" stroke="#7be8ff" stroke-width="9000" />
+      </svg>
+    `;
+    const metadata = parser.parse(svg);
+
+    expect(metadata.layers[0].strokeWidth).toBe(64);
+  });
+
+  it("should parse HUD roles and state style metadata from data attributes", () => {
+    const svg = `
+      <svg width="100" height="100">
+        <g
+          id="torpedo_meter"
+          data-hud-role="ammo-indicator"
+          data-hud-bind="torpedoes"
+          data-hud-state-styles='{"normal":{"stroke":"#7be8ff","opacity":0.85},"empty":{"stroke":"#ff43d6","fill":"#220019","opacity":0.45}}'
+        >
+          <line id="torpedo_line" x1="10" y1="10" x2="40" y2="10" />
+        </g>
+      </svg>
+    `;
+    const metadata = parser.parse(svg);
+
+    expect(metadata.layers[0].hud).toEqual({
+      role: "ammo-indicator",
+      bind: "torpedoes",
+      stateStyles: {
+        normal: { stroke: "#7be8ff", opacity: 0.85 },
+        empty: { stroke: "#ff43d6", fill: "#220019", opacity: 0.45 },
+      },
+    });
+  });
+
+  it("should parse HUD socket roles for procedural overlays", () => {
+    const svg = `
+      <svg width="100" height="100">
+        <g
+          id="socket_radar_center"
+          transform="translate(50, 82)"
+          data-socket-type="hud"
+          data-hud-role="radar-center"
+          data-hud-bind="radar"
+        />
+      </svg>
+    `;
+    const metadata = parser.parse(svg);
+
+    expect(metadata.sockets[0]).toEqual({
+      id: "socket_radar_center",
+      x: 50,
+      y: 82,
+      type: "hud",
+      hud: {
+        role: "radar-center",
+        bind: "radar",
+      },
+    });
+  });
+
   it("should parse physics colliders", () => {
     const svg = `
       <svg width="100" height="100">

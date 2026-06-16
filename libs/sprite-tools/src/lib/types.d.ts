@@ -38,19 +38,45 @@ export interface SocketMetadata {
   x: number;
   y: number;
   type: string;
+  hud?: HudBindingMetadata;
 }
 export interface AudioMetadata {
   onMax?: string;
   onMin?: string;
   onPeak?: string;
 }
+export interface HudStateStyle {
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+  opacity?: number;
+  visible?: boolean;
+}
+export interface HudBindingMetadata {
+  role?: string;
+  bind?: string;
+}
+export interface HudMetadata extends HudBindingMetadata {
+  stateStyles?: Record<string, HudStateStyle>;
+}
+export type StrokePolicy = "scale" | "screen" | "ignore";
 export interface LayerMetadata {
   id: string;
-  type: "path" | "circle" | "rect" | "line" | "polyline" | "polygon" | "group";
+  type:
+    | "path"
+    | "circle"
+    | "ellipse"
+    | "rect"
+    | "line"
+    | "polyline"
+    | "polygon"
+    | "group";
   d?: string;
   cx?: number;
   cy?: number;
   r?: number;
+  rx?: number;
+  ry?: number;
   x1?: number;
   y1?: number;
   x2?: number;
@@ -63,11 +89,10 @@ export interface LayerMetadata {
   y?: number;
   width?: number;
   height?: number;
-  rx?: number;
-  ry?: number;
   fill?: string;
   stroke?: string;
   strokeWidth?: number;
+  strokePolicy?: StrokePolicy;
   opacity?: number;
   transform?: string;
   slideRange?: number;
@@ -77,6 +102,7 @@ export interface LayerMetadata {
   material: MaterialMetadata;
   physics?: PhysicsMetadata;
   audio?: AudioMetadata;
+  hud?: HudMetadata;
   visible?: boolean;
   children?: LayerMetadata[];
 }

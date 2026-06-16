@@ -16,6 +16,9 @@
     },
     {
       "path": "../../libs/shaders/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/sprite-tools/tsconfig.lib.json"
     }
   ]
 }

@@ -8,9 +8,13 @@ import {
   AudioMetadata,
   DirectionBendMetadata,
   DirectionRotationMetadata,
+  HudMetadata,
+  HudStateStyle,
+  StrokePolicy,
 } from "./types.js";
 
 export class SVGParser {
+  private static readonly MAX_IMPORTED_STROKE_WIDTH = 64;
   private parser: DOMParser;
   private static readonly DEFAULT_DIRECTION_ROTATION: DirectionRotationMetadata =
     {
@@ -76,7 +80,8 @@ export class SVGParser {
     if (
       !["path", "circle", "rect", "line", "polyline", "polygon", "g"].includes(
         tagName,
-      )
+      ) &&
+      tagName !== "ellipse"
     ) {
       return null;
     }
@@ -88,6 +93,7 @@ export class SVGParser {
       material: this.parseMaterial(el),
       physics: this.parsePhysics(el),
       audio: this.parseAudio(el),
+      hud: this.parseHud(el),
       visible:
         el.getAttribute("display") !== "none" &&
         el.getAttribute("visibility") !== "hidden",
@@ -97,7 +103,8 @@ export class SVGParser {
       directionRotation: this.parseDirectionRotation(el),
       stroke: el.getAttribute("stroke") || undefined,
       fill: el.getAttribute("fill") || undefined,
-      strokeWidth: this.parseNumericAttribute(el, "stroke-width"),
+      strokeWidth: this.parseStrokeWidth(el),
+      strokePolicy: this.parseStrokePolicy(el),
       opacity: this.parseNumericAttribute(el, "opacity"),
     };
 
@@ -107,6 +114,11 @@ export class SVGParser {
       metadata.cx = parseFloat(el.getAttribute("cx") || "0");
       metadata.cy = parseFloat(el.getAttribute("cy") || "0");
       metadata.r = parseFloat(el.getAttribute("r") || "0");
+    } else if (tagName === "ellipse") {
+      metadata.cx = parseFloat(el.getAttribute("cx") || "0");
+      metadata.cy = parseFloat(el.getAttribute("cy") || "0");
+      metadata.rx = parseFloat(el.getAttribute("rx") || "0");
+      metadata.ry = parseFloat(el.getAttribute("ry") || "0");
     } else if (tagName === "rect") {
       metadata.x = parseFloat(el.getAttribute("x") || "0");
       metadata.y = parseFloat(el.getAttribute("y") || "0");
@@ -128,6 +140,70 @@ export class SVGParser {
     }
 
     return metadata;
+  }
+
+  private parseHud(el: SVGElement): HudMetadata | undefined {
+    const role = el.getAttribute("data-hud-role") || undefined;
+    const bind = el.getAttribute("data-hud-bind") || undefined;
+    const stateStyles = this.parseHudStateStyles(
+      el.getAttribute("data-hud-state-styles"),
+    );
+
+    if (!role && !bind && !stateStyles) return undefined;
+
+    return {
+      ...(role ? { role } : {}),
+      ...(bind ? { bind } : {}),
+      ...(stateStyles ? { stateStyles } : {}),
+    };
+  }
+
+  private parseHudStateStyles(
+    value: string | null,
+  ): Record<string, HudStateStyle> | undefined {
+    if (!value) return undefined;
+
+    try {
+      const parsed = JSON.parse(value);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return undefined;
+      }
+
+      const styles: Record<string, HudStateStyle> = {};
+      for (const [state, rawStyle] of Object.entries(parsed)) {
+        if (
+          !rawStyle ||
+          typeof rawStyle !== "object" ||
+          Array.isArray(rawStyle)
+        ) {
+          continue;
+        }
+
+        const input = rawStyle as Record<string, unknown>;
+        const style: HudStateStyle = {};
+        if (typeof input.fill === "string") style.fill = input.fill;
+        if (typeof input.stroke === "string") style.stroke = input.stroke;
+        if (
+          typeof input.strokeWidth === "number" &&
+          Number.isFinite(input.strokeWidth)
+        ) {
+          style.strokeWidth = input.strokeWidth;
+        }
+        if (
+          typeof input.opacity === "number" &&
+          Number.isFinite(input.opacity)
+        ) {
+          style.opacity = input.opacity;
+        }
+        if (typeof input.visible === "boolean") style.visible = input.visible;
+
+        if (Object.keys(style).length > 0) styles[state] = style;
+      }
+
+      return Object.keys(styles).length > 0 ? styles : undefined;
+    } catch {
+      return undefined;
+    }
   }
 
   private parseAnimations(el: SVGElement): AnimationMetadata[] {
@@ -299,6 +375,28 @@ export class SVGParser {
     return Number.isFinite(parsed) ? parsed : undefined;
   }
 
+  private parseStrokeWidth(el: SVGElement): number | undefined {
+    const parsed = this.parseNumericAttribute(el, "stroke-width");
+    if (parsed === undefined) return undefined;
+
+    return Math.min(Math.max(0, parsed), SVGParser.MAX_IMPORTED_STROKE_WIDTH);
+  }
+
+  private parseStrokePolicy(el: SVGElement): StrokePolicy | undefined {
+    const explicitPolicy = el.getAttribute("data-stroke-policy");
+    if (this.isStrokePolicy(explicitPolicy)) {
+      return explicitPolicy;
+    }
+
+    return el.getAttribute("vector-effect") === "non-scaling-stroke"
+      ? "screen"
+      : undefined;
+  }
+
+  private isStrokePolicy(value: string | null): value is StrokePolicy {
+    return value === "scale" || value === "screen" || value === "ignore";
+  }
+
   private parseSocket(el: SVGElement): SocketMetadata {
     const transform = el.getAttribute("transform") || "";
     const translateMatch = transform.match(
@@ -311,6 +409,7 @@ export class SVGParser {
       y:
         translateMatch && translateMatch[2] ? parseFloat(translateMatch[2]) : 0,
       type: el.getAttribute("data-socket-type") || "spawn",
+      hud: this.parseHud(el),
     };
   }
 

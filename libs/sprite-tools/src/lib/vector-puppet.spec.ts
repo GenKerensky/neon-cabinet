@@ -496,6 +496,80 @@ describe("VectorPuppet", () => {
     expect(layer?.rotation).toBeCloseTo(Math.PI / 4, 5);
   });
 
+  it("keeps screen-policy stroke widths stable when the puppet is scaled", () => {
+    const scene = new MockScene();
+    const puppet = createPuppet(scene, 0, 0, {
+      viewBox: { x: 0, y: 0, width: 100, height: 100 },
+      layers: [
+        {
+          id: "readout-line",
+          type: "line",
+          x1: 0,
+          y1: 0,
+          x2: 100,
+          y2: 0,
+          stroke: "#7be8ff",
+          strokeWidth: 4,
+          strokePolicy: "screen",
+          animations: [],
+          material: {},
+        },
+      ],
+      sockets: [],
+    });
+    const drawable = puppet.getLayerDrawable("readout-line");
+    if (!drawable || !("lineStyle" in drawable)) {
+      throw new Error("Missing graphics drawable");
+    }
+
+    let capturedWidth = 0;
+    drawable.lineStyle = (width: number) => {
+      capturedWidth = width;
+      return drawable;
+    };
+
+    puppet.setScale(2);
+
+    expect(capturedWidth).toBe(2);
+  });
+
+  it("does not render strokes for ignore-policy layers", () => {
+    const scene = new MockScene();
+    const puppet = createPuppet(scene, 0, 0, {
+      viewBox: { x: 0, y: 0, width: 100, height: 100 },
+      layers: [
+        {
+          id: "guide-line",
+          type: "line",
+          x1: 0,
+          y1: 0,
+          x2: 100,
+          y2: 0,
+          stroke: "#ff43d6",
+          strokeWidth: 4,
+          strokePolicy: "ignore",
+          animations: [],
+          material: {},
+        },
+      ],
+      sockets: [],
+    });
+    const drawable = puppet.getLayerDrawable("guide-line");
+    if (!drawable || !("lineStyle" in drawable)) {
+      throw new Error("Missing graphics drawable");
+    }
+
+    let lineStyleCalls = 0;
+    drawable.lineStyle = () => {
+      lineStyleCalls += 1;
+      return drawable;
+    };
+
+    puppet.setScale(2);
+
+    expect(lineStyleCalls).toBe(0);
+  });
+
   it("applies pulse animation as alpha and scale oscillation", () => {
     const scene = new MockScene();
     const puppet = createPuppet(scene, 0, 0, {

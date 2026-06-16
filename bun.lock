@@ -167,6 +167,7 @@
       "version": "0.0.1",
       "dependencies": {
         "@neon-cabinet/shaders": "workspace:*",
+        "@neon-cabinet/sprite-tools": "workspace:*",
         "@neon-cabinet/typed-event-emitter": "workspace:*",
         "phaser": "catalog:",
         "react": "catalog:",

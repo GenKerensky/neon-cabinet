@@ -163,6 +163,12 @@ class MockGraphics extends MockGameObject {
   fillCircle() {
     return this;
   }
+  strokeEllipse() {
+    return this;
+  }
+  fillEllipse() {
+    return this;
+  }
   strokeRoundedRect() {
     return this;
   }

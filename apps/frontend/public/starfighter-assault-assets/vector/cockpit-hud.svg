@@ -1,0 +1,66 @@
+<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+  <g id="canopy_frame" fill="none" stroke-linecap="round" stroke-linejoin="round" data-hud-role="canopy-frame">
+    <polyline id="canopy_lower_glow" points="0,372 180,492 500,540 820,492 1000,372" stroke="#23d9ff" stroke-width="12" opacity="0.12" />
+    <polyline id="canopy_lower" points="0,372 180,492 500,540 820,492 1000,372" stroke="#23d9ff" stroke-width="3" opacity="0.9" />
+    <polyline id="canopy_upper" points="80,144 270,108 500,132 730,108 920,144" stroke="#7be8ff" stroke-width="2" opacity="0.55" />
+    <polyline id="canopy_left_strut" points="120,372 280,300 360,108" stroke="#23d9ff" stroke-width="2" opacity="0.75" />
+    <polyline id="canopy_right_strut" points="880,372 720,300 640,108" stroke="#23d9ff" stroke-width="2" opacity="0.75" />
+  </g>
+
+  <g id="side_panels" data-hud-role="side-panels">
+    <polygon id="left_panel_fill" points="0,420 280,468 241,600 0,600" fill="#020107" opacity="0.68" />
+    <polygon id="right_panel_fill" points="1000,420 720,468 759,600 1000,600" fill="#020107" opacity="0.68" />
+    <polyline id="left_panel_edge" points="0,420 280,468 241,600" fill="none" stroke="#0a5d8f" stroke-width="2" opacity="0.9" />
+    <polyline id="right_panel_edge" points="1000,420 720,468 759,600" fill="none" stroke="#0a5d8f" stroke-width="2" opacity="0.9" />
+    <g id="left_panel_detail" fill="none" stroke="#7be8ff" stroke-width="2" opacity="0.6">
+      <line x1="55" y1="468" x2="127" y2="468" vector-effect="non-scaling-stroke" />
+      <line x1="55" y1="486" x2="117" y2="486" vector-effect="non-scaling-stroke" />
+      <line x1="55" y1="504" x2="107" y2="504" vector-effect="non-scaling-stroke" />
+    </g>
+    <g id="right_panel_detail" fill="none" stroke="#7be8ff" stroke-width="2" opacity="0.6">
+      <line x1="945" y1="468" x2="873" y2="468" vector-effect="non-scaling-stroke" />
+      <line x1="945" y1="486" x2="883" y2="486" vector-effect="non-scaling-stroke" />
+      <line x1="945" y1="504" x2="893" y2="504" vector-effect="non-scaling-stroke" />
+    </g>
+    <g id="panel_warning_lamps" fill="#8e44ff" opacity="0.65">
+      <circle cx="71" cy="542" r="3" />
+      <circle cx="89" cy="542" r="3" />
+      <circle cx="107" cy="542" r="3" />
+      <circle cx="929" cy="542" r="3" />
+      <circle cx="911" cy="542" r="3" />
+      <circle cx="893" cy="542" r="3" />
+    </g>
+  </g>
+
+  <polygon id="ship_nose_fill" points="420,600 580,600 500,432" fill="#23d9ff" opacity="0.06" data-hud-role="ship-nose" />
+  <polyline id="ship_nose_lines" points="420,600 500,432 580,600" fill="none" stroke="#23d9ff" stroke-width="2" opacity="0.22" data-hud-role="ship-nose" />
+
+  <g id="left_cannon" data-hud-role="laser-cannon">
+    <polygon points="0,363 160,396 0,429" fill="#8e44ff" opacity="0.16" />
+    <polyline points="0,363 160,396 0,429" fill="none" stroke="#ff43d6" stroke-width="9" opacity="0.12" />
+    <polyline points="0,363 160,396 0,429" fill="none" stroke="#ff43d6" stroke-width="3" opacity="0.85" />
+    <line x1="0" y1="396" x2="160" y2="396" stroke="#7be8ff" stroke-width="2" opacity="0.8" />
+  </g>
+  <g id="right_cannon" data-hud-role="laser-cannon">
+    <polygon points="1000,363 840,396 1000,429" fill="#8e44ff" opacity="0.16" />
+    <polyline points="1000,363 840,396 1000,429" fill="none" stroke="#ff43d6" stroke-width="9" opacity="0.12" />
+    <polyline points="1000,363 840,396 1000,429" fill="none" stroke="#ff43d6" stroke-width="3" opacity="0.85" />
+    <line x1="1000" y1="396" x2="840" y2="396" stroke="#7be8ff" stroke-width="2" opacity="0.8" />
+  </g>
+
+  <rect id="reticle_bounds" x="270" y="180" width="460" height="204" fill="none" stroke="#0a5d8f" stroke-width="1" opacity="0.45" vector-effect="non-scaling-stroke" data-hud-role="reticle-bounds" data-hud-bind="reticle" />
+
+  <g id="radar_static" data-hud-role="radar-static">
+    <ellipse id="radar_bezel" cx="500" cy="522" rx="130" ry="44" fill="#020107" stroke="#23d9ff" stroke-width="2" opacity="0.9" data-hud-role="radar-bezel" data-hud-bind="radar" />
+    <ellipse id="radar_inner_ring" cx="500" cy="522" rx="80.6" ry="27.28" fill="none" stroke="#0a5d8f" stroke-width="1" opacity="0.7" vector-effect="non-scaling-stroke" data-hud-role="radar-ring" data-hud-bind="radar" />
+    <line id="radar_horizontal" x1="390.8" y1="522" x2="609.2" y2="522" stroke="#0a5d8f" stroke-width="1" opacity="0.7" vector-effect="non-scaling-stroke" data-hud-role="radar-grid" data-hud-bind="radar" />
+    <line id="radar_vertical" x1="500" y1="492.08" x2="500" y2="551.92" stroke="#0a5d8f" stroke-width="1" opacity="0.7" vector-effect="non-scaling-stroke" data-hud-role="radar-grid" data-hud-bind="radar" />
+  </g>
+
+  <rect id="torpedo_meter" x="745" y="466" width="88" height="10" fill="#020107" stroke="#7be8ff" stroke-width="2" opacity="0.85" data-hud-role="ammo-indicator" data-hud-bind="torpedoes" data-hud-state-styles='{"normal":{"stroke":"#7be8ff","opacity":0.85},"empty":{"stroke":"#ff43d6","opacity":0.45}}' />
+  <rect id="shield_meter" x="167" y="466" width="88" height="10" fill="#020107" stroke="#7be8ff" stroke-width="2" opacity="0.85" data-hud-role="shield-indicator" data-hud-bind="shields" data-hud-state-styles='{"normal":{"stroke":"#7be8ff","opacity":0.85},"down":{"stroke":"#ff43d6","opacity":0.42}}' />
+
+  <g id="socket_radar_center" transform="translate(500, 522)" data-socket-type="hud" data-hud-role="radar-center" data-hud-bind="radar" />
+  <g id="socket_reticle_center" transform="translate(500, 288)" data-socket-type="hud" data-hud-role="reticle-center" data-hud-bind="reticle" />
+  <g id="socket_status_origin" transform="translate(22, 18)" data-socket-type="hud" data-hud-role="status-origin" data-hud-bind="status" />
+</svg>

@@ -26,7 +26,11 @@ export default function StarfighterAssaultPage() {
 
   return (
     <GameView>
-      <PhaserGame ref={phaserRef} currentActiveScene={onCurrentActiveScene} />
+      <PhaserGame
+        ref={phaserRef}
+        assetBaseUrl="/starfighter-assault-assets"
+        currentActiveScene={onCurrentActiveScene}
+      />
     </GameView>
   );
 }

@@ -9,7 +9,13 @@ import { UpgradeShop } from "./scenes/UpgradeShop";
 import { Pause } from "./scenes/Pause";
 import { GameOver } from "./scenes/GameOver";
 
-export function initializeGame(): Phaser.Game {
+export interface StarfighterGameOptions {
+  assetBaseUrl?: string;
+}
+
+export function initializeGame(
+  options: StarfighterGameOptions = {},
+): Phaser.Game {
   return new Phaser.Game({
     type: Phaser.AUTO,
     parent: "phaser-game",
@@ -26,6 +32,11 @@ export function initializeGame(): Phaser.Game {
       roundPixels: false,
     },
     callbacks: {
+      preBoot: (game) => {
+        if (options.assetBaseUrl) {
+          game.registry.set("assetBaseUrl", options.assetBaseUrl);
+        }
+      },
       postBoot: (game) => {
         const renderer = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
         if (renderer.pipelines) {

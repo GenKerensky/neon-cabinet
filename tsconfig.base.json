@@ -22,6 +22,7 @@
     "declaration": true,
     "paths": {
       "@neon-cabinet/audio-tools": ["libs/audio-tools/src/index.ts"],
+      "@neon-cabinet/sprite-tools": ["libs/sprite-tools/src/index.ts"],
       "@neon-cabinet/studio-registry": ["libs/studio-registry/src/index.ts"],
       "@neon-cabinet/ui": ["libs/ui/src/index.ts"],
       "@neon-cabinet/ui/components/*": ["libs/ui/src/components/*"],
